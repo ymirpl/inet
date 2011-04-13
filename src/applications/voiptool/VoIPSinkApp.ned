@@ -16,7 +16,7 @@
 // along with this program; if not, see <http://www.gnu.org/licenses/>.
 //
 
-package voiptool.applications.voiptool;
+package inet.applications.voiptool;
 
 import inet.applications.IUDPApp;
 

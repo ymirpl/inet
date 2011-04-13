@@ -17,7 +17,7 @@
 //
 
 
-package voiptool.applications.voiptool;
+package inet.applications.voiptool;
 
 import inet.applications.IUDPApp;
 
