@@ -530,7 +530,7 @@
         requires = ""
         labels = ""
         nedPackages = "
-                       voiptool.applications.voiptool
+                       inet.applications.voiptool
                       "
         extraSourceFolders = ""
         compileFlags = "-DWITH_WOIPTOOL"
@@ -544,7 +544,7 @@
         requires = "VOIPTOOL"
         labels = "examples"
         nedPackages = "
-                       voiptool.examples.voiptool
+                       inet.examples.voiptool
                       "
         extraSourceFolders = ""
         compileFlags = ""
