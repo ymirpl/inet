@@ -112,6 +112,7 @@ void VoIPSourceApp::handleMessage(cMessage *msg)
         if (msg == &timer)
         {
             packet = generatePacket();
+
             if(!packet)
             {
                 if (repeatCount > 1)
@@ -121,6 +122,7 @@ void VoIPSourceApp::handleMessage(cMessage *msg)
                     packet = generatePacket();
                 }
             }
+
             if (packet)
             {
                 // reschedule trigger message
@@ -132,7 +134,6 @@ void VoIPSourceApp::handleMessage(cMessage *msg)
         {
             sendToUDP(PK(msg), localPort, destAddress, destPort);
         }
-
     }
     else
         delete msg;
@@ -142,8 +143,10 @@ void VoIPSourceApp::finish()
 {
     av_free_packet(&packet);
     outFile.close();
+
     if (pReSampleCtx)
         audio_resample_close(pReSampleCtx);
+
     pReSampleCtx = NULL;
 
     if (this->pFormatCtx)
@@ -154,27 +157,35 @@ void VoIPSourceApp::finish()
 void VoIPSourceApp::openSoundFile(const char *name)
 {
     int ret = av_open_input_file(&pFormatCtx, name, NULL, 0, NULL);
+
     if (ret)
         error("Audiofile '%s' open error: %d", name, ret);
 
     av_find_stream_info(pFormatCtx);
 
     //get stream number
-    for(unsigned int j=0; j<pFormatCtx->nb_streams; j++)
+    streamIndex = -1;
+    for(unsigned int j = 0; j < pFormatCtx->nb_streams; j++)
     {
-        if(pFormatCtx->streams[j]->codec->codec_type==CODEC_TYPE_AUDIO)
+        if(pFormatCtx->streams[j]->codec->codec_type == CODEC_TYPE_AUDIO)
         {
             streamIndex = j;
             break;
         }
     }
+
+    if (streamIndex == -1)
+        error("The file '%s' not contains any audio stream.", name);
+
     pCodecCtx = pFormatCtx->streams[streamIndex]->codec;
 
     //find decoder and open the correct codec
     pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
     ret = avcodec_open(pCodecCtx, pCodec);
+
     if (ret)
         error("avcodec_open() error on file '%s': %d", name, ret);
+
     //allocate encoder
     pEncoderCtx = avcodec_alloc_context();
     //set bitrate:
@@ -184,13 +195,16 @@ void VoIPSourceApp::openSoundFile(const char *name)
     pEncoderCtx->channels = 1;
 
     pCodecEncoder = avcodec_find_encoder_by_name(codec);
+
     if (pCodecEncoder == NULL)
         error("Codec '%s' not found!", codec);
 
     if (avcodec_open(pEncoderCtx, pCodecEncoder) < 0)
         error("could not open %s encoding codec!", codec);
 
-    if(pCodecCtx->sample_rate != sampleRate || pEncoderCtx->sample_fmt != pCodecCtx->sample_fmt || pCodecCtx->channels != 1)
+    if(pCodecCtx->sample_rate != sampleRate
+            || pEncoderCtx->sample_fmt != pCodecCtx->sample_fmt
+            || pCodecCtx->channels != 1)
     {
         pReSampleCtx = av_audio_resample_init(1, pCodecCtx->channels, sampleRate, pCodecCtx->sample_rate,
                 pEncoderCtx->sample_fmt, pCodecCtx->sample_fmt, 16, 10, 0, 0.8);
@@ -209,14 +223,17 @@ void VoIPSourceApp::openSoundFile(const char *name)
     {
         pReSampleCtx = NULL;
     }
+
     if (traceFileName && *traceFileName)
         outFile.open(traceFileName, sampleRate, av_get_bits_per_sample_format(pEncoderCtx->sample_fmt));
+
     sampleBuffer.clear(samplesPerPacket * av_get_bits_per_sample_format(pEncoderCtx->sample_fmt) / 8);
 }
 
 VoIPPacket* VoIPSourceApp::generatePacket()
 {
     readFrame();
+
     if (sampleBuffer.empty())
         return NULL;
 
@@ -227,6 +244,7 @@ VoIPPacket* VoIPSourceApp::generatePacket()
     VoIPPacket *vp = new VoIPPacket();
     int outByteCount = 0;
     uint8_t *outBuf = NULL;
+
     if (pEncoderCtx->frame_size > 1)
     {
         error("Unsupported codec");
@@ -247,6 +265,7 @@ VoIPPacket* VoIPSourceApp::generatePacket()
         // The bitsPerOutSample is not 0 when codec is PCM.
         int buf_size = (bitsPerOutSample) ? samples * bitsPerOutSample / 8 : samples;
         outByteCount = avcodec_encode_audio(pEncoderCtx, outBuf, buf_size, (short int*)(sampleBuffer.readPtr()));
+
         if (outByteCount <= 0)
             error("avcodec_encode_audio() error: %d", outByteCount);
 
@@ -269,6 +288,7 @@ VoIPPacket* VoIPSourceApp::generatePacket()
         vp->setType(VOICE);
         vp->setByteLength(voipHeaderSize + outByteCount);
     }
+
     vp->setTimeStamp(pktID);
     vp->setSeqNo(pktID);
     vp->setCodec(pEncoderCtx->codec_id);
@@ -317,9 +337,11 @@ bool VoIPSourceApp::checkSilence(enum SampleFormat sampleFormat, void* _buf, int
     case SAMPLE_FMT_S32:
         {
             int32_t *buf = (int32_t *)_buf;
+
             for (i=0; i<samples; ++i)
             {
                 int s = abs(buf[i]);
+
                 if (s > max)
                     max = s;
             }
@@ -329,6 +351,7 @@ bool VoIPSourceApp::checkSilence(enum SampleFormat sampleFormat, void* _buf, int
     default:
         error("invalid sampleFormat:%d", sampleFormat);
     }
+
     return max < voipSilenceThreshold;
 }
 
@@ -352,14 +375,17 @@ void VoIPSourceApp::readFrame()
     sampleBuffer.align();
 
     char *tmpSamples = NULL;
+
     if(pReSampleCtx)
     {
         tmpSamples = new char[Buffer::BUFSIZE];
     }
+
     while(sampleBuffer.length() < samplesPerPacket * inBytesPerSample)
     {
         //read one frame
         int err = av_read_frame(pFormatCtx, &packet);
+
         if (err < 0)
             break;
 
@@ -385,6 +411,7 @@ void VoIPSourceApp::readFrame()
             int frame_size = (pReSampleCtx) ? Buffer::BUFSIZE : sampleBuffer.availableSpace();
             memset(rbuf, 0, frame_size);
             int decoded = avcodec_decode_audio2(pCodecCtx, rbuf, &frame_size, ptr, len);
+
             if (decoded < 0)
                 error("Error decoding frame, err=%d", decoded);
 
@@ -396,13 +423,17 @@ void VoIPSourceApp::readFrame()
 
             decoded = frame_size / (inBytesPerSample * pCodecCtx->channels);
             ASSERT(frame_size == decoded * inBytesPerSample * pCodecCtx->channels);
+
             if (pReSampleCtx)
             {
                 decoded = audio_resample(pReSampleCtx, nbuf, rbuf, decoded);
             }
+
             sampleBuffer.notifyWrote(decoded * inBytesPerSample);
         }
     }
+
     if(pReSampleCtx)
         delete[] tmpSamples;
 }
+
