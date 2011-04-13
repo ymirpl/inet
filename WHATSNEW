@@ -21,6 +21,10 @@ Recent changes in the INET Framework
   and copy an empty.xml file into the model directory. OMNeT++ 4.2 supports the 
   xml("<inlinexml/>") syntax so we use that for the default value.
 
+- New PcapRecorder module (in StandardHost) for recording traffic to a pcap file.
+  It's substitute the old TCPDump module.
+
+
 - StandardHost and Router now have a common base (containing Link~ and NetworkLayer)
   Wireless~ and AdhocHost is derived from StandardHost. All of them (including Router)
   supports multiple wireless, ethernet, ppp and external interfaces. 

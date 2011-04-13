@@ -1,0 +1,40 @@
+TCPDump megoldása:
+Az eddigi helyett signal alapon - nem módosítja a modell működését.
+
+Kell 4 signal: sent/received packet: a Layer2 alján tennénk csak sent/received emit-eket:
+signals: packetSentToLower, packetReceivedFromLower, packetSentToUpper, packetReceivedFromUpper
+    static simsignal_t packetSentToLowerSignal;
+    static simsignal_t packetReceivedFromLowerSignal;
+    static simsignal_t packetSentToUpperSignal;
+    static simsignal_t packetReceivedFromUpperSignal;
+simsignal_t XXX::packetSentToLowerSignal = SIMSIGNAL_NULL;
+simsignal_t XXX::packetReceivedFromLowerSignal = SIMSIGNAL_NULL;
+simsignal_t XXX::packetSentToUpperSignal = SIMSIGNAL_NULL;
+simsignal_t XXX::packetReceivedFromUpperSignal = SIMSIGNAL_NULL;
+        packetSentToLowerSignal = registerSignal("packetSentToLower");
+        packetReceivedFromLowerSignal = registerSignal("packetReceivedFromLower");
+        packetSentToUpperSignal = registerSignal("packetSentToUpper");
+        packetReceivedFromUpperSignal = registerSignal("packetReceivedFromUpper");
+
+ppp, eth, wlan, ext, stb. modulokba.
+   - ppp: linklayer/ppp/PPP.cc (IWiredNic --> PPPInterface.ned / PPP modul)
+   - ext: ????
+   - eth: (IWIredNic --> EthernetInterface|EthernetInterfaceFullDuplex|... ->
+   - wlan: linklayer/ieee80211/mac/Ieee80211Mac
+
+szűrés megoldása:
+ - emit source module name pattern
+
+StandardHost / ~6: PcapRecorder[numOfPcapRecorders] submodule vektor, numOfPcapRecorders = default(0) paraméter.
+
+PcapRecorder modul paraméterek:
+  - eddigi paraméterek:
+    - string dumpFile = default("");
+    - int snaplen = default(65535);
+    - int verbosity = default(0);
+  - új, szűrőfeltételek:
+    - string moduleNamePattern = default("wlan[*] eth[*] ppp[*]"); // jelenleg name lista, a csillagot meg kell implementálni!!!
+              // a saját parentben kell keresni a modulokat.
+    - string packetPattern = default(""); // jelenleg nem impl.
+    - string sendingSignalNames = default("packetSentToLower");
+    - string receivingSignalNames = default("packetReceivedFromLower");
