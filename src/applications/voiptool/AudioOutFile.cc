@@ -47,11 +47,11 @@ bool AudioOutFile::open(const char *resultFile, int sampleRate, short int sample
     opened = true;
 
     // auto detect the output format from the name. default is WAV
-    AVOutputFormat *fmt = guess_format(NULL, resultFile, NULL);
+    AVOutputFormat *fmt = av_guess_format(NULL, resultFile, NULL);
     if (!fmt)
     {
         ev << "Could not deduce output format from file extension: using WAV.\n";
-        fmt = guess_format("wav", NULL, NULL);
+        fmt = av_guess_format("wav", NULL, NULL);
     }
     if (!fmt)
     {
