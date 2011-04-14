@@ -35,6 +35,7 @@ void AudioOutFile::addAudioStream(enum CodecID codec_id, int sampleRate, short i
     /* put sample parameters */
     c->bit_rate = sampleRate * sampleBits;
     c->sample_rate = sampleRate;
+    c->sample_fmt = SAMPLE_FMT_S16;  //FIXME hack!
     c->channels = 1;
     audio_st = st;
 }
