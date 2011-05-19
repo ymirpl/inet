@@ -23,8 +23,7 @@ Define_Module(VoIPSourceApp);
 
 VoIPSourceApp::~VoIPSourceApp()
 {
-    if (timer.isScheduled())
-        cancelEvent(&timer);
+    cancelAndDelete(timer);
 }
 
 VoIPSourceApp::Buffer::Buffer() :
@@ -74,16 +73,14 @@ void VoIPSourceApp::initialize(int stage)
     soundFile = par("soundFile").stringValue();
     repeatCount = par("repeatCount");
     traceFileName = par("traceFileName").stringValue();
-    simtime_t start = par("start");
+    simtime_t startTime = par("startTime");
 
     samplesPerPacket = (int)round(sampleRate * SIMTIME_DBL(packetTimeLength));
     if (samplesPerPacket & 1)
-    {
         samplesPerPacket++;
-    }
     ev << "The packetTimeLength parameter is " << packetTimeLength * 1000.0 << "ms, ";
     packetTimeLength = ((double)samplesPerPacket) / sampleRate;
-    ev << "recalculated to " << packetTimeLength * 1000.0 << "ms!" << endl;
+    ev << "adjusted to " << packetTimeLength * 1000.0 << "ms" << endl;
 
     sampleBuffer.clear(0);
 
@@ -94,9 +91,10 @@ void VoIPSourceApp::initialize(int stage)
 
     openSoundFile(soundFile);
 
-    scheduleAt(start, &timer);
+    timer = new cMessage("sendVoIP");
+    scheduleAt(startTime, timer);
 
-    voipSilenceSize = voipHeaderSize;
+    voipSilencePacketSize = voipHeaderSize;
 
     // initialize the sequence number
     pktID = 1;
@@ -109,7 +107,7 @@ void VoIPSourceApp::handleMessage(cMessage *msg)
 
     if (msg->isSelfMessage())
     {
-        if (msg == &timer)
+        if (msg == timer)
         {
             packet = generatePacket();
 
@@ -304,7 +302,7 @@ VoIPPacket* VoIPSourceApp::generatePacket()
     {
         vp->setName("SILENCE");
         vp->setType(SILENCE);
-        vp->setByteLength(voipHeaderSize);
+        vp->setByteLength(voipSilencePacketSize);
     }
     else
     {
