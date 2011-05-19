@@ -52,6 +52,7 @@ simple VoIPSourceApp like IUDPApp
         int repeatCount = default(1);
         string traceFileName = default("");     // file name to save output stream (wav), OFF when empty
 
+        @display("i=block/departure");
     gates:
         input udpIn;
         output udpOut;
