@@ -26,14 +26,13 @@ simple PcapRecorder {
     parameters:
         int verbosity = default(0);
 
-        string dumpFile = default("");
+        string pcapFile = default("");
         int snaplen = default(65535);
 
-        string moduleNamePattern = default("wlan[*] eth[*] ppp[*]");
+        string moduleNamePatterns = default("wlan[*] eth[*] ppp[*]");
               // Space separated list of modulenames (which child of parent module of PcapRecorder)
               // (The program compares elements with getFullName() when element not terminated with '[*]'
               // or cut '[*]' and compare with getName() when name terminated with '[*]'.)
         string sendingSignalNames = default("packetSentToLower"); // List of outbound signals
         string receivingSignalNames = default("packetReceivedFromLower"); // List of incoming signals
-        string packetPattern = default(""); // not implemented yet.
 }

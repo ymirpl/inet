@@ -612,7 +612,7 @@ void PcapDumper::tcpDump(bool l2r, const char *label, TCPSegment *tcpseg, const 
 void PcapRecorder::initialize()
 {
     struct pcap_hdr fh;
-    const char* file = par("dumpFile");
+    const char* file = par("pcapFile");
     snaplen = this->par("snaplen");
     pcapDumper.setVerbosity(par("verbosity"));
 
@@ -632,7 +632,7 @@ void PcapRecorder::initialize()
             signalList[registerSignal(signalTokenizer.nextToken())] = false;
     }
 
-    const char* moduleNames = par("moduleNamePattern");
+    const char* moduleNames = par("moduleNamePatterns");
     cStringTokenizer moduleTokenizer(moduleNames);
 
     while (moduleTokenizer.hasMoreTokens())
@@ -850,7 +850,7 @@ void PcapRecorder::finish()
 {
      pcapDumper.dump("", "pcapRecorder finished");
 
-     if (0 != strcmp(this->par("dumpFile"),""))
+     if (0 != strcmp(this->par("pcapFile"),""))
           fclose(pcapDumper.dumpfile);
 }
 
