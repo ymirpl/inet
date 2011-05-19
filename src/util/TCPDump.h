@@ -23,13 +23,14 @@
 
 #include "INETDefs.h"
 
+#include "PcapDump.h"
+
 // Foreign declarations:
 class IPDatagram;
 class IPv6Datagram;
 class SCTPMessage;
 class TCPSegment;
 
-#define PCAP_MAGIC           0xa1b2c3d4
 #define RBUFFER_SIZE 65535
 
 /* "libpcap" file header (minus magic number). */
@@ -65,48 +66,20 @@ static hdr_ethernet_t HDR_ETHERNET = {
 */
 
 /**
- * Dumps SCTP packets in tcpdump format.
- */
-class TCPDumper
-{
-    private:
-        int verbosity;
-    protected:
-        int32 seq;
-        std::ostream *outp;
-    public:
-        FILE *dumpfile;
-    public:
-        TCPDumper(std::ostream& o);
-        ~TCPDumper();
-        inline void setVerbosity(const int32 verbosityLevel) {
-            verbosity = verbosityLevel;
-        }
-        void ipDump(const char *label, IPDatagram *dgram, const char *comment=NULL);
-        void sctpDump(const char *label, SCTPMessage *sctpmsg, const std::string& srcAddr, const std::string& destAddr, const char *comment=NULL);
-        // dumps arbitary text
-        void dump(const char *label, const char *msg);
-        void tcpDump(bool l2r, const char *label, IPDatagram *dgram, const char *comment=NULL);
-        void tcpDump(bool l2r, const char *label, TCPSegment *tcpseg, const std::string& srcAddr, const std::string& destAddr, const char *comment=NULL);
-        void dumpIPv6(bool l2r, const char *label, IPv6Datagram *dgram, const char *comment=NULL);
-        void udpDump(bool l2r, const char *label, IPDatagram *dgram, const char *comment);
-        const char* intToChunk(int32 type);
-};
-
-
-/**
- * Dumps every packet using the TCPDumper class
+ * Dumps every packet using the PcapDump class
  */
 class INET_API TCPDump : public cSimpleModule
 {
     protected:
         unsigned char* ringBuffer[RBUFFER_SIZE];
-        TCPDumper tcpdump;
+        PcapDump tcpdump;
         unsigned int snaplen;
         unsigned long first, last, space;
+        bool showBadFrames;
+        bool dumpBadFrames;
+        bool dropBadFrames;
 
     public:
-
         TCPDump();
         ~TCPDump();
         virtual void handleMessage(cMessage *msg);
@@ -115,5 +88,4 @@ class INET_API TCPDump : public cSimpleModule
 };
 
 #endif
-
 

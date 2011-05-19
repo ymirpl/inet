@@ -24,50 +24,14 @@
 
 #include "INETDefs.h"
 
+#include "PcapDump.h"
+
 // Foreign declarations:
 class IPDatagram;
 class IPv6Datagram;
 class SCTPMessage;
 class TCPSegment;
 
-
-/**
- * Dumps packets in PCAP format.
- */
-class PcapDumper
-{
-    private:
-        int verbosity;
-    protected:
-        int32 seq;
-        std::ostream *outp;
-    public:
-        FILE *dumpfile;
-    public:
-        PcapDumper(std::ostream& o);
-
-        ~PcapDumper();
-
-        inline void setVerbosity(const int verbosityLevel)
-        {
-            verbosity = verbosityLevel;
-        }
-
-        // dumps arbitary text
-        void dump(const char *label, const char *msg);
-
-        void dumpIPv4(bool l2r, const char *label, IPDatagram *dgram, const char *comment=NULL);
-
-        void dumpIPv6(bool l2r, const char *label, IPv6Datagram *dgram, const char *comment=NULL);
-
-        void ipDump(const char *label, IPDatagram *dgram, const char *comment=NULL);
-
-        void sctpDump(const char *label, SCTPMessage *sctpmsg, const std::string& srcAddr, const std::string& destAddr, const char *comment=NULL);
-
-        void tcpDump(bool l2r, const char *label, TCPSegment *tcpseg, const std::string& srcAddr, const std::string& destAddr, const char *comment=NULL);
-
-        void udpDump(bool l2r, const char *label, IPDatagram *dgram, const char *comment);
-};
 
 /**
  * Dumps every packet using the PcapDumper class
@@ -77,7 +41,7 @@ class INET_API PcapRecorder : public cSimpleModule, protected cListener
     protected:
         typedef std::map<simsignal_t,bool> SignalList;
         SignalList signalList;
-        PcapDumper pcapDumper;
+        PcapDump pcapDumper;
         unsigned int snaplen;
         unsigned long first, last, space;
     public:

@@ -41,7 +41,7 @@ package inet.util;
 //
 simple PcapRecorder {
     parameters:
-        int verbosity = default(0);  // whether to log packets on the module output
+        bool verbosity = default(false);  // whether to log packets on the module output
         string pcapFile = default(""); // the PCAP file to be written
         int snaplen = default(65535);  // maximum number of bytes to record per packet
         string moduleNamePatterns = default("wlan[*] eth[*] ppp[*]"); // space-separated list of sibling module names to listen on
