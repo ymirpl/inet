@@ -26,10 +26,6 @@
 
 // Foreign declarations:
 class IPDatagram;
-class IPv6Datagram;
-class SCTPMessage;
-class TCPSegment;
-class UDPPacket;
 
 
 /**
@@ -37,13 +33,9 @@ class UDPPacket;
  */
 class PcapDump
 {
-    private:
-        bool verbosity;
     protected:
-        int32 seq;
-        std::ostream *outp;
-        FILE *dumpfile;
-        unsigned int snaplen;
+        FILE *dumpfile;         // pcap file
+        unsigned int snaplen;   // max. length of packets in pcap file
     public:
         PcapDump();
 
@@ -56,31 +48,6 @@ class PcapDump
         void closePcap();
 
         void writeFrame(simtime_t time, const IPDatagram *ipPacket);
-
-        inline void setOutStream(std::ostream& o) { outp = &o; }
-
-        inline void setVerbosity(bool verbosityLevel)
-        {
-            verbosity = verbosityLevel;
-        }
-
-        // dumps arbitary text
-        void dump(const char *label, const char *msg);
-
-        void dumpPacket(bool l2r, cPacket *packet);
-
-        void dumpIPv4(bool l2r, const char *label, IPDatagram *dgram, const char *comment = NULL);
-
-        void dumpIPv6(bool l2r, const char *label, IPv6Datagram *dgram, const char *comment = NULL);
-
-        void sctpDump(const char *label, SCTPMessage *sctpmsg, const std::string& srcAddr,
-                const std::string& destAddr, const char *comment=NULL);
-
-        void tcpDump(bool l2r, const char *label, TCPSegment *tcpseg, const std::string& srcAddr,
-                const std::string& destAddr, const char *comment=NULL);
-
-        void udpDump(bool l2r, const char *label, UDPPacket* udppkt, const std::string& srcAddr,
-                const std::string& destAddr, const char *comment);
 };
 
 

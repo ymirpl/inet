@@ -17,19 +17,14 @@
 // along with this program; if not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef __TCPDUMP_H
-#define __TCPDUMP_H
+#ifndef __INET_TCPDUMP_H
+#define __INET_TCPDUMP_H
 
 
 #include "INETDefs.h"
 
 #include "PcapDump.h"
-
-// Foreign declarations:
-class IPDatagram;
-class IPv6Datagram;
-class SCTPMessage;
-class TCPSegment;
+#include "PacketDump.h"
 
 
 /**
@@ -38,7 +33,8 @@ class TCPSegment;
 class INET_API TCPDump : public cSimpleModule
 {
     protected:
-        PcapDump tcpdump;
+        PcapDump pcapDump;
+        PacketDump tcpdump;
         unsigned int snaplen;
         unsigned long first, last, space;
         bool dumpBadFrames;
@@ -52,5 +48,5 @@ class INET_API TCPDump : public cSimpleModule
         virtual void finish();
 };
 
-#endif
+#endif // __INET_TCPDUMP_H
 

@@ -48,7 +48,8 @@ void TCPDump::initialize()
     tcpdump.setVerbosity(par("verbosity").boolValue());
     tcpdump.setOutStream(ev.getOStream());
 
-    tcpdump.openPcap(file, snaplen);
+    if (*file)
+        pcapDump.openPcap(file, snaplen);
 }
 
 void TCPDump::handleMessage(cMessage *msg)
@@ -60,11 +61,12 @@ void TCPDump::handleMessage(cMessage *msg)
     }
 
 #ifdef WITH_IPv4
-    if (tcpdump.isOpened() && dynamic_cast<IPDatagram *>(msg) && (dumpBadFrames || !PK(msg)->hasBitError()))
+    if (pcapDump.isOpened() && dynamic_cast<IPDatagram *>(msg)
+            && (dumpBadFrames || !PK(msg)->hasBitError()))
     {
         const simtime_t stime = simulation.getSimTime();
         IPDatagram *ipPacket = check_and_cast<IPDatagram *>(msg);
-        tcpdump.writeFrame(stime, ipPacket);
+        pcapDump.writeFrame(stime, ipPacket);
     }
 #endif
 
@@ -89,6 +91,6 @@ void TCPDump::handleMessage(cMessage *msg)
 void TCPDump::finish()
 {
     tcpdump.dump("", "tcpdump finished");
-    tcpdump.closePcap();
+    pcapDump.closePcap();
 }
 

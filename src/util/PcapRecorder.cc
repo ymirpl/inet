@@ -44,8 +44,8 @@ void PcapRecorder::initialize()
     const char* file = par("pcapFile");
     snaplen = this->par("snaplen");
     dumpBadFrames = par("dumpBadFrames").boolValue();
-    pcapDumper.setVerbosity(par("verbosity").boolValue());
-    pcapDumper.setOutStream(ev.getOStream());
+    packetDumper.setVerbosity(par("verbosity").boolValue());
+    packetDumper.setOutStream(ev.getOStream());
     signalList.clear();
 
     {
@@ -100,7 +100,8 @@ void PcapRecorder::initialize()
         }
     }
 
-    pcapDumper.openPcap(file, snaplen);
+    if (*file)
+        pcapDumper.openPcap(file, snaplen);
 }
 
 void PcapRecorder::handleMessage(cMessage *msg)
@@ -125,7 +126,7 @@ void PcapRecorder::recordPacket(cPacket *msg, bool l2r)
     if (!ev.isDisabled())
     {
         EV << "PcapRecorder::recordPacket(" << msg->getFullPath() << ", " << l2r << ")\n";
-        pcapDumper.dumpPacket(l2r, msg);
+        packetDumper.dumpPacket(l2r, msg);
     }
 
 #ifdef WITH_IPv4
@@ -156,7 +157,7 @@ void PcapRecorder::recordPacket(cPacket *msg, bool l2r)
 
 void PcapRecorder::finish()
 {
-     pcapDumper.dump("", "pcapRecorder finished");
+     packetDumper.dump("", "pcapRecorder finished");
      pcapDumper.closePcap();
 }
 

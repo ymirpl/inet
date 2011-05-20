@@ -24,23 +24,19 @@
 
 #include "INETDefs.h"
 
+#include "PacketDump.h"
 #include "PcapDump.h"
-
-// Foreign declarations:
-class IPDatagram;
-class IPv6Datagram;
-class SCTPMessage;
-class TCPSegment;
 
 
 /**
- * Dumps every packet using the PcapDumper class
+ * Dumps every packet using the PcapDump and PacketDump classes
  */
 class INET_API PcapRecorder : public cSimpleModule, protected cListener
 {
     protected:
         typedef std::map<simsignal_t,bool> SignalList;
         SignalList signalList;
+        PacketDump packetDumper;
         PcapDump pcapDumper;
         unsigned int snaplen;
         unsigned long first, last, space;
