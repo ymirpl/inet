@@ -20,56 +20,11 @@
 //
 
 
-#include <errno.h>
-
 #include "PcapRecorder.h"
 
-#include "IPProtocolId_m.h"
-
-#ifdef WITH_UDP
-#include "UDPPacket_m.h"
-#endif
-
-#ifdef WITH_SCTP
-#include "SCTPMessage.h"
-#include "SCTPAssociation.h"
-#endif
-
-#ifdef WITH_TCP_BASE
-#include "TCPSegment.h"
-#endif
-
 #ifdef WITH_IPv4
-#include "ICMPMessage.h"
-#include "IPAddress.h"
-#include "IPControlInfo_m.h"
 #include "IPDatagram.h"
-#include "IPSerializer.h"
 #endif
-
-#ifdef WITH_IPv6
-#include "IPv6Datagram.h"
-#endif
-
-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(_WIN64)
-#include <netinet/in.h>  // htonl, ntohl, ...
-#endif
-
-#define MAXBUFLENGTH 65536
-
-/* "libpcap" record header. */
-struct pcaprec_hdr {
-     int32  ts_sec;     /* timestamp seconds */
-     uint32 ts_usec;        /* timestamp microseconds */
-     uint32 incl_len;   /* number of octets of packet saved in file */
-     uint32 orig_len;   /* actual length of packet */
-};
-
-typedef struct {
-     uint8  dest_addr[6];
-     uint8  src_addr[6];
-     uint16 l3pid;
-} hdr_ethernet_t;
 
 
 //----
@@ -88,6 +43,7 @@ void PcapRecorder::initialize()
 {
     const char* file = par("pcapFile");
     snaplen = this->par("snaplen");
+    dumpBadFrames = par("dumpBadFrames").boolValue();
     pcapDumper.setVerbosity(par("verbosity").boolValue());
     pcapDumper.setOutStream(ev.getOStream());
     signalList.clear();
@@ -169,73 +125,7 @@ void PcapRecorder::recordPacket(cPacket *msg, bool l2r)
     if (!ev.isDisabled())
     {
         EV << "PcapRecorder::recordPacket(" << msg->getFullPath() << ", " << l2r << ")\n";
-#ifdef WITH_IPv4
-        if (dynamic_cast<IPDatagram *>(msg))
-        {
-            pcapDumper.dumpIPv4(l2r, "", (IPDatagram *)msg, "");
-        }
-        else
-#endif
-#ifdef WITH_SCTP
-        if (dynamic_cast<SCTPMessage *>(msg))
-        {
-            pcapDumper.sctpDump("", (SCTPMessage *)msg, std::string(l2r ? "A" : "B"), std::string(l2r ? "B" : "A"));
-        }
-        else
-#endif
-#ifdef WITH_TCP_BASE
-        if (dynamic_cast<TCPSegment *>(msg))
-        {
-            pcapDumper.tcpDump(l2r, "", (TCPSegment *)msg, std::string(l2r ? "A" : "B"), std::string(l2r ? "B" : "A"));
-        }
-        else
-#endif
-#ifdef WITH_IPv4
-        if (dynamic_cast<ICMPMessage *>(msg))
-        {
-            ev << "ICMPMessage" << (msg->hasBitError() ? "BitError" : "") << endl;
-        }
-        else
-#endif
-        {
-            // search for encapsulated IP[v6]Datagram in it
-            cPacket *encapmsg = msg;
-
-            while (encapmsg
-#ifdef WITH_IPv4
-                    && dynamic_cast<IPDatagram *>(encapmsg) == NULL
-#endif
-#ifdef WITH_IPv6
-                    && dynamic_cast<IPv6Datagram_Base *>(encapmsg) == NULL
-#endif
-                )
-            {
-                encapmsg = encapmsg->getEncapsulatedPacket();
-            }
-
-            if (!encapmsg)
-            {
-                //We do not want this to end in an error if EtherAutoconf messages
-                //are passed, so just print a warning. -WEI
-                EV << "CANNOT DECODE: packet " << msg->getName() << " doesn't contain either IP or IPv6 Datagram\n";
-            }
-            else
-            {
-                msg = encapmsg;
-
-#ifdef WITH_IPv4
-                if (dynamic_cast<IPDatagram *>(msg))
-                    pcapDumper.dumpIPv4(l2r, "", (IPDatagram *)msg);
-                else
-#endif
-#ifdef WITH_IPv6
-                if (dynamic_cast<IPv6Datagram *>(msg))
-                    pcapDumper.dumpIPv6(l2r, "", (IPv6Datagram *)msg);
-                else
-#endif
-                    ASSERT(0); // cannot get here
-            }
-        }
+        pcapDumper.dumpPacket(l2r, msg);
     }
 
 #ifdef WITH_IPv4
@@ -256,7 +146,7 @@ void PcapRecorder::recordPacket(cPacket *msg, bool l2r)
         msg = msg->getEncapsulatedPacket();
     }
 
-    if (ipPacket)
+    if (ipPacket && (dumpBadFrames || !hasBitError))
     {
         const simtime_t stime = simulation.getSimTime();
         pcapDumper.writeFrame(stime, ipPacket);

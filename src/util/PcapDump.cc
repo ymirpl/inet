@@ -97,7 +97,8 @@ PcapDump::~PcapDump()
 {
 }
 
-void PcapDump::sctpDump(const char *label, SCTPMessage *sctpmsg, const std::string& srcAddr, const std::string& destAddr, const char *comment)
+void PcapDump::sctpDump(const char *label, SCTPMessage *sctpmsg, const std::string& srcAddr,
+        const std::string& destAddr, const char *comment)
 {
 #ifdef WITH_SCTP
      std::ostream& out = *outp;
@@ -401,6 +402,70 @@ void PcapDump::dump(const char *label, const char *msg)
      out << buf;
 
      out << msg << "\n";
+}
+
+void PcapDump::dumpPacket(bool l2r, cPacket *msg)
+{
+    std::ostream& out = *outp;
+
+    #ifdef WITH_IPv4
+    if (dynamic_cast<IPDatagram *>(msg))
+    {
+        dumpIPv4(l2r, "", (IPDatagram *)msg, "");
+    }
+    else
+#endif
+#ifdef WITH_SCTP
+    if (dynamic_cast<SCTPMessage *>(msg))
+    {
+        sctpDump("", (SCTPMessage *)msg, std::string(l2r ? "A" : "B"), std::string(l2r ? "B" : "A"));
+    }
+    else
+#endif
+#ifdef WITH_TCP_BASE
+    if (dynamic_cast<TCPSegment *>(msg))
+    {
+        tcpDump(l2r, "", (TCPSegment *)msg, std::string(l2r ? "A" : "B"), std::string(l2r ? "B" : "A"));
+    }
+    else
+#endif
+#ifdef WITH_IPv4
+    if (dynamic_cast<ICMPMessage *>(msg))
+    {
+        out << "ICMPMessage " << msg->getName() << (msg->hasBitError() ? " (BitError)" : "") << endl;
+    }
+    else
+#endif
+    {
+        // search for encapsulated IP[v6]Datagram in it
+        while (msg)
+        {
+#ifdef WITH_IPv4
+            if (dynamic_cast<IPDatagram *>(msg))
+            {
+                dumpIPv4(l2r, "", (IPDatagram *)msg);
+                break;
+            }
+#endif
+#ifdef WITH_IPv6
+            if (dynamic_cast<IPv6Datagram *>(msg))
+            {
+                dumpIPv6(l2r, "", (IPv6Datagram *)msg);
+                break;
+            }
+#endif
+            out << "Packet " << msg->getClassName() << " '" << msg->getName() << "'"
+                 << (msg->hasBitError() ? " (BitError)" : "")<< ": ";
+            msg = msg->getEncapsulatedPacket();
+        }
+
+        if (!msg)
+        {
+            //We do not want this to end in an error if EtherAutoconf messages
+            //are passed, so just print a warning. -WEI
+            out << "CANNOT DECODE, packet doesn't contain either IP or IPv6 Datagram\n";
+        }
+    }
 }
 
 void PcapDump::udpDump(bool l2r, const char *label, UDPPacket* udppkt,

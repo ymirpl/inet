@@ -19,42 +19,11 @@
 //
 
 
-#include <errno.h>
-
 #include "TCPDump.h"
 
-#include "IPProtocolId_m.h"
-
-#ifdef WITH_UDP
-#include "UDPPacket_m.h"
-#endif
-
-#ifdef WITH_SCTP
-#include "SCTPMessage.h"
-#include "SCTPAssociation.h"
-#endif
-
-#ifdef WITH_TCP_COMMON
-#include "TCPSegment.h"
-#endif
-
 #ifdef WITH_IPv4
-#include "ICMPMessage.h"
-#include "IPAddress.h"
-#include "IPControlInfo_m.h"
 #include "IPDatagram.h"
-#include "IPSerializer.h"
 #endif
-
-#ifdef WITH_IPv6
-#include "IPv6Datagram.h"
-#endif
-
-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(_WIN64)
-#include <netinet/in.h>  // htonl, ntohl, ...
-#endif
-
-#define MAXBUFLENGTH 65536
 
 //----
 
@@ -72,7 +41,6 @@ void TCPDump::initialize()
 {
     const char* file = this->par("dumpFile");
 
-    showBadFrames = par("showBadFrames").boolValue();
     dumpBadFrames = par("dumpBadFrames").boolValue();
     dropBadFrames = par("dropBadFrames").boolValue();
 
@@ -85,75 +53,10 @@ void TCPDump::initialize()
 
 void TCPDump::handleMessage(cMessage *msg)
 {
-    if (!ev.isDisabled() && (showBadFrames || !PK(msg)->hasBitError()))
+    if (!ev.isDisabled() && msg->isPacket())
     {
         bool l2r = msg->arrivedOn("in1");
-
-#ifdef WITH_IPv4
-        if (dynamic_cast<IPDatagram *>(msg))
-        {
-            tcpdump.dumpIPv4(l2r, "", (IPDatagram *)msg, "");
-        }
-        else
-#endif
-#ifdef WITH_SCTP
-        if (dynamic_cast<SCTPMessage *>(msg))
-        {
-            tcpdump.sctpDump("", (SCTPMessage *)msg, std::string(l2r ? "A" : "B"), std::string(l2r ? "B" : "A"));
-        }
-        else
-#endif
-#ifdef TCP_COMMON
-        if (dynamic_cast<TCPSegment *>(msg))
-        {
-            tcpdump.tcpDump(l2r, "", (TCPSegment *)msg, std::string(l2r ? "A" : "B"), std::string(l2r ? "B" : "A"));
-        }
-        else
-#endif
-#ifdef WITH_IPv4
-        if (dynamic_cast<ICMPMessage *>(msg))
-        {
-            ev << "ICMPMessage" << (((ICMPMessage *)msg)->hasBitError() ? "BitError" : "") << endl;
-        }
-        else
-#endif
-        {
-            // search for encapsulated IP[v6]Datagram in it
-            cPacket *encapmsg = PK(msg);
-
-            while (encapmsg
-#ifdef WITH_IPv4
-                    && dynamic_cast<IPDatagram *>(encapmsg) == NULL
-#endif
-#ifdef WITH_IPv6
-                    && dynamic_cast<IPv6Datagram_Base *>(encapmsg) == NULL
-#endif
-                )
-            {
-                encapmsg = encapmsg->getEncapsulatedPacket();
-            }
-
-            if (!encapmsg)
-            {
-                //We do not want this to end in an error if EtherAutoconf messages
-                //are passed, so just print a warning. -WEI
-                EV << "CANNOT DECODE: packet " << msg->getName() << " doesn't contain either IP or IPv6 Datagram\n";
-            }
-            else
-            {
-#ifdef WITH_IPv4
-                if (dynamic_cast<IPDatagram *>(encapmsg))
-                    tcpdump.dumpIPv4(l2r, "", (IPDatagram *)encapmsg);
-                else
-#endif
-#ifdef WITH_IPv6
-                if (dynamic_cast<IPv6Datagram *>(encapmsg))
-                    tcpdump.dumpIPv6(l2r, "", (IPv6Datagram *)encapmsg);
-                else
-#endif
-                    ASSERT(0); // cannot get here
-            }
-        }
+        tcpdump.dumpPacket(l2r, PK(msg));
     }
 
 #ifdef WITH_IPv4

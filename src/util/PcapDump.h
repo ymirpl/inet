@@ -67,6 +67,8 @@ class PcapDump
         // dumps arbitary text
         void dump(const char *label, const char *msg);
 
+        void dumpPacket(bool l2r, cPacket *packet);
+
         void dumpIPv4(bool l2r, const char *label, IPDatagram *dgram, const char *comment = NULL);
 
         void dumpIPv6(bool l2r, const char *label, IPv6Datagram *dgram, const char *comment = NULL);

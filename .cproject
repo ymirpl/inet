@@ -535,6 +535,11 @@
 									<listOptionValue builtIn="false" value="WITH_MPLS"/>
 									<listOptionValue builtIn="false" value="WITH_OSPFv2"/>
 									<listOptionValue builtIn="false" value="WITH_BGPv4"/>
+<<<<<<< HEAD
+=======
+									<listOptionValue builtIn="false" value="WITH_xMIPv6"/>
+									<listOptionValue builtIn="false" value="WITH_TCP_COMMON"/>
+>>>>>>> Continued refactoring of PcapRecorder. TCPDump and PcapDump classes.
 									<listOptionValue builtIn="false" value="WITH_MANET"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.924398200" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>

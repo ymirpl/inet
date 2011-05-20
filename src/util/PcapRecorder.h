@@ -44,6 +44,7 @@ class INET_API PcapRecorder : public cSimpleModule, protected cListener
         PcapDump pcapDumper;
         unsigned int snaplen;
         unsigned long first, last, space;
+        bool dumpBadFrames;
     public:
         PcapRecorder();
         ~PcapRecorder();
