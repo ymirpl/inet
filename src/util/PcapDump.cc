@@ -30,30 +30,11 @@
 #include "UDPPacket_m.h"
 #endif
 
-#ifdef WITH_SCTP
-#include "SCTPMessage.h"
-#include "SCTPAssociation.h"
-#endif
-
-#ifdef WITH_TCP_BASE
-#include "TCPSegment.h"
-#endif
-
 #ifdef WITH_IPv4
-#include "ICMPMessage.h"
-#include "IPAddress.h"
-#include "IPControlInfo_m.h"
 #include "IPDatagram.h"
 #include "IPSerializer.h"
 #endif
 
-#ifdef WITH_IPv6
-#include "IPv6Datagram.h"
-#endif
-
-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(_WIN64)
-#include <netinet/in.h>  // htonl, ntohl, ...
-#endif
 
 #define MAXBUFLENGTH 65536
 
@@ -78,12 +59,6 @@ struct pcaprec_hdr {
      uint32 orig_len;   /* actual length of packet */
 };
 
-typedef struct {
-     uint8  dest_addr[6];
-     uint8  src_addr[6];
-     uint16 l3pid;
-} hdr_ethernet_t;
-
 
 
 PcapDump::PcapDump()
@@ -101,7 +76,7 @@ void PcapDump::openPcap(const char* filename, unsigned int snaplen_par)
     struct pcap_hdr fh;
 
     if (NULL == filename || '\0' == *filename)
-        throw cRuntimeError("Missing pcap file name for writing\n");
+        throw cRuntimeError("Missing pcap filename for writing\n");
 
     dumpfile = fopen(filename, "wb");
 

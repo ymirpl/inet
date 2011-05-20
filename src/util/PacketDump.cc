@@ -24,8 +24,6 @@
 
 #include "PacketDump.h"
 
-#include "IPProtocolId_m.h"
-
 #ifdef WITH_UDP
 #include "UDPPacket_m.h"
 #endif
@@ -41,49 +39,12 @@
 
 #ifdef WITH_IPv4
 #include "ICMPMessage.h"
-#include "IPAddress.h"
-#include "IPControlInfo_m.h"
 #include "IPDatagram.h"
-#include "IPSerializer.h"
 #endif
 
 #ifdef WITH_IPv6
 #include "IPv6Datagram.h"
 #endif
-
-#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(_WIN64)
-#include <netinet/in.h>  // htonl, ntohl, ...
-#endif
-
-#define MAXBUFLENGTH 65536
-
-#define PCAP_MAGIC           0xa1b2c3d4
-
-/* "libpcap" file header (minus magic number). */
-struct pcap_hdr {
-     uint32 magic;      /* magic */
-     uint16 version_major;   /* major version number */
-     uint16 version_minor;   /* minor version number */
-     uint32 thiszone;   /* GMT to local correction */
-     uint32 sigfigs;        /* accuracy of timestamps */
-     uint32 snaplen;        /* max length of captured packets, in octets */
-     uint32 network;        /* data link type */
-};
-
-/* "libpcap" record header. */
-struct pcaprec_hdr {
-     int32  ts_sec;     /* timestamp seconds */
-     uint32 ts_usec;        /* timestamp microseconds */
-     uint32 incl_len;   /* number of octets of packet saved in file */
-     uint32 orig_len;   /* actual length of packet */
-};
-
-typedef struct {
-     uint8  dest_addr[6];
-     uint8  src_addr[6];
-     uint16 l3pid;
-} hdr_ethernet_t;
-
 
 
 PacketDump::PacketDump()
@@ -96,310 +57,323 @@ PacketDump::~PacketDump()
 {
 }
 
-void PacketDump::sctpDump(const char *label, SCTPMessage *sctpmsg, const std::string& srcAddr,
-        const std::string& destAddr, const char *comment)
+void PacketDump::sctpDump(const char *label, SCTPMessage *sctpmsg,
+        const std::string& srcAddr, const std::string& destAddr, const char *comment)
 {
 #ifdef WITH_SCTP
-     std::ostream& out = *outp;
-     uint32 numberOfChunks;
-     SCTPChunk* chunk;
-     uint8 type;
-     // seq and time (not part of the tcpdump format)
-     char buf[30];
-     sprintf(buf,"[%.3f%s] ", simulation.getSimTime().dbl(), label);
-     out << buf;
+    std::ostream& out = *outp;
+    uint32 numberOfChunks;
+    SCTPChunk* chunk;
+    uint8 type;
+    // seq and time (not part of the tcpdump format)
+    char buf[30];
+    sprintf(buf,"[%.3f%s] ", simulation.getSimTime().dbl(), label);
+    out << buf;
 
-     // src/dest
-     out << srcAddr  << "." << sctpmsg->getSrcPort()  << " > ";
+    // src/dest
+    out << srcAddr  << "." << sctpmsg->getSrcPort()  << " > ";
 
-     out << destAddr << "." << sctpmsg->getDestPort() << ": ";
+    out << destAddr << "." << sctpmsg->getDestPort() << ": ";
 
-     if (sctpmsg->hasBitError())
-     {
-          sctpmsg->setChecksumOk(false);
-     }
+    if (sctpmsg->hasBitError())
+    {
+        sctpmsg->setChecksumOk(false);
+    }
 
-     numberOfChunks = sctpmsg->getChunksArraySize();
-     out << "numberOfChunks="<<numberOfChunks<<" VTag="<<sctpmsg->getTag()<<"\n";
+    numberOfChunks = sctpmsg->getChunksArraySize();
+    out << "numberOfChunks="<<numberOfChunks<<" VTag="<<sctpmsg->getTag()<<"\n";
 
-     if (sctpmsg->hasBitError())
-          out << "Packet has bit error!!\n";
+    if (sctpmsg->hasBitError())
+        out << "Packet has bit error!!\n";
 
-     for (uint32 i=0; i<numberOfChunks; i++)
-     {
-          chunk = (SCTPChunk*)sctpmsg->getChunks(i);
-          type  = chunk->getChunkType();
+    for (uint32 i = 0; i < numberOfChunks; i++)
+    {
+        chunk = (SCTPChunk*) sctpmsg->getChunks(i);
+        type = chunk->getChunkType();
 
-          // FIXME create a getChunkTypeName(SCTPChunkType x) function in SCTP code and use it!
-          switch (type)
-          {
+        // FIXME create a getChunkTypeName(SCTPChunkType x) function in SCTP code and use it!
+        switch (type)
+        {
+            case INIT:
+                out << "INIT ";
+                break;
+
+            case INIT_ACK:
+                out << "INIT_ACK ";
+                break;
+
+            case COOKIE_ECHO:
+                out << "COOKIE_ECHO ";
+                break;
+
+            case COOKIE_ACK:
+                out << "COOKIE_ACK ";
+                break;
+
+            case DATA:
+                out << "DATA ";
+                break;
+
+            case SACK:
+                out << "SACK ";
+                break;
+
+            case HEARTBEAT:
+                out << "HEARTBEAT ";
+                break;
+
+            case HEARTBEAT_ACK:
+                out << "HEARTBEAT_ACK ";
+                break;
+
+            case ABORT:
+                out << "ABORT ";
+                break;
+
+            case SHUTDOWN:
+                out << "SHUTDOWN ";
+                break;
+
+            case SHUTDOWN_ACK:
+                out << "SHUTDOWN_ACK ";
+                break;
+
+            case SHUTDOWN_COMPLETE:
+                out << "SHUTDOWN_COMPLETE ";
+                break;
+
+            case ERRORTYPE:
+                out << "ERROR";
+                break;
+        }
+    }
+
+    if (verbosity)
+    {
+        out << endl;
+
+        for (uint32 i = 0; i < numberOfChunks; i++)
+        {
+            chunk = (SCTPChunk*) sctpmsg->getChunks(i);
+            type = chunk->getChunkType();
+
+            sprintf(buf, "   %3u: ", i + 1);
+            out << buf;
+
+            switch (type)
+            {
                 case INIT:
-                     out << "INIT ";
-                     break;
-                case INIT_ACK:
-                     out << "INIT_ACK ";
-                     break;
-                case COOKIE_ECHO:
-                     out << "COOKIE_ECHO ";
-                     break;
-                case COOKIE_ACK:
-                     out << "COOKIE_ACK ";
-                     break;
-                case DATA:
-                     out << "DATA ";
-                     break;
-                case SACK:
-                     out << "SACK ";
-                     break;
-                case HEARTBEAT:
-                     out << "HEARTBEAT ";
-                     break;
-                case HEARTBEAT_ACK:
-                     out << "HEARTBEAT_ACK ";
-                     break;
-                case ABORT:
-                     out << "ABORT ";
-                     break;
-                case SHUTDOWN:
-                     out << "SHUTDOWN ";
-                     break;
-                case SHUTDOWN_ACK:
-                     out << "SHUTDOWN_ACK ";
-                     break;
-                case SHUTDOWN_COMPLETE:
-                     out << "SHUTDOWN_COMPLETE ";
-                     break;
-                case ERRORTYPE:
-                     out << "ERROR";
-                     break;
-          }
-     }
-
-     if (verbosity)
-     {
-          out << endl;
-
-          for (uint32 i = 0; i < numberOfChunks; i++)
-          {
-                chunk = (SCTPChunk*)sctpmsg->getChunks(i);
-                type = chunk->getChunkType();
-
-                sprintf(buf,  "   %3u: ", i + 1);
-                out << buf;
-
-                switch (type)
                 {
-                     case INIT:
-                     {
-                          SCTPInitChunk* initChunk;
-                          initChunk = check_and_cast<SCTPInitChunk *>(chunk);
-                          out << "INIT[InitiateTag=";
-                          out << initChunk->getInitTag();
-                          out << "; a_rwnd=";
-                          out << initChunk->getA_rwnd();
-                          out << "; OS=";
-                          out << initChunk->getNoOutStreams();
-                          out << "; IS=";
-                          out << initChunk->getNoInStreams();
-                          out << "; InitialTSN=";
-                          out << initChunk->getInitTSN();
+                    SCTPInitChunk* initChunk;
+                    initChunk = check_and_cast<SCTPInitChunk *> (chunk);
+                    out << "INIT[InitiateTag=";
+                    out << initChunk->getInitTag();
+                    out << "; a_rwnd=";
+                    out << initChunk->getA_rwnd();
+                    out << "; OS=";
+                    out << initChunk->getNoOutStreams();
+                    out << "; IS=";
+                    out << initChunk->getNoInStreams();
+                    out << "; InitialTSN=";
+                    out << initChunk->getInitTSN();
 
-                          if (initChunk->getAddressesArraySize() > 0)
-                          {
-                                out <<"; Addresses=";
+                    if (initChunk->getAddressesArraySize() > 0)
+                    {
+                        out << "; Addresses=";
 
-                                for (uint32 i = 0; i < initChunk->getAddressesArraySize(); i++)
-                                {
-                                     if (i > 0)
-                                          out << ",";
+                        for (uint32 i = 0; i < initChunk->getAddressesArraySize(); i++)
+                        {
+                            if (i > 0)
+                                out << ",";
 
-                                     if (initChunk->getAddresses(i).isIPv6())
-                                          out << initChunk->getAddresses(i).str();
-                                     else
-                                          out << initChunk->getAddresses(i);
-                                }
-                          }
+                            if (initChunk->getAddresses(i).isIPv6())
+                                out << initChunk->getAddresses(i).str();
+                            else
+                                out << initChunk->getAddresses(i);
+                        }
+                    }
 
-                          out <<"]";
-                          break;
-                     }
-
-                     case INIT_ACK:
-                     {
-                          SCTPInitAckChunk* initackChunk;
-                          initackChunk = check_and_cast<SCTPInitAckChunk *>(chunk);
-                          out << "INIT_ACK[InitiateTag=";
-                          out << initackChunk->getInitTag();
-                          out << "; a_rwnd=";
-                          out << initackChunk->getA_rwnd();
-                          out << "; OS=";
-                          out << initackChunk->getNoOutStreams();
-                          out << "; IS=";
-                          out << initackChunk->getNoInStreams();
-                          out << "; InitialTSN=";
-                          out << initackChunk->getInitTSN();
-                          out << "; CookieLength=";
-                          out << initackChunk->getCookieArraySize();
-
-                          if (initackChunk->getAddressesArraySize() > 0)
-                          {
-                                out <<"; Addresses=";
-
-                                for (uint32 i = 0; i < initackChunk->getAddressesArraySize(); i++)
-                                {
-                                     if (i > 0)
-                                          out << ",";
-
-                                     out << initackChunk->getAddresses(i);
-                                }
-                          }
-
-                          out <<"]";
-                          break;
-                     }
-
-                     case COOKIE_ECHO:
-                          out << "COOKIE_ECHO[CookieLength=";
-                          out <<     chunk->getBitLength()/8 - 4;
-                          out <<"]";
-                          break;
-
-                     case COOKIE_ACK:
-                          out << "COOKIE_ACK ";
-                          break;
-
-                     case DATA:
-                     {
-                          SCTPDataChunk* dataChunk;
-                          dataChunk = check_and_cast<SCTPDataChunk *>(chunk);
-                          out << "DATA[TSN=";
-                          out << dataChunk->getTsn();
-                          out << "; SID=";
-                          out << dataChunk->getSid();
-                          out << "; SSN=";
-                          out << dataChunk->getSsn();
-                          out << "; PPID=";
-                          out << dataChunk->getPpid();
-                          out << "; PayloadLength=";
-                          out << dataChunk->getBitLength()/8 - 16;
-                          out <<"]";
-                          break;
-                     }
-
-                     case SACK:
-                     {
-                          SCTPSackChunk* sackChunk;
-                          sackChunk = check_and_cast<SCTPSackChunk *>(chunk);
-                          out << "SACK[CumTSNAck=";
-                          out << sackChunk->getCumTsnAck();
-                          out << "; a_rwnd=";
-                          out << sackChunk->getA_rwnd();
-
-                          if (sackChunk->getGapStartArraySize() > 0)
-                          {
-                                out <<"; Gaps=";
-                                for (uint32 i = 0; i < sackChunk->getGapStartArraySize(); i++)
-                                {
-                                     if (i > 0)
-                                          out << ", ";
-                                     out << sackChunk->getGapStart(i) << "-" << sackChunk->getGapStop(i);
-                                }
-                          }
-
-                          if (sackChunk->getDupTsnsArraySize() > 0)
-                          {
-                                out <<"; Dups=";
-
-                                for (uint32 i = 0; i < sackChunk->getDupTsnsArraySize(); i++)
-                                {
-                                     if (i > 0)
-                                          out << ", ";
-
-                                     out << sackChunk->getDupTsns(i);
-                                }
-                          }
-
-                          out <<"]";
-                          break;
-                     }
-
-                     case HEARTBEAT:
-                          SCTPHeartbeatChunk* heartbeatChunk;
-                          heartbeatChunk = check_and_cast<SCTPHeartbeatChunk *>(chunk);
-                          out << "HEARTBEAT[InfoLength=";
-                          out <<     chunk->getBitLength() / 8 - 4;
-                          out << "; time=";
-                          out << heartbeatChunk->getTimeField();
-                          out <<"]";
-                          break;
-
-                     case HEARTBEAT_ACK:
-                          out << "HEARTBEAT_ACK[InfoLength=";
-                          out <<     chunk->getBitLength() / 8 - 4;
-                          out <<"]";
-                          break;
-
-                     case ABORT:
-                          SCTPAbortChunk* abortChunk;
-                          abortChunk = check_and_cast<SCTPAbortChunk *>(chunk);
-                          out << "ABORT[T-Bit=";
-                          out << abortChunk->getT_Bit();
-                          out << "]";
-                          break;
-
-                     case SHUTDOWN:
-                          SCTPShutdownChunk* shutdown;
-                          shutdown = check_and_cast<SCTPShutdownChunk *>(chunk);
-                          out << "SHUTDOWN[CumTSNAck=";
-                          out << shutdown->getCumTsnAck();
-                          out << "]";
-                          break;
-
-                     case SHUTDOWN_ACK:
-                          out << "SHUTDOWN_ACK ";
-                          break;
-
-                     case SHUTDOWN_COMPLETE:
-                          out << "SHUTDOWN_COMPLETE ";
-                          break;
-
-                     case ERRORTYPE:
-                     {
-                          SCTPErrorChunk* errorChunk;
-                          errorChunk = check_and_cast<SCTPErrorChunk*>(chunk);
-                          uint32 numberOfParameters = errorChunk->getParametersArraySize();
-                          uint32 parameterType;
-
-                          for (uint32 i = 0; i < numberOfParameters; i++)
-                          {
-                                SCTPParameter* param = (SCTPParameter*)errorChunk->getParameters(i);
-                                parameterType   = param->getParameterType();
-                          }
-
-                          break;
-                     }
+                    out << "]";
+                    break;
                 }
-                out << endl;
-          }
-     }
 
-     // comment
-     if (comment)
-          out << "# " << comment;
+                case INIT_ACK:
+                {
+                    SCTPInitAckChunk* initackChunk;
+                    initackChunk = check_and_cast<SCTPInitAckChunk *> (chunk);
+                    out << "INIT_ACK[InitiateTag=";
+                    out << initackChunk->getInitTag();
+                    out << "; a_rwnd=";
+                    out << initackChunk->getA_rwnd();
+                    out << "; OS=";
+                    out << initackChunk->getNoOutStreams();
+                    out << "; IS=";
+                    out << initackChunk->getNoInStreams();
+                    out << "; InitialTSN=";
+                    out << initackChunk->getInitTSN();
+                    out << "; CookieLength=";
+                    out << initackChunk->getCookieArraySize();
 
-     out << endl;
+                    if (initackChunk->getAddressesArraySize() > 0)
+                    {
+                        out << "; Addresses=";
+
+                        for (uint32 i = 0; i < initackChunk->getAddressesArraySize(); i++)
+                        {
+                            if (i > 0)
+                                out << ",";
+
+                            out << initackChunk->getAddresses(i);
+                        }
+                    }
+
+                    out << "]";
+                    break;
+                }
+
+                case COOKIE_ECHO:
+                    out << "COOKIE_ECHO[CookieLength=";
+                    out << chunk->getBitLength() / 8 - 4;
+                    out << "]";
+                    break;
+
+                case COOKIE_ACK:
+                    out << "COOKIE_ACK ";
+                    break;
+
+                case DATA: {
+                    SCTPDataChunk* dataChunk;
+                    dataChunk = check_and_cast<SCTPDataChunk *> (chunk);
+                    out << "DATA[TSN=";
+                    out << dataChunk->getTsn();
+                    out << "; SID=";
+                    out << dataChunk->getSid();
+                    out << "; SSN=";
+                    out << dataChunk->getSsn();
+                    out << "; PPID=";
+                    out << dataChunk->getPpid();
+                    out << "; PayloadLength=";
+                    out << dataChunk->getBitLength() / 8 - 16;
+                    out << "]";
+                    break;
+                }
+
+                case SACK:
+                {
+                    SCTPSackChunk* sackChunk;
+                    sackChunk = check_and_cast<SCTPSackChunk *> (chunk);
+                    out << "SACK[CumTSNAck=";
+                    out << sackChunk->getCumTsnAck();
+                    out << "; a_rwnd=";
+                    out << sackChunk->getA_rwnd();
+
+                    if (sackChunk->getGapStartArraySize() > 0)
+                    {
+                        out << "; Gaps=";
+
+                        for (uint32 i = 0; i < sackChunk->getGapStartArraySize(); i++)
+                        {
+                            if (i > 0)
+                                out << ", ";
+
+                            out << sackChunk->getGapStart(i) << "-" << sackChunk->getGapStop(i);
+                        }
+                    }
+
+                    if (sackChunk->getDupTsnsArraySize() > 0)
+                    {
+                        out << "; Dups=";
+
+                        for (uint32 i = 0; i < sackChunk->getDupTsnsArraySize(); i++)
+                        {
+                            if (i > 0)
+                                out << ", ";
+
+                            out << sackChunk->getDupTsns(i);
+                        }
+                    }
+
+                    out << "]";
+                    break;
+                }
+
+                case HEARTBEAT:
+                    SCTPHeartbeatChunk* heartbeatChunk;
+                    heartbeatChunk = check_and_cast<SCTPHeartbeatChunk *> (chunk);
+                    out << "HEARTBEAT[InfoLength=";
+                    out << chunk->getBitLength() / 8 - 4;
+                    out << "; time=";
+                    out << heartbeatChunk->getTimeField();
+                    out << "]";
+                    break;
+
+                case HEARTBEAT_ACK:
+                    out << "HEARTBEAT_ACK[InfoLength=";
+                    out << chunk->getBitLength() / 8 - 4;
+                    out << "]";
+                    break;
+
+                case ABORT:
+                    SCTPAbortChunk* abortChunk;
+                    abortChunk = check_and_cast<SCTPAbortChunk *> (chunk);
+                    out << "ABORT[T-Bit=";
+                    out << abortChunk->getT_Bit();
+                    out << "]";
+                    break;
+
+                case SHUTDOWN:
+                    SCTPShutdownChunk* shutdown;
+                    shutdown = check_and_cast<SCTPShutdownChunk *> (chunk);
+                    out << "SHUTDOWN[CumTSNAck=";
+                    out << shutdown->getCumTsnAck();
+                    out << "]";
+                    break;
+
+                case SHUTDOWN_ACK:
+                    out << "SHUTDOWN_ACK ";
+                    break;
+
+                case SHUTDOWN_COMPLETE:
+                    out << "SHUTDOWN_COMPLETE ";
+                    break;
+
+                case ERRORTYPE:
+                {
+                    SCTPErrorChunk* errorChunk;
+                    errorChunk = check_and_cast<SCTPErrorChunk*> (chunk);
+                    uint32 numberOfParameters = errorChunk->getParametersArraySize();
+                    uint32 parameterType;
+
+                    for (uint32 i = 0; i < numberOfParameters; i++)
+                    {
+                        SCTPParameter* param = (SCTPParameter*) errorChunk->getParameters(i);
+                        parameterType = param->getParameterType();
+                    }
+
+                    break;
+                }
+            }
+            out << endl;
+        }
+    }
+
+    // comment
+    if (comment)
+        out << "# " << comment;
+
+    out << endl;
 #endif
 }
 
 void PacketDump::dump(const char *label, const char *msg)
 {
-     std::ostream& out = *outp;
+    std::ostream& out = *outp;
 
-     // seq and time (not part of the tcpdump format)
-     char buf[30];
-     sprintf(buf,"[%.3f%s] ", simulation.getSimTime().dbl(), label);
-     out << buf;
-     out << msg << "\n";
+    // seq and time (not part of the tcpdump format)
+    char buf[30];
+    sprintf(buf,"[%.3f%s] ", simulation.getSimTime().dbl(), label);
+    out << buf;
+    out << msg << "\n";
 }
 
 void PacketDump::dumpPacket(bool l2r, cPacket *msg)
