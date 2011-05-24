@@ -22,7 +22,7 @@
  *****************************************************************************/
 #include "dsr-pkt_omnet.h"
 #ifndef MobilityFramework
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #endif
 
 
@@ -179,7 +179,7 @@ DSRPkt::DSRPkt(struct dsr_pkt *dp,int interface_id) : IPDatagram()
 #ifndef MobilityFramework
         if (interface_id>=0)
         {
-            IPControlInfo *ipControlInfo = new IPControlInfo();
+            IPv4ControlInfo *ipControlInfo = new IPv4ControlInfo();
             //ipControlInfo->setProtocol(IP_PROT_UDP);
             ipControlInfo->setProtocol(IP_PROT_DSR);
             ipControlInfo->setInterfaceId(interface_id); // If broadcast packet send to interface
@@ -252,7 +252,7 @@ void DSRPkt::ModOptions (struct dsr_pkt *dp,int interface_id)
 #ifndef MobilityFramework
         if (interface_id>=0)
         {
-            IPControlInfo *ipControlInfo = new IPControlInfo();
+            IPv4ControlInfo *ipControlInfo = new IPv4ControlInfo();
             //ipControlInfo->setProtocol(IP_PROT_UDP);
             ipControlInfo->setProtocol(IP_PROT_DSR);
 

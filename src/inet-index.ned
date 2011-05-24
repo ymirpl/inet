@@ -64,7 +64,7 @@
 //  - message classes: ~IPDatagram, ~TCPSegment, ~UDPPacket, ~EthernetIIFrame,
 //    ~ARPPacket, ~PPPFrame, ~GenericAppMsg, ~EtherAppReq, etc.
 //  - control info classes (used in communication between protocol layers):
-//    ~IPControlInfo, ~TCPCommand, ~UDPControlInfo, ~Ieee802Ctrl, etc.
+//    ~IPv4ControlInfo, ~TCPCommand, ~UDPControlInfo, ~Ieee802Ctrl, etc.
 //  - application models: ~UDPVideoStreamSvr, ~UDPVideoStreamCli, ~UDPApp,
 //    ~TCPSessionApp, ~TCPBasicClientApp, ~TCPGenericSrvApp, ~TCPSinkApp,
 //    ~TCPSrvHostApp, ~EtherAppCli, ~EtherAppSrv, ~PingApp, etc.

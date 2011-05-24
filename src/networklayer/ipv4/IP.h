@@ -23,7 +23,7 @@
 #include "RoutingTableAccess.h"
 #include "IRoutingTable.h"
 #include "ICMPAccess.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPDatagram.h"
 #include "IPFragBuf.h"
 #include "ProtocolMap.h"
@@ -90,7 +90,7 @@ class INET_API IP : public QueueBase
      * the given control info. Override if you subclassed controlInfo and/or
      * want to add options etc to the datagram.
      */
-    virtual IPDatagram *encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPControlInfo *controlInfo);
+    virtual IPDatagram *encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPv4ControlInfo *controlInfo);
 
     /**
      * Creates a blank IP datagram. Override when subclassing IPDatagram is needed
@@ -139,7 +139,7 @@ class INET_API IP : public QueueBase
     virtual void reassembleAndDeliver(IPDatagram *datagram);
 
     /**
-     * Decapsulate and return encapsulated packet after attaching IPControlInfo.
+     * Decapsulate and return encapsulated packet after attaching IPv4ControlInfo.
      */
     virtual cPacket *decapsulateIP(IPDatagram *datagram);
 

@@ -132,7 +132,7 @@ void DSRUU::omnet_xmit(struct dsr_pkt *dp)
         p->setNextAddress(dp->nxt_hop.s_addr);
         p->setControlInfo(new MacControlInfo(macAddr));
 #else
-        IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(p->getControlInfo());
+        IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(p->getControlInfo());
         IPv4Address nextIp((uint32_t)dp->nxt_hop.s_addr);
         controlInfo->setNextHopAddr(nextIp);
         p->setNextAddress(nextIp);
@@ -1000,7 +1000,7 @@ void DSRUU::EtxMsgSend(unsigned long data)
     msg->setSrcAddress(srcAddress_var);
     msg->setTimeToLive (1); // TTL
     msg->setTransportProtocol(IP_PROT_DSR); // Transport protocol
-    IPControlInfo *ipControlInfo = new IPControlInfo();
+    IPv4ControlInfo *ipControlInfo = new IPv4ControlInfo();
     ipControlInfo->setProtocol(IP_PROT_DSR);
     ipControlInfo->setInterfaceId(interfaceId); // If broadcast packet send to interface
     ipControlInfo->setSrcAddr(srcAddress_var);

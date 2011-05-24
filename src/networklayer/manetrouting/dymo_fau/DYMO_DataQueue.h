@@ -25,7 +25,7 @@
 #include <map>
 #include <omnetpp.h>
 #include "IPv4Address.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "IPDatagram.h"
 #include "InterfaceTable.h"
 #include "InterfaceTableAccess.h"

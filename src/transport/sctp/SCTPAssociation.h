@@ -32,7 +32,7 @@
 #include "SCTPSendStream.h"
 #include "SCTPReceiveStream.h"
 #include "SCTPMessage.h"
-//#include "IPControlInfo.h"
+//#include "IPv4ControlInfo.h"
 #include <list>
 #include <iostream>
 #include <errno.h>

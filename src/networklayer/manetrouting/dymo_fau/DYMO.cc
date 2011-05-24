@@ -23,7 +23,7 @@
 #include "UDPControlInfo_m.h"
 #include "UDPSocket.h"
 #include "IPProtocolId_m.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "UDPPacket.h"
 #include "ModuleAccess.h"
 #include "IP.h"
@@ -229,7 +229,7 @@ void DYMO::handleMessage(cMessage* apMsg)
             }
             msg_aux  = udpPacket->decapsulate();
 
-            IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(udpPacket->removeControlInfo());
+            IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(udpPacket->removeControlInfo());
             if (isLocalAddress(controlInfo->getSrcAddr()) || controlInfo->getSrcAddr().isUnspecified())
             {
                 // local address delete packet
@@ -382,8 +382,8 @@ InterfaceEntry* DYMO::getNextHopInterface(DYMO_PacketBBMessage* pkt)
 
     if (!pkt) error("getNextHopInterface called with NULL packet");
 
-    IPControlInfo* controlInfo = check_and_cast<IPControlInfo*>(pkt->removeControlInfo());
-    if (!controlInfo) error("received packet did not have IPControlInfo attached");
+    IPv4ControlInfo* controlInfo = check_and_cast<IPv4ControlInfo*>(pkt->removeControlInfo());
+    if (!controlInfo) error("received packet did not have IPv4ControlInfo attached");
 
     int interfaceId = controlInfo->getInterfaceId();
     if (interfaceId == -1) error("received packet's UDPControlInfo did not have information on interfaceId");
@@ -554,7 +554,7 @@ void DYMO::handleLowerRERR(DYMO_RERR *my_rerr)
     statsDYMORcvd++;
 
     // get RERR's IP.SourceAddress
-    IPControlInfo* controlInfo = check_and_cast<IPControlInfo*>(my_rerr->getControlInfo());
+    IPv4ControlInfo* controlInfo = check_and_cast<IPv4ControlInfo*>(my_rerr->getControlInfo());
     IPv4Address sourceAddr = controlInfo->getSrcAddr();
 
     // get RERR's SourceInterface

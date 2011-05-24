@@ -28,7 +28,7 @@
 #include "dymo_um_omnet.h"
 
 #include "UDPPacket.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPv6ControlInfo.h"
 #include "ICMPMessage_m.h"
 #include "ICMPAccess.h"
@@ -395,7 +395,7 @@ void DYMOUM::handleMessage (cMessage *msg)
             dymoMsg = check_and_cast  <DYMO_element *>(msg_aux);
             if (!isInMacLayer())
             {
-                IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(udpPacket->removeControlInfo());
+                IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(udpPacket->removeControlInfo());
                 src_addr.s_addr = controlInfo->getSrcAddr().getInt();
                 dymoMsg->setControlInfo(controlInfo);
             }
@@ -609,7 +609,7 @@ void DYMOUM::recvDYMOUMPacket(cMessage * msg)
 
     if (!isInMacLayer())
     {
-        IPControlInfo *ctrl = check_and_cast<IPControlInfo *>(msg->removeControlInfo());
+        IPv4ControlInfo *ctrl = check_and_cast<IPv4ControlInfo *>(msg->removeControlInfo());
         IPvXAddress srcAddr = ctrl->getSrcAddr();
         IPvXAddress destAddr = ctrl->getDestAddr();
         src.s_addr = srcAddr.get4().getInt();

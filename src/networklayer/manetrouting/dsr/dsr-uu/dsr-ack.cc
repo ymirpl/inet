@@ -232,18 +232,18 @@ int NSCLASS dsr_ack_req_send(struct dsr_pkt *dp)
         p->setNextAddress(dp->nxt_hop.s_addr);
         p->setControlInfo(new MacControlInfo(macAddr));
 #else
-        IPControlInfo *controlInfo=NULL;
+        IPv4ControlInfo *controlInfo=NULL;
         if (p->getControlInfo())
         {
-            if (dynamic_cast<IPControlInfo*>(p->getControlInfo()))
-                controlInfo = check_and_cast<IPControlInfo*>(p->getControlInfo());
+            if (dynamic_cast<IPv4ControlInfo*>(p->getControlInfo()))
+                controlInfo = check_and_cast<IPv4ControlInfo*>(p->getControlInfo());
             else
                 delete p->removeControlInfo();
         }
 
         if (controlInfo==NULL)
         {
-            controlInfo = new IPControlInfo();
+            controlInfo = new IPv4ControlInfo();
             p->setControlInfo(controlInfo);
         }
 

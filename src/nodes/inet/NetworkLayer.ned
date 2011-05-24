@@ -37,19 +37,19 @@ module NetworkLayer
         bool proxyARP = default(true);
     gates:
         input ifIn[] @labels(IPDatagram);
-        input tcpIn @labels(TCPSegment,IPControlInfo/down);
-        input udpIn @labels(UDPPacket,IPControlInfo/down);
-        input sctpIn @labels(IPControlInfo/down,SCTPPacket);
-        input rsvpIn @labels(IPControlInfo/down);
-        input ospfIn @labels(IPControlInfo/down);
+        input tcpIn @labels(TCPSegment,IPv4ControlInfo/down);
+        input udpIn @labels(UDPPacket,IPv4ControlInfo/down);
+        input sctpIn @labels(IPv4ControlInfo/down,SCTPPacket);
+        input rsvpIn @labels(IPv4ControlInfo/down);
+        input ospfIn @labels(IPv4ControlInfo/down);
         input pingIn;
         input manetIn;
         output ifOut[];
-        output tcpOut @labels(TCPSegment,IPControlInfo/up);
-        output udpOut @labels(UDPPacket,IPControlInfo/up);
-        output sctpOut @labels(IPControlInfo/up,SCTPPacket);
-        output rsvpOut @labels(IPControlInfo/up);
-        output ospfOut @labels(IPControlInfo/up);
+        output tcpOut @labels(TCPSegment,IPv4ControlInfo/up);
+        output udpOut @labels(UDPPacket,IPv4ControlInfo/up);
+        output sctpOut @labels(IPv4ControlInfo/up,SCTPPacket);
+        output rsvpOut @labels(IPv4ControlInfo/up);
+        output ospfOut @labels(IPv4ControlInfo/up);
         output pingOut;
         output manetOut;
 

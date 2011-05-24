@@ -22,7 +22,7 @@
 #include "IPAddressResolver.h"
 
 #ifdef WITH_IPv4
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #endif
 
 #ifdef WITH_IPv6
@@ -62,9 +62,9 @@ void IPTrafSink::printPacket(cPacket *msg)
     int protocol = -1;
 
 #ifdef WITH_IPv4
-    if (dynamic_cast<IPControlInfo *>(msg->getControlInfo()) != NULL)
+    if (dynamic_cast<IPv4ControlInfo *>(msg->getControlInfo()) != NULL)
     {
-        IPControlInfo *ctrl = (IPControlInfo *)msg->getControlInfo();
+        IPv4ControlInfo *ctrl = (IPv4ControlInfo *)msg->getControlInfo();
         src = ctrl->getSrcAddr();
         dest = ctrl->getDestAddr();
         protocol = ctrl->getProtocol();
@@ -166,7 +166,7 @@ void IPTrafGen::sendPacket()
     {
 #ifdef WITH_IPv4
         // send to IPv4
-        IPControlInfo *controlInfo = new IPControlInfo();
+        IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
         controlInfo->setDestAddr(destAddr.get4());
         controlInfo->setProtocol(protocol);
         payload->setControlInfo(controlInfo);

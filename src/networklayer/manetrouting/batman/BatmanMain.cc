@@ -2,7 +2,7 @@
   */
 #include "ManetRoutingBase.h"
 #include "batman.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "UDPPacket_m.h"
 
 Define_Module (Batman);
@@ -289,7 +289,7 @@ void Batman::handleMessage(cMessage *msg)
     //select_timeout = ((int)(((struct forw_node *)forw_list.next)->send_time - curr_time) > 0 ?
     //            ((struct forw_node *)forw_list.next)->send_time - curr_time : 10);
 
-    IPControlInfo *ctrl = check_and_cast<IPControlInfo *>(msg->removeControlInfo());
+    IPv4ControlInfo *ctrl = check_and_cast<IPv4ControlInfo *>(msg->removeControlInfo());
     IPvXAddress srcAddr = ctrl->getSrcAddr();
     IPvXAddress destAddr = ctrl->getDestAddr();
     neigh = srcAddr.get4().getInt();

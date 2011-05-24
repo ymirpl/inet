@@ -20,7 +20,7 @@
 #include "ARP.h"
 
 #include "Ieee802Ctrl_m.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPDatagram.h"
 #include "IPv4InterfaceData.h"
 #include "IRoutingTable.h"

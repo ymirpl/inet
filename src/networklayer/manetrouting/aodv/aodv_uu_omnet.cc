@@ -27,7 +27,7 @@
 #include "aodv_uu_omnet.h"
 
 #include "UDPPacket.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPv6ControlInfo.h"
 #include "ICMPMessage_m.h"
 #include "ICMPAccess.h"
@@ -443,7 +443,7 @@ void NS_CLASS handleMessage (cMessage *msg)
             aodvMsg = check_and_cast  <AODV_msg *>(msg_aux);
             if (!isInMacLayer())
             {
-                IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(udpPacket->removeControlInfo());
+                IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(udpPacket->removeControlInfo());
                 src_addr.s_addr = controlInfo->getSrcAddr().getInt();
                 aodvMsg->setControlInfo(controlInfo);
             }
@@ -665,7 +665,7 @@ void NS_CLASS recvAODVUUPacket(cMessage * msg)
     ttl =  aodv_msg->ttl-1;
     if (!isInMacLayer())
     {
-        IPControlInfo *ctrl = check_and_cast<IPControlInfo *>(msg->getControlInfo());
+        IPv4ControlInfo *ctrl = check_and_cast<IPv4ControlInfo *>(msg->getControlInfo());
         IPvXAddress srcAddr = ctrl->getSrcAddr();
         IPvXAddress destAddr = ctrl->getDestAddr();
 

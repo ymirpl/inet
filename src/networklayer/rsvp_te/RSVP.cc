@@ -13,7 +13,7 @@
 //
 
 #include "RSVP.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPAddressResolver.h"
 #include "common.h"
 #include "Utils.h"
@@ -1370,7 +1370,7 @@ void RSVP::processHelloMsg(RSVPHelloMsg* msg)
     EV << "Received RSVP_HELLO" << endl;
     //print(msg);
 
-    IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(msg->getControlInfo());
+    IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(msg->getControlInfo());
     IPv4Address sender = controlInfo->getSrcAddr();
     IPv4Address peer = tedmod->primaryAddress(sender);
 
@@ -1993,7 +1993,7 @@ void RSVP::sendPathErrorMessage(SessionObj_t session, SenderTemplateObj_t sender
 
 void RSVP::sendToIP(cMessage *msg, IPv4Address destAddr)
 {
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setDestAddr(destAddr);
     controlInfo->setProtocol(IP_PROT_RSVP);
     msg->setControlInfo(controlInfo);

@@ -42,11 +42,11 @@ simple TCPSpoof like ITCP
         @statistic[sentPkBytesSignal](title="Sent packet bytes"; record=count,sum,vector);
 
     gates:
-        output ipOut @labels(TCPSegment,IPControlInfo/down);
+        output ipOut @labels(TCPSegment,IPv4ControlInfo/down);
         output ipv6Out @labels(TCPSegment,IPv6ControlInfo/down);
 
         input appIn[] @labels(TCPCommand/down); // Not used!
-        input ipIn @labels(TCPSegment,IPControlInfo/up); // Not used!
+        input ipIn @labels(TCPSegment,IPv4ControlInfo/up); // Not used!
         input ipv6In @labels(TCPSegment,IPv6ControlInfo/up); // Not used!
         output appOut[] @labels(TCPCommand/up); // Not used!
 }

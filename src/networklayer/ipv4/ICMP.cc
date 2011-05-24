@@ -22,7 +22,7 @@
 #include <string.h>
 
 #include "IPDatagram.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "ICMP.h"
 
 Define_Module(ICMP);
@@ -106,7 +106,7 @@ void ICMP::sendErrorMessage(IPDatagram *origDatagram, ICMPType type, ICMPCode co
     if (origDatagram->getSrcAddress().isUnspecified())
     {
         // pretend it came from the IP layer
-        IPControlInfo *controlInfo = new IPControlInfo();
+        IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
         controlInfo->setSrcAddr(IPv4Address::LOOPBACK_ADDRESS); // FIXME maybe use configured loopback address
         controlInfo->setProtocol(IP_PROT_ICMP);
         errorMessage->setControlInfo(controlInfo);
@@ -120,7 +120,7 @@ void ICMP::sendErrorMessage(IPDatagram *origDatagram, ICMPType type, ICMPCode co
     }
 }
 
-void ICMP::sendErrorMessage(cPacket *transportPacket, IPControlInfo *ctrl, ICMPType type, ICMPCode code)
+void ICMP::sendErrorMessage(cPacket *transportPacket, IPv4ControlInfo *ctrl, ICMPType type, ICMPCode code)
 {
     Enter_Method("sendErrorMessage(transportPacket, ctrl, type=%d, code=%d)", type, code);
 
@@ -178,7 +178,7 @@ void ICMP::processEchoRequest(ICMPMessage *request)
 
     // swap src and dest
     // TBD check what to do if dest was multicast etc?
-    IPControlInfo *ctrl = check_and_cast<IPControlInfo *>(reply->getControlInfo());
+    IPv4ControlInfo *ctrl = check_and_cast<IPv4ControlInfo *>(reply->getControlInfo());
     IPv4Address src = ctrl->getSrcAddr();
     IPv4Address dest = ctrl->getDestAddr();
     // A. Ariza Modification 5/1/2011 clean the interface id, this forces the use of routing table in the IP layer
@@ -191,7 +191,7 @@ void ICMP::processEchoRequest(ICMPMessage *request)
 
 void ICMP::processEchoReply(ICMPMessage *reply)
 {
-    IPControlInfo *ctrl = check_and_cast<IPControlInfo*>(reply->removeControlInfo());
+    IPv4ControlInfo *ctrl = check_and_cast<IPv4ControlInfo*>(reply->removeControlInfo());
     cPacket *payload = reply->decapsulate();
     payload->setControlInfo(ctrl);
     delete reply;
@@ -200,7 +200,7 @@ void ICMP::processEchoReply(ICMPMessage *reply)
 
 void ICMP::sendEchoRequest(cPacket *msg)
 {
-    IPControlInfo *ctrl = check_and_cast<IPControlInfo*>(msg->removeControlInfo());
+    IPv4ControlInfo *ctrl = check_and_cast<IPv4ControlInfo*>(msg->removeControlInfo());
     ctrl->setProtocol(IP_PROT_ICMP);
     ICMPMessage *request = new ICMPMessage(msg->getName());
     request->setType(ICMP_ECHO_REQUEST);
@@ -211,7 +211,7 @@ void ICMP::sendEchoRequest(cPacket *msg)
 
 void ICMP::sendToIP(ICMPMessage *msg, const IPv4Address& dest)
 {
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setDestAddr(dest);
     controlInfo->setProtocol(IP_PROT_ICMP);
     msg->setControlInfo(controlInfo);
@@ -221,7 +221,7 @@ void ICMP::sendToIP(ICMPMessage *msg, const IPv4Address& dest)
 
 void ICMP::sendToIP(ICMPMessage *msg)
 {
-    // assumes IPControlInfo is already attached
+    // assumes IPv4ControlInfo is already attached
     send(msg, "sendOut");
 }
 

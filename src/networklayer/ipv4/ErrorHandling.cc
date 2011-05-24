@@ -21,7 +21,7 @@
 
 #include <omnetpp.h>
 #include "ErrorHandling.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPDatagram.h"
 #include "ICMPMessage.h"
 

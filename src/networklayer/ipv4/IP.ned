@@ -25,11 +25,11 @@ package inet.networklayer.ipv4;
 // <b>Interfacing with higher layer protocols</b>
 //
 // To send a packet over IPv4 from a higher layer protocol, the module should
-// fill in an ~IPControlInfo object, attach it to the packet with cMessage's
+// fill in an ~IPv4ControlInfo object, attach it to the packet with cMessage's
 // setControlInfo() method, the send it to the ~IP module.
 //
 // When ~IP sends up a packet to a higher layer protocol, it will also attach
-// an ~IPControlInfo to the packet, with the source and destination IP address,
+// an ~IPv4ControlInfo to the packet, with the source and destination IP address,
 // etc. of the IP datagram in which the packet arrived.
 //
 // ~IP can serve several higher-layer protocols. When delivering packets
@@ -77,7 +77,7 @@ package inet.networklayer.ipv4;
 // method which determines processing time for a packet, or (2) use a
 // different base class.
 //
-// @see ~RoutingTable, ~IPControlInfo, ~IPRoutingDecision, ~ARP
+// @see ~RoutingTable, ~IPv4ControlInfo, ~IPRoutingDecision, ~ARP
 //
 // @author Andras Varga
 //
@@ -92,8 +92,8 @@ simple IP
         bool forceBroadcast = default(false);
         @display("i=block/routing");
     gates:
-        input transportIn[] @labels(IPControlInfo/down,TCPSegment,UDPPacket);
-        output transportOut[] @labels(IPControlInfo/up,TCPSegment,UDPPacket);
+        input transportIn[] @labels(IPv4ControlInfo/down,TCPSegment,UDPPacket);
+        output transportOut[] @labels(IPv4ControlInfo/up,TCPSegment,UDPPacket);
         input queueIn[] @labels(IPDatagram);
         output queueOut @labels(IPDatagram);
 }

@@ -31,7 +31,7 @@
 #include "NotificationBoard.h"
 #include "ProtocolMap.h"
 #include "ControlManetRouting_m.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #else
 #include "Blackboard.h"
 #include "LinkBreak.h"

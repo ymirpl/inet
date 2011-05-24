@@ -18,24 +18,24 @@
 #ifndef __INET_IPCONTROLINFO_H
 #define __INET_IPCONTROLINFO_H
 
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 
 class IPDatagram;
 
 /**
  * Control information for sending/receiving packets over IP.
  *
- * See the IPControlInfo.msg file for more info.
+ * See the IPv4ControlInfo.msg file for more info.
  */
-class INET_API IPControlInfo : public IPControlInfo_Base
+class INET_API IPv4ControlInfo : public IPv4ControlInfo_Base
 {
   protected:
     IPDatagram *dgram;
   public:
-    IPControlInfo() : IPControlInfo_Base() {dgram=NULL;}
-    virtual ~IPControlInfo();
-    IPControlInfo(const IPControlInfo& other) : IPControlInfo_Base() {dgram=NULL; operator=(other);}
-    IPControlInfo& operator=(const IPControlInfo& other) {IPControlInfo_Base::operator=(other); return *this;}
+    IPv4ControlInfo() : IPv4ControlInfo_Base() {dgram=NULL;}
+    virtual ~IPv4ControlInfo();
+    IPv4ControlInfo(const IPv4ControlInfo& other) : IPv4ControlInfo_Base() {dgram=NULL; operator=(other);}
+    IPv4ControlInfo& operator=(const IPv4ControlInfo& other) {IPv4ControlInfo_Base::operator=(other); return *this;}
 
     virtual void setOrigDatagram(IPDatagram *d);
     virtual IPDatagram *getOrigDatagram() const {return dgram;}

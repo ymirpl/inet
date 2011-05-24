@@ -20,7 +20,7 @@
 #include "DYMO_DataQueue.h"
 #include "IPv4InterfaceData.h"
 #include "Ieee802Ctrl_m.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IP.h"
 
 std::ostream& operator<<(std::ostream& os, const DYMO_QueuedData& o)

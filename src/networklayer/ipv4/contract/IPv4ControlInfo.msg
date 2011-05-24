@@ -33,7 +33,7 @@ cplusplus {{
 //
 // Control information for sending/receiving packets over IP.
 //
-// To send a packet over IP, fill in an ~IPControlInfo object,
+// To send a packet over IP, fill in an ~IPv4ControlInfo object,
 // attach it to the packet with the C++ method setControlInfo(),
 // the send it to the ~IP module.
 //
@@ -51,7 +51,7 @@ cplusplus {{
 // - options: IP Options currently not used
 // - Identifier is currently always chosen by the IP layer
 //
-// When ~IP delivers a packet to higher layers, it also attaches an ~IPControlInfo
+// When ~IP delivers a packet to higher layers, it also attaches an ~IPv4ControlInfo
 // to it. It fills in the following fields:
 //  - srcAddr, destAddr, protocol, diffServCodePoint: values from the original datagram
 //  - interfaceId: the interface on which the datagram arrived, or -1 if it was
@@ -60,7 +60,7 @@ cplusplus {{
 // ~IP also puts the original datagram object into the control info, because
 // it may be needed by higher layers (for example, by ~ICMP for error reporting).
 //
-class IPControlInfo
+class IPv4ControlInfo
 {
     @customize(true);
     IPv4Address destAddr;   // destination IP address

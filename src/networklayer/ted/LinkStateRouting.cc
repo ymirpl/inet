@@ -16,7 +16,7 @@
 #include <algorithm>
 
 #include "LinkStateRouting.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPv4InterfaceData.h"
 #include "NotifierConsts.h"
 #include "RoutingTableAccess.h"
@@ -79,7 +79,7 @@ void LinkStateRouting::handleMessage(cMessage * msg)
     else if (!strcmp(msg->getArrivalGate()->getName(), "ipIn"))
     {
         EV << "Processing message from IP: " << msg << endl;
-        IPControlInfo *controlInfo = check_and_cast<IPControlInfo *>(msg->getControlInfo());
+        IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo *>(msg->getControlInfo());
         IPv4Address sender = controlInfo->getSrcAddr();
         processLINK_STATE_MESSAGE(check_and_cast<LinkStateMsg*>(msg), sender);
     }
@@ -224,7 +224,7 @@ void LinkStateRouting::sendToPeer(IPv4Address peer, const std::vector<TELinkStat
 void LinkStateRouting::sendToIP(LinkStateMsg *msg, IPv4Address destAddr)
 {
     // attach control info to packet
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setDestAddr(destAddr);
     controlInfo->setSrcAddr(routerId);
     controlInfo->setProtocol(IP_PROT_OSPF);

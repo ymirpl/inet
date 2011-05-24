@@ -15,10 +15,10 @@
 // License along with this program; if not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPDatagram.h"
 
-IPControlInfo::~IPControlInfo()
+IPv4ControlInfo::~IPv4ControlInfo()
 {
     if (dgram)
     {
@@ -27,20 +27,20 @@ IPControlInfo::~IPControlInfo()
     }
 }
 
-void IPControlInfo::setOrigDatagram(IPDatagram *d)
+void IPv4ControlInfo::setOrigDatagram(IPDatagram *d)
 {
     if (dgram)
-        throw cRuntimeError(this, "IPControlInfo::setOrigDatagram(): a datagram is already attached");
+        throw cRuntimeError(this, "IPv4ControlInfo::setOrigDatagram(): a datagram is already attached");
 
     dgram = d;
     take(dgram);
 }
 
-IPDatagram *IPControlInfo::removeOrigDatagram()
+IPDatagram *IPv4ControlInfo::removeOrigDatagram()
 {
     if (!dgram)
-        throw cRuntimeError(this, "IPControlInfo::removeOrigDatagram(): no datagram attached "
-                  "(already removed, or maybe this IPControlInfo does not come "
+        throw cRuntimeError(this, "IPv4ControlInfo::removeOrigDatagram(): no datagram attached "
+                  "(already removed, or maybe this IPv4ControlInfo does not come "
                   "from the IP module?)");
 
     IPDatagram *ret = dgram;

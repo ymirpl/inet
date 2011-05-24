@@ -162,7 +162,7 @@ void DSDV_2::handleMessage(cMessage *msg)
             on large networks. For network 192.168.0.0, the broadcast is 192.168.255.255.
             */
             //new control info for DSDV_HelloMessage
-            IPControlInfo *controlInfo = new IPControlInfo();
+            IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
             controlInfo->setDestAddr(IPv4Address(255,255,255,255));//let's try the limited broadcast 255.255.255.255 but multicast goes from 224.0.0.0 to 239.255.255.255
             controlInfo->setSrcAddr(source);//let's try the limited broadcast
             controlInfo->setProtocol(IP_PROT_MANET);
@@ -214,7 +214,7 @@ void DSDV_2::handleMessage(cMessage *msg)
         {
             if (msg->getControlInfo() != NULL )
                 delete msg->removeControlInfo();
-            IPControlInfo *controlInfo = new IPControlInfo();
+            IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
             controlInfo->setDestAddr(IPv4Address(255,255,255,255));//let's try the limited broadcast 255.255.255.255 but multicast goes from 224.0.0.0 to 239.255.255.255
 
             // int numIntf = 0;

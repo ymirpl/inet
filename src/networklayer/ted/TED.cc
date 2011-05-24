@@ -16,7 +16,7 @@
 #include <algorithm>
 
 #include "TED.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "IPv4InterfaceData.h"
 #include "NotifierConsts.h"
 #include "RoutingTableAccess.h"

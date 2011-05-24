@@ -22,7 +22,7 @@
 
 #include "IP.h"
 #include "IPDatagram.h"
-#include "IPControlInfo.h"
+#include "IPv4ControlInfo.h"
 #include "ICMPMessage_m.h"
 #include "IPv4InterfaceData.h"
 #include "ARPPacket_m.h"
@@ -234,7 +234,7 @@ void IP::handleMessageFromHL(cPacket *msg)
     // encapsulate and send
 
     // encapsulate and send
-    IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(msg->removeControlInfo());
+    IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(msg->removeControlInfo());
     IPDatagram *datagram = encapsulate(msg, destIE,controlInfo);
     nextHopAddress = controlInfo->getNextHopAddr();
     delete controlInfo;
@@ -586,7 +586,7 @@ cPacket *IP::decapsulateIP(IPDatagram *datagram)
     cPacket *packet = datagram->decapsulate();
 
     // create and fill in control info
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setProtocol(datagram->getTransportProtocol());
     controlInfo->setSrcAddr(datagram->getSrcAddress());
     controlInfo->setDestAddr(datagram->getDestAddress());
@@ -668,13 +668,13 @@ void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address n
 
 IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
 {
-    IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(transportPacket->removeControlInfo());
+    IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(transportPacket->removeControlInfo());
     IPDatagram *datagram = encapsulate(transportPacket, destIE, controlInfo);
     delete controlInfo;
     return datagram;
 }
 
-IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPControlInfo *controlInfo)
+IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPv4ControlInfo *controlInfo)
 {
     IPDatagram *datagram = createIPDatagram(transportPacket->getName());
     datagram->setByteLength(IP_HEADER_BYTES);
@@ -761,7 +761,7 @@ void IP::dsrFillDestIE(IPDatagram *datagram, InterfaceEntry *&destIE,IPv4Address
     if (datagram->getTransportProtocol()!=IP_PROT_DSR)
         return; // Not Dsr packet
 
-    IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(datagram->removeControlInfo());
+    IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(datagram->removeControlInfo());
     if (controlInfo==NULL)
         return; // Not contolInfo
 

@@ -31,9 +31,9 @@ simple IPTrafSink like IPTrafficGenerator
         @statistic[endToEndDelay](title="End to end delay"; record=stats,histogram,vector);
 
     gates:
-        input ipIn @labels(IPControlInfo/up);
+        input ipIn @labels(IPv4ControlInfo/up);
         input ipv6In @labels(IPv6ControlInfo/up);
-        output ipOut @labels(IPControlInfo/down);
+        output ipOut @labels(IPv4ControlInfo/down);
         output ipv6Out @labels(IPv6ControlInfo/down);
 }
 
@@ -65,8 +65,8 @@ simple IPTrafGen like IPTrafficGenerator
         @statistic[endToEndDelay](title="End to end delay"; record=stats,histogram,vector);
 
     gates:
-        input ipIn @labels(IPControlInfo/up);
+        input ipIn @labels(IPv4ControlInfo/up);
         input ipv6In @labels(IPv6ControlInfo/up);
-        output ipOut @labels(IPControlInfo/down);
+        output ipOut @labels(IPv4ControlInfo/down);
         output ipv6Out @labels(IPv6ControlInfo/down);
 }
