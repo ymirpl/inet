@@ -8,11 +8,11 @@
 #include "IPv4ControlInfo.h"
 #include "IPv6ControlInfo.h"
 #include "ICMPMessage_m.h"
-#include "IPDatagram_m.h"
+#include "IPv4Datagram_m.h"
 #include "RoutingTable.h"
 #include "ICMPAccess.h"
 #include "IPv4ControlInfo.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "ProtocolMap.h"
 
 

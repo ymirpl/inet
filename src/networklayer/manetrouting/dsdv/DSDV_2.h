@@ -25,7 +25,7 @@
 #include "IPv4InterfaceData.h"
 #include "IPv4Address.h"
 #include "IPv4ControlInfo.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IInterfaceTable.h"
 #include "InterfaceTableAccess.h"
 #include "IRoutingTable.h"

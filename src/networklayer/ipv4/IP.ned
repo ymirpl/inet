@@ -20,7 +20,7 @@ package inet.networklayer.ipv4;
 
 //
 // Implements the IP protocol. The protocol header is represented
-// by the ~IPDatagram message class.
+// by the ~IPv4Datagram message class.
 //
 // <b>Interfacing with higher layer protocols</b>
 //
@@ -94,6 +94,6 @@ simple IP
     gates:
         input transportIn[] @labels(IPv4ControlInfo/down,TCPSegment,UDPPacket);
         output transportOut[] @labels(IPv4ControlInfo/up,TCPSegment,UDPPacket);
-        input queueIn[] @labels(IPDatagram);
-        output queueOut @labels(IPDatagram);
+        input queueIn[] @labels(IPv4Datagram);
+        output queueOut @labels(IPv4Datagram);
 }

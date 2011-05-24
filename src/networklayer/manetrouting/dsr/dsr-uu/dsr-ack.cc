@@ -157,7 +157,7 @@ int NSCLASS dsr_ack_req_send(struct dsr_pkt *dp)
     if (dp->payload)
     {
         p = new DSRPkt();
-        IPDatagram *dgram;
+        IPv4Datagram *dgram;
         dgram = p;
 
 #ifndef MobilityFramework

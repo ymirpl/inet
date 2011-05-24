@@ -22,16 +22,16 @@
 #ifndef IPv4Address
 #define IPv4Address int
 #endif
-#define IPDatagram NetwPkt
+#define IPv4Datagram NetwPkt
 #else
-#include <IPDatagram.h>
+#include <IPv4Datagram.h>
 #include <IPProtocolId_m.h>
 #endif
 
 #ifdef MobilityFramework
 
-#ifndef IPDatagram
-#define IPDatagram NetwPkt
+#ifndef IPv4Datagram
+#define IPv4Datagram NetwPkt
 #endif
 
 #ifndef IPv4Address
@@ -53,7 +53,7 @@ class EtxCost
     ~EtxCost() {}
 };
 
-class DSRPkt : public IPDatagram
+class DSRPkt : public IPv4Datagram
 {
 
   protected:
@@ -66,7 +66,7 @@ class DSRPkt : public IPDatagram
     int dsr_ttl;
 
   public:
-    explicit DSRPkt(const char *name=NULL) : IPDatagram(name) {costVector=NULL; options=NULL; costVectorSize=0; dsr_ttl=0;}
+    explicit DSRPkt(const char *name=NULL) : IPv4Datagram(name) {costVector=NULL; options=NULL; costVectorSize=0; dsr_ttl=0;}
     ~DSRPkt ();
     DSRPkt (const DSRPkt  &m);
     DSRPkt (struct dsr_pkt *dp,int interface_id);
@@ -117,13 +117,13 @@ class EtxList
     double delivery;// the simulation suppose that the code use a u_int32_t
 };
 
-class DSRPktExt: public IPDatagram
+class DSRPktExt: public IPv4Datagram
 {
   protected:
     EtxList *extension;
     int size;
   public:
-    explicit DSRPktExt(const char *name=NULL) : IPDatagram(name) {size=0; extension=NULL;}
+    explicit DSRPktExt(const char *name=NULL) : IPv4Datagram(name) {size=0; extension=NULL;}
     ~DSRPktExt ();
     DSRPktExt (const DSRPktExt  &m);
     DSRPktExt &     operator= (const DSRPktExt &m);

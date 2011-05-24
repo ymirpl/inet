@@ -75,12 +75,12 @@ std::string DYMO_DataQueue::detailedInfo() const
 }
 
 
-void DYMO_DataQueue::queuePacket(const IPDatagram* datagram)
+void DYMO_DataQueue::queuePacket(const IPv4Datagram* datagram)
 {
     IPv4Address destAddr = datagram->getDestAddress();
 
     ev << "Queueing data packet to " << destAddr << endl;
-    dataQueue.push_back(DYMO_QueuedData(const_cast<IPDatagram *> (datagram), destAddr));
+    dataQueue.push_back(DYMO_QueuedData(const_cast<IPv4Datagram *> (datagram), destAddr));
     dataQueueByteSize += datagram->getByteLength();
 
     // if buffer is full, force dequeueing of old packets
@@ -96,7 +96,7 @@ void DYMO_DataQueue::queuePacket(const IPDatagram* datagram)
     }
 }
 
-void DYMO_DataQueue::reinjectDatagramsTo(IPv4Address destAddr, int prefix, Result verdict,std::list<IPDatagram*> *datagrams)
+void DYMO_DataQueue::reinjectDatagramsTo(IPv4Address destAddr, int prefix, Result verdict,std::list<IPv4Datagram*> *datagrams)
 {
     bool tryAgain = true;
     double delay = 0;
@@ -133,7 +133,7 @@ void DYMO_DataQueue::dequeuePacketsTo(IPv4Address destAddr, int prefix)
     reinjectDatagramsTo(destAddr, prefix, ACCEPT);
 }
 
-void DYMO_DataQueue::dropPacketsTo(IPv4Address destAddr, int prefix,std::list<IPDatagram*>* datagrams)
+void DYMO_DataQueue::dropPacketsTo(IPv4Address destAddr, int prefix,std::list<IPv4Datagram*>* datagrams)
 {
     reinjectDatagramsTo(destAddr, prefix, DROP,datagrams);
 }

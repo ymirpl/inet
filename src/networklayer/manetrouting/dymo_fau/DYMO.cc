@@ -207,7 +207,7 @@ void DYMO::handleMessage(cMessage* apMsg)
             ControlManetRouting * control =  check_and_cast <ControlManetRouting *> (apMsg);
             if (control->getOptionCode()== MANET_ROUTE_NOROUTE)
             {
-                IPDatagram * dgram = check_and_cast<IPDatagram*>(control->decapsulate()) ;
+                IPv4Datagram * dgram = check_and_cast<IPv4Datagram*>(control->decapsulate()) ;
                 processPacket(dgram);
             }
             else if (control->getOptionCode()== MANET_ROUTE_UPDATE)
@@ -262,7 +262,7 @@ void DYMO::handleMessage(cMessage* apMsg)
     }
 }
 
-void DYMO::processPacket (const IPDatagram* datagram)
+void DYMO::processPacket (const IPv4Datagram* datagram)
 {
     Enter_Method("procces ip Packet (%s)", datagram->getName());
 
@@ -1044,13 +1044,13 @@ void DYMO::handleRREQTimeout(DYMO_OutstandingRREQ& outstandingRREQ)
     {
         /** RREQ_TRIES is reached **/
 
-        std::list<IPDatagram*> datagrams;
+        std::list<IPv4Datagram*> datagrams;
         // drop packets bound for the expired RREQ's destination
         dymo_routingTable->maintainAssociatedRoutingTable();
         queuedDataPackets->dropPacketsTo(outstandingRREQ.destAddr, 32, &datagrams);
         while (!datagrams.empty())
         {
-            IPDatagram* dgram = datagrams.front();
+            IPv4Datagram* dgram = datagrams.front();
             datagrams.pop_front();
             sendICMP(dgram);
         }
@@ -1181,7 +1181,7 @@ cModule* DYMO::getRouterByAddress(IPv4Address address)
 
 
 /* Called for packets whose delivery fails at the link layer */
-void DYMO::packetFailed(IPDatagram *dgram)
+void DYMO::packetFailed(IPv4Datagram *dgram)
 {
 
     /* We don't care about link failures for broadcast or non-data packets */
@@ -1210,9 +1210,9 @@ void DYMO::packetFailed(IPDatagram *dgram)
 
 void DYMO::processLinkBreak (const cPolymorphic *details)
 {
-    IPDatagram  *dgram=NULL;
-    if (dynamic_cast<IPDatagram *>(const_cast<cPolymorphic*> (details)))
-        dgram = check_and_cast<IPDatagram *>(details);
+    IPv4Datagram  *dgram=NULL;
+    if (dynamic_cast<IPv4Datagram *>(const_cast<cPolymorphic*> (details)))
+        dgram = check_and_cast<IPv4Datagram *>(details);
     else
         return;
     packetFailed(dgram);

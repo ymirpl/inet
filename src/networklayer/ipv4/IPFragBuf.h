@@ -22,7 +22,7 @@
 #include <vector>
 #include "INETDefs.h"
 #include "ReassemblyBuffer.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 
 class ICMP;
@@ -54,7 +54,7 @@ class INET_API IPFragBuf
     struct DatagramBuffer
     {
         ReassemblyBuffer buf;  // reassembly buffer
-        IPDatagram *datagram;  // the actual datagram
+        IPv4Datagram *datagram;  // the actual datagram
         simtime_t lastupdate;  // last time a new fragment arrived
     };
 
@@ -89,7 +89,7 @@ class INET_API IPFragBuf
      * If this fragment completes a datagram, the full reassembled
      * datagram is returned, otherwise NULL.
      */
-    IPDatagram *addFragment(IPDatagram *datagram, simtime_t now);
+    IPv4Datagram *addFragment(IPv4Datagram *datagram, simtime_t now);
 
     /**
      * Throws out all fragments which are incomplete and their

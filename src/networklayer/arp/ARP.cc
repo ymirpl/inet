@@ -21,7 +21,7 @@
 
 #include "Ieee802Ctrl_m.h"
 #include "IPv4ControlInfo.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IPv4InterfaceData.h"
 #include "IRoutingTable.h"
 #include "RoutingTableAccess.h"
@@ -189,7 +189,7 @@ void ARP::processOutboundPacket(cMessage *msg)
     else
     {
         // try proxy ARP
-        IPDatagram *datagram = check_and_cast<IPDatagram *>(msg);
+        IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(msg);
         nextHopAddr = datagram->getDestAddress();
         EV << "no next-hop address, using destination address " << nextHopAddr << " (proxy ARP)\n";
     }

@@ -207,7 +207,7 @@ class INET_API LDP: public cSimpleModule, public TCPSocket::CallbackInterface, p
     //@}
 
     // IClassifier
-    virtual bool lookupLabel(IPDatagram *ipdatagram, LabelOpVector& outLabel, std::string& outInterface, int& color);
+    virtual bool lookupLabel(IPv4Datagram *ipdatagram, LabelOpVector& outLabel, std::string& outInterface, int& color);
 
     // INotifiable
     virtual void receiveChangeNotification(int category, const cPolymorphic *details);

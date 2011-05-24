@@ -20,7 +20,7 @@
 
 #include "IPv4ControlInfo_m.h"
 
-class IPDatagram;
+class IPv4Datagram;
 
 /**
  * Control information for sending/receiving packets over IP.
@@ -30,16 +30,16 @@ class IPDatagram;
 class INET_API IPv4ControlInfo : public IPv4ControlInfo_Base
 {
   protected:
-    IPDatagram *dgram;
+    IPv4Datagram *dgram;
   public:
     IPv4ControlInfo() : IPv4ControlInfo_Base() {dgram=NULL;}
     virtual ~IPv4ControlInfo();
     IPv4ControlInfo(const IPv4ControlInfo& other) : IPv4ControlInfo_Base() {dgram=NULL; operator=(other);}
     IPv4ControlInfo& operator=(const IPv4ControlInfo& other) {IPv4ControlInfo_Base::operator=(other); return *this;}
 
-    virtual void setOrigDatagram(IPDatagram *d);
-    virtual IPDatagram *getOrigDatagram() const {return dgram;}
-    virtual IPDatagram *removeOrigDatagram();
+    virtual void setOrigDatagram(IPv4Datagram *d);
+    virtual IPv4Datagram *getOrigDatagram() const {return dgram;}
+    virtual IPv4Datagram *removeOrigDatagram();
 };
 
 #endif

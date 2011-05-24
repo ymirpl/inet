@@ -2281,7 +2281,7 @@ OLSR_ETX::populate_nb2hopset(OLSR_msg& msg)
 ///
 /// \param p the packet which couldn't be delivered by the MAC layer.
 ///
-// void OLSR::mac_failed(IPDatagram* p) from OLSR
+// void OLSR::mac_failed(IPv4Datagram* p) from OLSR
 
 ///
 /// \brief Schedule the timer used for sending HELLO messages.

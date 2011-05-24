@@ -194,7 +194,7 @@ static struct maint_entry *maint_entry_create(struct dsr_pkt *dp,
 
     if (dp->payload || (!dp->moreFragments || dp->fragmentOffset!=0))
     {
-        IPDatagram *dgram;
+        IPv4Datagram *dgram;
         DSRPkt *dsrPkt;
         if (dp->nh.iph->protocol == IP_PROT_DSR)
         {
@@ -205,7 +205,7 @@ static struct maint_entry *maint_entry_create(struct dsr_pkt *dp,
             dgram = dsrPkt;
         }
         else
-            dgram = new IPDatagram();
+            dgram = new IPv4Datagram();
 
 #ifndef MobilityFramework
         IPv4Address destAddress_var((uint32_t)dp->dst.s_addr);

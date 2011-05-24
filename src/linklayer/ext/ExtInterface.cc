@@ -113,8 +113,8 @@ void ExtInterface::handleMessage(cMessage *msg)
         for(uint32 i=0; i < packetLength; i++)
             buffer[i] = rawPacket->getData(i);
 
-        IPDatagram *ipPacket = new IPDatagram("ip-from-wire");
-        IPSerializer().parse(buffer, packetLength, (IPDatagram *)ipPacket);
+        IPv4Datagram *ipPacket = new IPv4Datagram("ip-from-wire");
+        IPSerializer().parse(buffer, packetLength, (IPv4Datagram *)ipPacket);
         EV << "Delivering an IP packet from "
            << ipPacket->getSrcAddress()
            << " to "
@@ -128,7 +128,7 @@ void ExtInterface::handleMessage(cMessage *msg)
     else
     {
         memset(buffer, 0, 1<<16);
-        IPDatagram *ipPacket = check_and_cast<IPDatagram *>(msg);
+        IPv4Datagram *ipPacket = check_and_cast<IPv4Datagram *>(msg);
 
         if ((ipPacket->getTransportProtocol() != IP_PROT_ICMP) &&
             (ipPacket->getTransportProtocol() != IP_PROT_SCTP) &&

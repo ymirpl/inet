@@ -21,7 +21,7 @@
 //#include <stdarg.h>
 
 #ifndef MobilityFramework
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "InterfaceTableAccess.h"
 #include "RoutingTableAccess.h"
 #include "IRoutingTable.h"
@@ -54,8 +54,8 @@
 #ifndef IPv4Address
 #define IPv4Address int
 #endif
-#ifndef IPDatagram
-#define IPDatagram NetwPkt
+#ifndef IPv4Datagram
+#define IPv4Datagram NetwPkt
 #endif
 #ifndef MACAddress
 #define MACAddress int
@@ -286,7 +286,7 @@ class DSRUU:public cSimpleModule, public INotifiable
     void tap(DSRPkt * p);
     void omnet_xmit(struct dsr_pkt *dp);
     void omnet_deliver(struct dsr_pkt *dp);
-    void packetFailed(IPDatagram *ipDgram);
+    void packetFailed(IPv4Datagram *ipDgram);
     void handleTimer(cMessage*);
     void defaultProcess(cMessage*);
 

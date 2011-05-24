@@ -21,7 +21,7 @@
 #include <string>
 #include "ConstType.h"
 #include "IPv4Address.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 // label operations
 #define PUSH_OPER              0

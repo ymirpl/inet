@@ -18,7 +18,7 @@
 #ifndef __INET_BGPCOMMON_H
 #define __INET_BGPCOMMON_H
 
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 //#include "TCPSocket.h"
 #include "InterfaceEntry.h"
 

@@ -193,8 +193,8 @@ void DSRUU::omnet_deliver(struct dsr_pkt *dp)
     int macAddr = arp->getMacAddr(dp->dst.s_addr);
     dgram->setControlInfo(new MacControlInfo(macAddr));
 #else
-    IPDatagram *dgram;
-    dgram = new IPDatagram;
+    IPv4Datagram *dgram;
+    dgram = new IPv4Datagram;
     IPv4Address destAddress_var((uint32_t)dp->dst.s_addr);
     dgram->setDestAddress(destAddress_var);
     IPv4Address srcAddress_var((uint32_t)dp->src.s_addr);
@@ -633,10 +633,10 @@ void DSRUU::handleMessage(cMessage* msg)
     }
 
 #ifndef MobilityFramework
-    IPDatagram * ipDgram=NULL;
-    if (dynamic_cast<IPDatagram *>(msg))
+    IPv4Datagram * ipDgram=NULL;
+    if (dynamic_cast<IPv4Datagram *>(msg))
     {
-        ipDgram=dynamic_cast<IPDatagram *>(msg);
+        ipDgram=dynamic_cast<IPv4Datagram *>(msg);
     }
     else
     {
@@ -749,7 +749,7 @@ void DSRUU::receiveBBItem(int category, const BBItem *details, int scopeModuleId
 
 void DSRUU::receiveChangeNotification(int category, const cPolymorphic *details)
 {
-    IPDatagram  *dgram=NULL;
+    IPv4Datagram  *dgram=NULL;
     //current_time = simTime();
 
     if (details==NULL)
@@ -760,13 +760,13 @@ void DSRUU::receiveChangeNotification(int category, const cPolymorphic *details)
         Enter_Method("Dsr Link Break");
         Ieee80211DataFrame *frame  = check_and_cast<Ieee80211DataFrame *>(details);
 #if OMNETPP_VERSION > 0x0400
-        if (dynamic_cast<IPDatagram *>(frame->getEncapsulatedPacket()))
-            dgram = check_and_cast<IPDatagram *>(frame->getEncapsulatedPacket());
+        if (dynamic_cast<IPv4Datagram *>(frame->getEncapsulatedPacket()))
+            dgram = check_and_cast<IPv4Datagram *>(frame->getEncapsulatedPacket());
         else
             return;
 #else
-if (dynamic_cast<IPDatagram *>(frame->getEncapsulatedMsg()))
-    dgram = check_and_cast<IPDatagram *>(frame->getEncapsulatedMsg());
+if (dynamic_cast<IPv4Datagram *>(frame->getEncapsulatedMsg()))
+    dgram = check_and_cast<IPv4Datagram *>(frame->getEncapsulatedMsg());
 else
     return;
 #endif
@@ -817,7 +817,7 @@ DSRPkt *paux = check_and_cast <DSRPkt *> (frame->getEncapsulatedMsg());
 #ifdef MobilityFramework
 void DSRUU::packetFailed(NetwPkt * ipDgram)
 #else
-void DSRUU::packetFailed(IPDatagram *ipDgram)
+void DSRUU::packetFailed(IPv4Datagram *ipDgram)
 #endif
 {
     struct dsr_pkt *dp;

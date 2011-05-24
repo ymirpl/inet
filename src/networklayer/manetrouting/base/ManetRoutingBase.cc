@@ -1295,7 +1295,7 @@ void ManetRoutingBase::sendICMP(cPacket* pkt)
         }
     }
 
-    IPDatagram* datagram= dynamic_cast<IPDatagram*>(pkt);
+    IPv4Datagram* datagram= dynamic_cast<IPv4Datagram*>(pkt);
     if (datagram==NULL)
     {
         delete pkt;

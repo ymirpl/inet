@@ -16,7 +16,7 @@
 //
 
 #include "IPv4ControlInfo.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 IPv4ControlInfo::~IPv4ControlInfo()
 {
@@ -27,7 +27,7 @@ IPv4ControlInfo::~IPv4ControlInfo()
     }
 }
 
-void IPv4ControlInfo::setOrigDatagram(IPDatagram *d)
+void IPv4ControlInfo::setOrigDatagram(IPv4Datagram *d)
 {
     if (dgram)
         throw cRuntimeError(this, "IPv4ControlInfo::setOrigDatagram(): a datagram is already attached");
@@ -36,14 +36,14 @@ void IPv4ControlInfo::setOrigDatagram(IPDatagram *d)
     take(dgram);
 }
 
-IPDatagram *IPv4ControlInfo::removeOrigDatagram()
+IPv4Datagram *IPv4ControlInfo::removeOrigDatagram()
 {
     if (!dgram)
         throw cRuntimeError(this, "IPv4ControlInfo::removeOrigDatagram(): no datagram attached "
                   "(already removed, or maybe this IPv4ControlInfo does not come "
                   "from the IP module?)");
 
-    IPDatagram *ret = dgram;
+    IPv4Datagram *ret = dgram;
     drop(dgram);
     dgram = NULL;
     return ret;

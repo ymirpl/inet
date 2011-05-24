@@ -30,7 +30,7 @@
 #include "RoutingTableAccess.h"
 #include "Ieee802Ctrl_m.h"
 #include "ICMPMessage.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 #include "ManetRoutingBase.h"
 
@@ -106,7 +106,7 @@ class DYMO : public ManetRoutingBase
   private:
     friend class DYMO_RoutingTable;
 
-    void processPacket (const IPDatagram* datagram);
+    void processPacket (const IPv4Datagram* datagram);
     //===============================================================================
     // OPERATIONS
     //===============================================================================
@@ -265,7 +265,7 @@ class DYMO : public ManetRoutingBase
     virtual bool getDestAddress(cPacket *,Uint128 &) {return false;};
 
     virtual void processLinkBreak(const cPolymorphic *details);
-    void packetFailed(IPDatagram *dgram);
+    void packetFailed(IPv4Datagram *dgram);
 
 };
 

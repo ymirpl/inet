@@ -79,7 +79,7 @@ int ICMPSerializer::serialize(const ICMPMessage *pkt, unsigned char *buf, unsign
         }
         case ICMP_DESTINATION_UNREACHABLE:
         {
-            IPDatagram *ip = check_and_cast<IPDatagram* >(pkt->getEncapsulatedPacket());
+            IPv4Datagram *ip = check_and_cast<IPv4Datagram* >(pkt->getEncapsulatedPacket());
             icmp->icmp_type = ICMP_UNREACH;
             icmp->icmp_code = pkt->getCode();
             packetLength += IPSerializer().serialize(ip, (unsigned char *)icmp->icmp_data, bufsize - ICMP_MINLEN);
@@ -87,7 +87,7 @@ int ICMPSerializer::serialize(const ICMPMessage *pkt, unsigned char *buf, unsign
         }
         case ICMP_TIME_EXCEEDED:
         {
-            IPDatagram *ip = check_and_cast<IPDatagram* >(pkt->getEncapsulatedPacket());
+            IPv4Datagram *ip = check_and_cast<IPv4Datagram* >(pkt->getEncapsulatedPacket());
             icmp->icmp_type = ICMP_TIMXCEED;
             icmp->icmp_code = ICMP_TIMXCEED_INTRANS;
             packetLength += IPSerializer().serialize(ip, (unsigned char *)icmp->icmp_data, bufsize - ICMP_MINLEN);

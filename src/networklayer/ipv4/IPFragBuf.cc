@@ -44,7 +44,7 @@ void IPFragBuf::init(ICMP *icmp)
     icmpModule = icmp;
 }
 
-IPDatagram *IPFragBuf::addFragment(IPDatagram *datagram, simtime_t now)
+IPv4Datagram *IPFragBuf::addFragment(IPv4Datagram *datagram, simtime_t now)
 {
     // find datagram buffer
     Key key;
@@ -90,7 +90,7 @@ IPDatagram *IPFragBuf::addFragment(IPDatagram *datagram, simtime_t now)
     if (isComplete)
     {
         // datagram complete: deallocate buffer and return complete datagram
-        IPDatagram *ret = buf->datagram;
+        IPv4Datagram *ret = buf->datagram;
         ret->setByteLength(ret->getHeaderLength()+buf->buf.getTotalLength());
         ret->setFragmentOffset(0);
         ret->setMoreFragments(false);

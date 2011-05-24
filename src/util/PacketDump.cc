@@ -39,7 +39,7 @@
 
 #ifdef WITH_IPv4
 #include "ICMPMessage.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #endif
 
 #ifdef WITH_IPv6
@@ -383,9 +383,9 @@ void PacketDump::dumpPacket(bool l2r, cPacket *msg)
     std::ostream& out = *outp;
 
 #ifdef WITH_IPv4
-    if (dynamic_cast<IPDatagram *>(msg))
+    if (dynamic_cast<IPv4Datagram *>(msg))
     {
-        dumpIPv4(l2r, "", (IPDatagram *)msg, "");
+        dumpIPv4(l2r, "", (IPv4Datagram *)msg, "");
     }
     else
 #endif
@@ -415,9 +415,9 @@ void PacketDump::dumpPacket(bool l2r, cPacket *msg)
         while (msg)
         {
 #ifdef WITH_IPv4
-            if (dynamic_cast<IPDatagram *>(msg))
+            if (dynamic_cast<IPv4Datagram *>(msg))
             {
-                dumpIPv4(l2r, "", (IPDatagram *)msg);
+                dumpIPv4(l2r, "", (IPv4Datagram *)msg);
                 break;
             }
 #endif
@@ -490,7 +490,7 @@ void PacketDump::udpDump(bool l2r, const char *label, UDPPacket* udppkt,
     out << endl;
 }
 
-void PacketDump::dumpIPv4(bool l2r, const char *label, IPDatagram *dgram, const char *comment)
+void PacketDump::dumpIPv4(bool l2r, const char *label, IPv4Datagram *dgram, const char *comment)
 {
      std::ostream& out = *outp;
      char buf[30];

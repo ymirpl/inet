@@ -25,7 +25,7 @@
 #include "RoutingTableAccess.h"
 #include "ICMPMessage.h"
 
-class IPDatagram;
+class IPv4Datagram;
 class IPv4ControlInfo;
 
 
@@ -50,7 +50,7 @@ class INET_API ICMP : public cSimpleModule
      * This method can be called from other modules to send an ICMP error packet
      * in response to a received bogus packet.
      */
-    virtual void sendErrorMessage(IPDatagram *datagram, ICMPType type, ICMPCode code);
+    virtual void sendErrorMessage(IPv4Datagram *datagram, ICMPType type, ICMPCode code);
 
     /**
      * This method can be called from other modules to send an ICMP error packet

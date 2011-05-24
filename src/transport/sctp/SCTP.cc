@@ -26,7 +26,7 @@
 #include "IPv6ControlInfo.h"
 #endif
 
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 #ifdef WITH_UDP
 #include "UDPControlInfo_m.h"
@@ -205,7 +205,7 @@ void SCTP::handleMessage(cMessage *msg)
             else
             {
             	IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo *>(msg->removeControlInfo());
-                IPDatagram *datagram = controlInfo->removeOrigDatagram();
+                IPv4Datagram *datagram = controlInfo->removeOrigDatagram();
                 delete datagram;
                 sctpEV3<<"controlInfo srcAddr="<<controlInfo->getSrcAddr()<<"   destAddr="<<controlInfo->getDestAddr()<<"\n";
                 srcAddr = controlInfo->getSrcAddr();

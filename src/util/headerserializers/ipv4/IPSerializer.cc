@@ -66,7 +66,7 @@ using namespace INETFw;
 
 
 
-int IPSerializer::serialize(const IPDatagram *dgram, unsigned char *buf, unsigned int bufsize, bool hasCalcChkSum)
+int IPSerializer::serialize(const IPv4Datagram *dgram, unsigned char *buf, unsigned int bufsize, bool hasCalcChkSum)
 {
     int packetLength;
     struct ip *ip = (struct ip *) buf;
@@ -132,7 +132,7 @@ int IPSerializer::serialize(const IPDatagram *dgram, unsigned char *buf, unsigne
     return packetLength;
 }
 
-void IPSerializer::parse(const unsigned char *buf, unsigned int bufsize, IPDatagram *dest)
+void IPSerializer::parse(const unsigned char *buf, unsigned int bufsize, IPv4Datagram *dest)
 {
     const struct ip *ip = (const struct ip *) buf;
     unsigned int totalLength, headerLength;

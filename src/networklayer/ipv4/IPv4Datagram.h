@@ -18,7 +18,7 @@
 #ifndef __INET_IPDATAGRAM_H
 #define __INET_IPDATAGRAM_H
 
-#include "IPDatagram_m.h"
+#include "IPv4Datagram_m.h"
 
 #endif
 

@@ -20,7 +20,7 @@
 #include <string>
 #include "ConstType.h"
 #include "IPv4Address.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IScriptable.h"
 #include "IRSVPClassifier.h"
 #include "LIBTable.h"
@@ -67,7 +67,7 @@ class INET_API SimpleClassifier: public cSimpleModule, public IScriptable, publi
     virtual void processCommand(const cXMLElement& node);
 
     // IRSVPClassifier implementation
-    virtual bool lookupLabel(IPDatagram *ipdatagram, LabelOpVector& outLabel, std::string& outInterface, int& color);
+    virtual bool lookupLabel(IPv4Datagram *ipdatagram, LabelOpVector& outLabel, std::string& outInterface, int& color);
     virtual void bind(const SessionObj_t& session, const SenderTemplateObj_t& sender, int inLabel);
 
   protected:

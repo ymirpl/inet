@@ -48,6 +48,6 @@ simple ARP
         @statistic[initiatedResolution](title="ARP initiated resolutions";record=count,vector);
         @statistic[failedResolution](title="failed ARP resolutions sent";record=count,vector);
     gates:
-        input ipIn @labels(ARPPacket,IPDatagram);
+        input ipIn @labels(ARPPacket,IPv4Datagram);
         output nicOut[] @labels(ARPPacket);
 }

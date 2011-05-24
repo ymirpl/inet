@@ -71,7 +71,7 @@ DSRPkt::~DSRPkt()
         delete [] costVector;
 }
 
-DSRPkt::DSRPkt(const DSRPkt& m) : IPDatagram()
+DSRPkt::DSRPkt(const DSRPkt& m) : IPv4Datagram()
 {
 
     costVector =NULL;
@@ -89,7 +89,7 @@ DSRPkt& DSRPkt::operator=(const DSRPkt& m)
 #ifdef MobilityFramework
     NetwPkt::operator=(m);
 #else
-    IPDatagram::operator=(m);
+    IPv4Datagram::operator=(m);
 #endif
     encap_protocol=m.encap_protocol;
     previous=m.previous;
@@ -127,7 +127,7 @@ DSRPkt& DSRPkt::operator=(const DSRPkt& m)
     return *this;
 }
 // Constructor
-DSRPkt::DSRPkt(struct dsr_pkt *dp,int interface_id) : IPDatagram()
+DSRPkt::DSRPkt(struct dsr_pkt *dp,int interface_id) : IPv4Datagram()
 {
     costVectorSize=0;
     costVector = NULL;
@@ -495,7 +495,7 @@ void DSRPkt::resetCostVector()
     costVectorSize=0;
 }
 
-DSRPktExt::DSRPktExt(const DSRPktExt& m) : IPDatagram()
+DSRPktExt::DSRPktExt(const DSRPktExt& m) : IPv4Datagram()
 {
     setName(m.getName());
     operator=(m);
@@ -505,7 +505,7 @@ DSRPktExt::DSRPktExt(const DSRPktExt& m) : IPDatagram()
 DSRPktExt& DSRPktExt::operator=(const DSRPktExt& msg)
 {
     if (this==&msg) return *this;
-    IPDatagram::operator=(msg);
+    IPv4Datagram::operator=(msg);
     size=msg.size;
     if (size==0)
     {

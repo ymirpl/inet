@@ -33,7 +33,7 @@
 #include "ICMPAccess.h"
 #include "ICMPMessage_m.h"
 #include "IPv4ControlInfo.h"
-#include "IPDatagram_m.h"
+#include "IPv4Datagram_m.h"
 #endif
 
 #ifdef WITH_IPv6
@@ -399,7 +399,7 @@ void UDP::processICMPError(cPacket *msg)
         type = icmpMsg->getType();
         code = icmpMsg->getCode();
         // Note: we must NOT use decapsulate() because payload in ICMP is conceptually truncated
-        IPDatagram *datagram = check_and_cast<IPDatagram *>(icmpMsg->getEncapsulatedPacket());
+        IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(icmpMsg->getEncapsulatedPacket());
         UDPPacket *packet = check_and_cast<UDPPacket *>(datagram->getEncapsulatedPacket());
         localAddr = datagram->getSrcAddress();
         remoteAddr = datagram->getDestAddress();

@@ -119,7 +119,7 @@ class AODVUU : public ManetRoutingBase
     AODVUU() {is_init =false; log_file_fd_init=false; sendMessageEvent = new cMessage();/*&messageEvent;*/}
     ~AODVUU();
 
-    void packetFailed(IPDatagram *p);
+    void packetFailed(IPv4Datagram *p);
 
     // Routing information access
     virtual uint32_t getRoute(const Uint128 &,std::vector<Uint128> &);
@@ -139,8 +139,8 @@ class AODVUU : public ManetRoutingBase
     int startAODVUUAgent();
     void scheduleNextEvent();
     const char *if_indextoname(int, char *);
-    IPDatagram *pkt_encapsulate(IPDatagram *, IPv4Address);
-    IPDatagram *pkt_decapsulate(IPDatagram *);
+    IPv4Datagram *pkt_encapsulate(IPv4Datagram *, IPv4Address);
+    IPv4Datagram *pkt_decapsulate(IPv4Datagram *);
     virtual void handleMessage(cMessage *msg);
     virtual void finish();
 
@@ -151,7 +151,7 @@ class AODVUU : public ManetRoutingBase
     cMessage * sendMessageEvent;
 
     void recvAODVUUPacket(cMessage * p);
-    void processPacket(IPDatagram *,unsigned int);
+    void processPacket(IPv4Datagram *,unsigned int);
 
     int initialized;
     int  node_id;

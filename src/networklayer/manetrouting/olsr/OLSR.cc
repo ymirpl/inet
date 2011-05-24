@@ -1890,7 +1890,7 @@ OLSR::populate_mprselset(OLSR_msg& msg)
 /// \param p the packet which couldn't be delivered by the MAC layer.
 ///
 void
-OLSR::mac_failed(IPDatagram* p)
+OLSR::mac_failed(IPv4Datagram* p)
 {
     double now      = CURRENT_TIME;
 
@@ -2404,9 +2404,9 @@ void OLSR:: processLinkBreak(const cPolymorphic *details)
 {
     if (use_mac())
     {
-        if (dynamic_cast<IPDatagram *>(const_cast<cPolymorphic*>(details)))
+        if (dynamic_cast<IPv4Datagram *>(const_cast<cPolymorphic*>(details)))
         {
-            IPDatagram * dgram = check_and_cast<IPDatagram *>(details);
+            IPv4Datagram * dgram = check_and_cast<IPv4Datagram *>(details);
             mac_failed(dgram);
             return;
         }

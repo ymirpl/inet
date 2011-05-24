@@ -21,7 +21,7 @@
 #include <string.h>
 
 #include "IP.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IPv4ControlInfo.h"
 #include "ICMPMessage_m.h"
 #include "IPv4InterfaceData.h"
@@ -107,7 +107,7 @@ void IP::endService(cPacket *msg)
     }
     else
     {
-        IPDatagram *dgram = check_and_cast<IPDatagram *>(msg);
+        IPv4Datagram *dgram = check_and_cast<IPv4Datagram *>(msg);
         handlePacketFromNetwork(dgram);
     }
 
@@ -121,7 +121,7 @@ InterfaceEntry *IP::getSourceInterfaceFrom(cPacket *msg)
     return g ? ift->getInterfaceByNetworkLayerGateIndex(g->getIndex()) : NULL;
 }
 
-void IP::handlePacketFromNetwork(IPDatagram *datagram)
+void IP::handlePacketFromNetwork(IPv4Datagram *datagram)
 {
     //
     // "Prerouting"
@@ -186,7 +186,7 @@ void IP::handleReceivedICMP(ICMPMessage *msg)
         case ICMP_TIME_EXCEEDED:
         case ICMP_PARAMETER_PROBLEM: {
             // ICMP errors are delivered to the appropriate higher layer protocol
-            IPDatagram *bogusPacket = check_and_cast<IPDatagram *>(msg->getEncapsulatedPacket());
+            IPv4Datagram *bogusPacket = check_and_cast<IPv4Datagram *>(msg->getEncapsulatedPacket());
             int protocol = bogusPacket->getTransportProtocol();
             int gateindex = mapping.getOutputGateForProtocol(protocol);
             send(msg, "transportOut", gateindex);
@@ -218,10 +218,10 @@ void IP::handleMessageFromHL(cPacket *msg)
     IPv4Address *nextHopAddressPrt=NULL;
 
     // if HL send a Ipdatagram routing the packet
-    if (dynamic_cast<IPDatagram *>(msg))
+    if (dynamic_cast<IPv4Datagram *>(msg))
     {
-        IPDatagram *datagram = check_and_cast  <IPDatagram *>(msg);
-        // Dsr routing, Dsr is a HL protocol and send IPDatagram
+        IPv4Datagram *datagram = check_and_cast  <IPv4Datagram *>(msg);
+        // Dsr routing, Dsr is a HL protocol and send IPv4Datagram
         dsrFillDestIE(datagram, destIE, nextHopAddress);
         if (!nextHopAddress.isUnspecified())
             nextHopAddressPrt=&nextHopAddress;
@@ -235,7 +235,7 @@ void IP::handleMessageFromHL(cPacket *msg)
 
     // encapsulate and send
     IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(msg->removeControlInfo());
-    IPDatagram *datagram = encapsulate(msg, destIE,controlInfo);
+    IPv4Datagram *datagram = encapsulate(msg, destIE,controlInfo);
     nextHopAddress = controlInfo->getNextHopAddr();
     delete controlInfo;
     if (!nextHopAddress.isUnspecified())
@@ -248,7 +248,7 @@ void IP::handleMessageFromHL(cPacket *msg)
         routeMulticastPacket(datagram, destIE, NULL);
 }
 
-void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, IPv4Address* nextHopAddrPtr)
+void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL, IPv4Address* nextHopAddrPtr)
 {
     // TBD add option handling code here
 
@@ -309,7 +309,7 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
                     InterfaceEntry *ie = ift->getInterface(i);
                     if (!ie->isLoopback())
                     {
-                        IPDatagram * dataAux = datagram->dup();
+                        IPv4Datagram * dataAux = datagram->dup();
                         if (dataAux->getSrcAddress().isUnspecified())
                              dataAux->setSrcAddress(ie->ipv4Data()->getIPAddress());
                         fragmentAndSend(datagram->dup(), ie, IPv4Address::ALLONES_ADDRESS);
@@ -413,7 +413,7 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
     fragmentAndSend(datagram, destIE, nextHopAddr);
 }
 
-void IP::routeMulticastPacket(IPDatagram *datagram, InterfaceEntry *destIE, InterfaceEntry *fromIE)
+void IP::routeMulticastPacket(IPv4Datagram *datagram, InterfaceEntry *destIE, InterfaceEntry *fromIE)
 {
     IPv4Address destAddr = datagram->getDestAddress();
     EV << "Routing multicast datagram `" << datagram->getName() << "' with dest=" << destAddr << "\n";
@@ -438,7 +438,7 @@ void IP::routeMulticastPacket(IPDatagram *datagram, InterfaceEntry *destIE, Inte
         // check for local delivery
         if (rt->isLocalMulticastAddress(destAddr))
         {
-            IPDatagram *datagramCopy = (IPDatagram *) datagram->dup();
+            IPv4Datagram *datagramCopy = (IPv4Datagram *) datagram->dup();
 
             // FIXME code from the MPLS model: set packet dest address to routerId (???)
             datagramCopy->setDestAddress(rt->getRouterId());
@@ -496,7 +496,7 @@ void IP::routeMulticastPacket(IPDatagram *datagram, InterfaceEntry *destIE, Inte
             // don't forward to input port
             if (destIE && destIE!=fromIE)
             {
-                IPDatagram *datagramCopy = (IPDatagram *) datagram->dup();
+                IPv4Datagram *datagramCopy = (IPv4Datagram *) datagram->dup();
 
                 // set datagram source address if not yet set
                 if (datagramCopy->getSrcAddress().isUnspecified())
@@ -513,7 +513,7 @@ void IP::routeMulticastPacket(IPDatagram *datagram, InterfaceEntry *destIE, Inte
     }
 }
 #ifndef NEWFRAGMENT
-void IP::reassembleAndDeliver(IPDatagram *datagram)
+void IP::reassembleAndDeliver(IPv4Datagram *datagram)
 {
     // reassemble the packet (if fragmented)
     if (datagram->getFragmentOffset()!=0 || datagram->getMoreFragments())
@@ -579,7 +579,7 @@ void IP::reassembleAndDeliver(IPDatagram *datagram)
 }
 }
 #endif
-cPacket *IP::decapsulateIP(IPDatagram *datagram)
+cPacket *IP::decapsulateIP(IPv4Datagram *datagram)
 {
     // decapsulate transport packet
     InterfaceEntry *fromIE = getSourceInterfaceFrom(datagram);
@@ -604,7 +604,7 @@ cPacket *IP::decapsulateIP(IPDatagram *datagram)
 }
 
 #ifndef NEWFRAGMENT
-void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
+void IP::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     int mtu = ie->getMTU();
 
@@ -641,7 +641,7 @@ void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address n
     {
         // FIXME is it ok that full encapsulated packet travels in every datagram fragment?
         // should better travel in the last fragment only. Cf. with reassembly code!
-        IPDatagram *fragment = (IPDatagram *) datagram->dup();
+        IPv4Datagram *fragment = (IPv4Datagram *) datagram->dup();
         fragment->setName(fragMsgName.c_str());
 
         // total_length equal to mtu, except for last fragment;
@@ -666,17 +666,17 @@ void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address n
 }
 #endif
 
-IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
+IPv4Datagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
 {
     IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(transportPacket->removeControlInfo());
-    IPDatagram *datagram = encapsulate(transportPacket, destIE, controlInfo);
+    IPv4Datagram *datagram = encapsulate(transportPacket, destIE, controlInfo);
     delete controlInfo;
     return datagram;
 }
 
-IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPv4ControlInfo *controlInfo)
+IPv4Datagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPv4ControlInfo *controlInfo)
 {
-    IPDatagram *datagram = createIPDatagram(transportPacket->getName());
+    IPv4Datagram *datagram = createIPv4Datagram(transportPacket->getName());
     datagram->setByteLength(IP_HEADER_BYTES);
     datagram->encapsulate(transportPacket);
 
@@ -727,12 +727,12 @@ IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, I
     return datagram;
 }
 
-IPDatagram *IP::createIPDatagram(const char *name)
+IPv4Datagram *IP::createIPv4Datagram(const char *name)
 {
-    return new IPDatagram(name);
+    return new IPv4Datagram(name);
 }
 
-void IP::sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
+void IP::sendDatagramToOutput(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     // hop counter check
     if (datagram->getTimeToLive() <= 0)
@@ -753,7 +753,7 @@ void IP::sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPv4Addr
 
 }
 
-void IP::dsrFillDestIE(IPDatagram *datagram, InterfaceEntry *&destIE,IPv4Address &nextHopAddress)
+void IP::dsrFillDestIE(IPv4Datagram *datagram, InterfaceEntry *&destIE,IPv4Address &nextHopAddress)
 {
 
     nextHopAddress= IPv4Address::UNSPECIFIED_ADDRESS;
@@ -773,7 +773,7 @@ void IP::dsrFillDestIE(IPDatagram *datagram, InterfaceEntry *&destIE,IPv4Address
 }
 
 #ifdef WITH_MANET
-void IP::controlMessageToManetRouting(int code,IPDatagram *datagram)
+void IP::controlMessageToManetRouting(int code,IPv4Datagram *datagram)
 {
     ControlManetRouting *control;
     if (!manetRouting)
@@ -814,7 +814,7 @@ void IP::controlMessageToManetRouting(int code,IPDatagram *datagram)
 #endif
 
 #ifdef NEWFRAGMENT
-void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
+void IP::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     int mtu = ie->getMTU();
 
@@ -856,7 +856,7 @@ void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address n
     {
         // FIXME is it ok that full encapsulated packet travels in every datagram fragment?
         // should better travel in the last fragment only. Cf. with reassembly code!
-        IPDatagram *fragment = (IPDatagram *) datagram->dup();
+        IPv4Datagram *fragment = (IPv4Datagram *) datagram->dup();
         cPacket *payloadFrag = payload->dup();
         fragment->setName(fragMsgName.c_str());
 
@@ -882,7 +882,7 @@ void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address n
 }
 
 
-void IP::reassembleAndDeliver(IPDatagram *datagram)
+void IP::reassembleAndDeliver(IPv4Datagram *datagram)
 {
 
     // reassemble the packet (if fragmented)

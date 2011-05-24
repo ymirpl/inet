@@ -21,7 +21,7 @@
 #include <omnetpp.h>
 #include <string.h>
 
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IPv4ControlInfo.h"
 #include "ICMP.h"
 
@@ -48,7 +48,7 @@ void ICMP::handleMessage(cMessage *msg)
 }
 
 
-void ICMP::sendErrorMessage(IPDatagram *origDatagram, ICMPType type, ICMPCode code)
+void ICMP::sendErrorMessage(IPv4Datagram *origDatagram, ICMPType type, ICMPCode code)
 {
     Enter_Method("sendErrorMessage(datagram, type=%d, code=%d)", type, code);
 
@@ -124,7 +124,7 @@ void ICMP::sendErrorMessage(cPacket *transportPacket, IPv4ControlInfo *ctrl, ICM
 {
     Enter_Method("sendErrorMessage(transportPacket, ctrl, type=%d, code=%d)", type, code);
 
-    IPDatagram *datagram = ctrl->removeOrigDatagram();
+    IPv4Datagram *datagram = ctrl->removeOrigDatagram();
     take(transportPacket);
     take(datagram);
     datagram->encapsulate(transportPacket);

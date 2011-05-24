@@ -31,7 +31,7 @@
 #endif
 
 #ifdef WITH_IPv4
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IPSerializer.h"
 #endif
 
@@ -95,7 +95,7 @@ void PcapDump::openPcap(const char* filename, unsigned int snaplen_par)
     fwrite(&fh, sizeof(fh), 1, dumpfile);
 }
 
-void PcapDump::writeFrame(simtime_t stime, const IPDatagram *ipPacket)
+void PcapDump::writeFrame(simtime_t stime, const IPv4Datagram *ipPacket)
 {
     if (!dumpfile)
         throw cRuntimeError("Cannot write frame: pcap output file is not open");

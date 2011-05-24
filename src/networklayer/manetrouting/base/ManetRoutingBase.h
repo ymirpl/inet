@@ -24,7 +24,7 @@
 
 #include <sys/time.h>
 #include "compatibility.h"
-#include "IPDatagram_m.h"
+#include "IPv4Datagram_m.h"
 #include "IRoutingTable.h"
 #include "NotificationBoard.h"
 #include "IPv4InterfaceData.h"

@@ -36,7 +36,7 @@ module NetworkLayer
         @display("i=block/fork");
         bool proxyARP = default(true);
     gates:
-        input ifIn[] @labels(IPDatagram);
+        input ifIn[] @labels(IPv4Datagram);
         input tcpIn @labels(TCPSegment,IPv4ControlInfo/down);
         input udpIn @labels(UDPPacket,IPv4ControlInfo/down);
         input sctpIn @labels(IPv4ControlInfo/down,SCTPPacket);
