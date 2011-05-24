@@ -50,7 +50,7 @@
 PacketDump::PacketDump()
 {
      outp = NULL;
-     verbosity = false;
+     verbose = false;
 }
 
 PacketDump::~PacketDump()
@@ -148,7 +148,7 @@ void PacketDump::sctpDump(const char *label, SCTPMessage *sctpmsg,
         }
     }
 
-    if (verbosity)
+    if (verbose)
     {
         out << endl;
 
@@ -632,7 +632,7 @@ void PacketDump::tcpDump(bool l2r, const char *label, TCPSegment *tcpseg,
     if (comment)
         out << "# " << comment;
 
-     out << endl;
+    out << endl;
 #else
     throw cRuntimeError("INET compiled without any TCP features!");
 #endif

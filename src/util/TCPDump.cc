@@ -45,7 +45,7 @@ void TCPDump::initialize()
     dropBadFrames = par("dropBadFrames").boolValue();
 
     snaplen = this->par("snaplen");
-    tcpdump.setVerbosity(par("verbosity").boolValue());
+    tcpdump.setVerbose(par("verbose").boolValue());
     tcpdump.setOutStream(ev.getOStream());
 
     if (*file)

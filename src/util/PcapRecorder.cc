@@ -44,7 +44,7 @@ void PcapRecorder::initialize()
     const char* file = par("pcapFile");
     snaplen = this->par("snaplen");
     dumpBadFrames = par("dumpBadFrames").boolValue();
-    packetDumper.setVerbosity(par("verbosity").boolValue());
+    packetDumper.setVerbose(par("verbose").boolValue());
     packetDumper.setOutStream(ev.getOStream());
     signalList.clear();
 

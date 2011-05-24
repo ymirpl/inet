@@ -38,16 +38,16 @@ class UDPPacket;
 class PacketDump
 {
     protected:
-        bool verbosity;
+        bool verbose;
         std::ostream *outp;
     public:
         PacketDump();
 
         ~PacketDump();
 
-        inline void setOutStream(std::ostream& o) { outp = &o; }
+        void setOutStream(std::ostream& o) { outp = &o; }
 
-        inline void setVerbosity(bool verbosityLevel) { verbosity = verbosityLevel; }
+        void setVerbose(bool verb) { verbose = verb; }
 
         // dumps arbitary text
         void dump(const char *label, const char *msg);

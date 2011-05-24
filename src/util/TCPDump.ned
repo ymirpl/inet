@@ -25,7 +25,7 @@ simple TCPDump {
     parameters:
         string dumpFile = default("");
         int snaplen = default(65535);
-        bool verbosity = default(false);
+        bool verbose = default(false);
         bool dumpBadFrames = default(true); // write bad frames to pcap file
         bool dropBadFrames = default(false);
     gates:
