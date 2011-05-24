@@ -38,7 +38,7 @@ void IPLocalDeliver::initialize()
 
 void IPLocalDeliver::handleMessage(cMessage *msg)
 {
-    IPDatagram *datagram = check_and_cast<IPDatagram *>(msg);
+    IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(msg);
 
     // Defragmentation. skip defragmentation if datagram is not fragmented
     if (datagram->fragmentOffset()!=0 || datagram->moreFragments())
@@ -71,7 +71,7 @@ void IPLocalDeliver::handleMessage(cMessage *msg)
     }
 }
 
-cMessage *IPLocalDeliver::decapsulateIP(IPDatagram *datagram)
+cMessage *IPLocalDeliver::decapsulateIP(IPv4Datagram *datagram)
 {
     cMessage *packet = datagram->decapsulate();
 

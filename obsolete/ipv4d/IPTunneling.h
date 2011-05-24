@@ -22,7 +22,7 @@
 #define __IPTUNNELING_H__
 
 
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 /**
  * Receives an IP datagram, set tunnel destination address and Protocol fields,

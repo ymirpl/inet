@@ -41,7 +41,7 @@ void IPMulticast::initialize()
 
 void IPMulticast::handleMessage(cMessage *msg)
 {
-    IPDatagram *datagram = check_and_cast<IPDatagram *>(msg);
+    IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(msg);
     IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision *>(msg->controlInfo());
     int inputPort = controlInfo->inputPort();
 
@@ -65,7 +65,7 @@ void IPMulticast::handleMessage(cMessage *msg)
     if (rt->multicastLocalDeliver(destAddress))
     {
         // FIXME control info will NOT be present in duplicate packet!
-        IPDatagram *datagramCopy = (IPDatagram *) datagram->dup();
+        IPv4Datagram *datagramCopy = (IPv4Datagram *) datagram->dup();
 
         // FIXME code from the MPLS model: set packet dest address to routerId (???)
         datagramCopy->setDestAddress(rt->getRouterId());
@@ -96,7 +96,7 @@ void IPMulticast::handleMessage(cMessage *msg)
             // don't forward to input port
             if (outputPort>=0 && outputPort!=inputPort)
             {
-                IPDatagram *datagramCopy = (IPDatagram *) datagram->dup();
+                IPv4Datagram *datagramCopy = (IPv4Datagram *) datagram->dup();
                 IPv4Address nextHopAddr = routes[i].gateway;
 
                 // add a copy of the control info (OMNeT++ doesn't copy it) --FIXME needed?

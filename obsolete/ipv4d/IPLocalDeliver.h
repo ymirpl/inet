@@ -26,7 +26,7 @@
 
 #include "IPFragBuf.h"
 #include "ProtocolMap.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 
 
@@ -47,7 +47,7 @@ class INET_API IPLocalDeliver : public cSimpleModule
     ProtocolMapping mapping;
 
   private:
-    cMessage *decapsulateIP(IPDatagram *);
+    cMessage *decapsulateIP(IPv4Datagram *);
 
   public:
     Module_Class_Members(IPLocalDeliver, cSimpleModule, 0);

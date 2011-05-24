@@ -25,7 +25,7 @@
 // invoking functions in the RoutingTable module.
 //
 // Detailed operation:
-// - receive correct IPDatagram, then:
+// - receive correct IPv4Datagram, then:
 // - if source routing option is on, use next source addr. as dest. addr.
 // - map \IP address on output port, use static routing table
 // - if destination address is not in routing table,

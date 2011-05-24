@@ -22,7 +22,7 @@
 // Pre-routing handling of \IP datagrams: check for errors and decrement TTL.
 //
 // Handling:
-//   - receive IPDatagram
+//   - receive IPv4Datagram
 //   - check for header error -> throw away and notify ICMP module on error
 //   - decrement hop counter
 //   - send correct datagram to IPRouting module

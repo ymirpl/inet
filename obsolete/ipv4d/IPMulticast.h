@@ -23,7 +23,7 @@
 
 //  Cleanup and rewrite: Andras Varga, 2004
 
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 class RoutingTable;
 class InterfaceTable;

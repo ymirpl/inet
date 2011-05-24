@@ -21,7 +21,7 @@
 
 
 #include "IPOutput.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "ARPPacket_m.h"
 
 
@@ -37,7 +37,7 @@ void IPOutput::handleMessage(cMessage *msg)
         return;
     }
 
-    IPDatagram *datagram = check_and_cast<IPDatagram *>(msg);
+    IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(msg);
 
     // hop counter check
     if (datagram->timeToLive() <= 0)

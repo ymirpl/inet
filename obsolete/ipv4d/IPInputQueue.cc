@@ -19,7 +19,7 @@
 
 #include <omnetpp.h>
 #include "IPInputQueue.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IPv4ControlInfo_m.h"
 #include "ARPPacket_m.h"
 

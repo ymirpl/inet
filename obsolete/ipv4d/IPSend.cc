@@ -25,7 +25,7 @@
 #include <string.h>
 
 #include "IPSend.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "IPv4ControlInfo_m.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"
@@ -47,11 +47,11 @@ void IPSend::initialize()
 
 void IPSend::handleMessage(cMessage *msg)
 {
-    IPDatagram *dgram = encapsulate(msg);
+    IPv4Datagram *dgram = encapsulate(msg);
     send(dgram, "routingOut");
 }
 
-IPDatagram *IPSend::encapsulate(cMessage *transportPacket)
+IPv4Datagram *IPSend::encapsulate(cMessage *transportPacket)
 {
     // if no interface exists, do not send datagram
     if (ift->numInterfaces() == 0)
@@ -63,7 +63,7 @@ IPDatagram *IPSend::encapsulate(cMessage *transportPacket)
 
     IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(transportPacket->removeControlInfo());
 
-    IPDatagram *datagram = new IPDatagram(transportPacket->name());
+    IPv4Datagram *datagram = new IPv4Datagram(transportPacket->name());
     datagram->setLength(8*IP_HEADER_BYTES);
     datagram->encapsulate(transportPacket);
 

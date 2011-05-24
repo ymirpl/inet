@@ -23,7 +23,7 @@
 
 //  Cleanup and rewrite: Andras Varga, 2004
 
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "ICMPAccess.h"
 
 class InterfaceTable;
@@ -39,7 +39,7 @@ class INET_API IPFragmentation: public cSimpleModule
     InterfaceTable *ift;
     ICMPAccess icmpAccess;
 
-    void sendDatagramToOutput(IPDatagram *datagram, int outputPort, IPv4Address nextHopAddr);
+    void sendDatagramToOutput(IPv4Datagram *datagram, int outputPort, IPv4Address nextHopAddr);
 
   public:
     Module_Class_Members(IPFragmentation, cSimpleModule, 0);

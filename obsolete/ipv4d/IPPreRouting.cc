@@ -28,7 +28,7 @@ Define_Module(IPPreRouting);
 
 void IPPreRouting::handleMessage(cMessage *msg)
 {
-    IPDatagram *datagram = check_and_cast<IPDatagram *>(msg);
+    IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(msg);
 
     // check for header biterror
     if (datagram->hasBitError())

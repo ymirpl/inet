@@ -38,7 +38,7 @@ void IPFragmentation::initialize()
 // FIXME performance model is not good here! probably we should wait #fragments times delay
 void IPFragmentation::handleMessage(cMessage *msg)
 {
-    IPDatagram *datagram  = check_and_cast<IPDatagram *>(msg);
+    IPv4Datagram *datagram  = check_and_cast<IPv4Datagram *>(msg);
     IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision *>(msg->controlInfo());
     int outputPort = controlInfo->outputPort();
     IPv4Address nextHopAddr = controlInfo->nextHopAddr();
@@ -75,7 +75,7 @@ void IPFragmentation::handleMessage(cMessage *msg)
     {
         // FIXME is it ok that full encapsulated packet travels in every datagram fragment?
         // should better travel in the last fragment only. Cf. with reassembly code!
-        IPDatagram *fragment = (IPDatagram *) datagram->dup();
+        IPv4Datagram *fragment = (IPv4Datagram *) datagram->dup();
 
         // total_length equal to mtu, except for last fragment;
         // "more fragments" bit is unchanged in the last fragment, otherwise true
@@ -99,7 +99,7 @@ void IPFragmentation::handleMessage(cMessage *msg)
 }
 
 
-void IPFragmentation::sendDatagramToOutput(IPDatagram *datagram, int outputPort, IPv4Address nextHopAddr)
+void IPFragmentation::sendDatagramToOutput(IPv4Datagram *datagram, int outputPort, IPv4Address nextHopAddr)
 {
     // attach next hop address if needed
     IPRoutingDecision *routingDecision = new IPRoutingDecision();

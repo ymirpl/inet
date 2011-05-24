@@ -24,7 +24,7 @@
 
 
 #include "IPv4ControlInfo_m.h"
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 
 class InterfaceTable;
 class RoutingTable;
@@ -48,7 +48,7 @@ class INET_API IPSend : public cSimpleModule
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
-    IPDatagram *encapsulate(cMessage *transportPacket);
+    IPv4Datagram *encapsulate(cMessage *transportPacket);
 };
 
 #endif

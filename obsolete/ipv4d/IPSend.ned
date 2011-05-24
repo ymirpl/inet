@@ -20,7 +20,7 @@
 
 //
 // Receives packet from transport layer, ICMP or IPTunneling (IP tunneled
-// datagram) and encapsulates it into an IPDatagram.
+// datagram) and encapsulates it into an IPv4Datagram.
 //  - sets version
 //  - sets TOS (currently  constant 0!!!)
 //  - sets ds.codepoint

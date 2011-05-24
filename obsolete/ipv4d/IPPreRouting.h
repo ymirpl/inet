@@ -26,7 +26,7 @@
 #include <omnetpp.h>
 
 
-#include "IPDatagram.h"
+#include "IPv4Datagram.h"
 #include "ICMPAccess.h"
 
 /**
