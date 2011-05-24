@@ -17,7 +17,7 @@
 
 #include "rsvp_message.h"
 #include "RSVPInterface.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 
 Define_Module(RSVPInterface);
 
@@ -118,7 +118,7 @@ void RSVPInterface::processMsgFromApp(cMessage * msg)
     IPv4Address dest_addr = msg->hasPar("dest_addr") ? msg->par("dest_addr").stringValue() :  IPv4Address();
 
     // attach control info to transport packet
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setDestAddr(dest_addr);
     controlInfo->setSrcAddr(src_addr);
     controlInfo->setProtocol(IP_PROT_RSVP);
@@ -141,7 +141,7 @@ void RSVPInterface::processMsgFromApp(cMessage * msg)
         msg->hasPar("dest_addr") ? msg->par("dest_addr").stringValue() : MY_ERROR_IP_ADDRESS;
 
     // attach control info to transport packet
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setDestAddr(dest_addr);
     if (!src_addr.equals(MY_ERROR_IP_ADDRESS))
         controlInfo->setSrcAddr(src_addr);

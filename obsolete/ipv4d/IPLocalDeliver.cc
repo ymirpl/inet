@@ -20,7 +20,7 @@
 
 #include <omnetpp.h>
 #include "IPLocalDeliver.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 
 
 //  Cleanup and rewrite: Andras Varga, 2004
@@ -78,7 +78,7 @@ cMessage *IPLocalDeliver::decapsulateIP(IPDatagram *datagram)
     IPRoutingDecision *routingDecision = check_and_cast<IPRoutingDecision *>(datagram->controlInfo());
     int inputPort = routingDecision->inputPort();
 
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setProtocol(datagram->transportProtocol());
     controlInfo->setSrcAddr(datagram->srcAddress());
     controlInfo->setDestAddr(datagram->destAddress());

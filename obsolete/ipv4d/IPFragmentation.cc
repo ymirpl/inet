@@ -20,7 +20,7 @@
 //  Cleanup and rewrite: Andras Varga, 2004
 
 #include "IPFragmentation.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "InterfaceTableAccess.h"
 
 

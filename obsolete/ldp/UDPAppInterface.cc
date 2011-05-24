@@ -15,7 +15,7 @@
 #include <omnetpp.h>
 #include "UDPPacket.h"
 #include "UDPControlInfo_m.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "IPv4Address.h"
 #include "IPAddressResolver.h"
 #include "RoutingTableAccess.h"

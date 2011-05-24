@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 #include <omnetpp.h>
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "IPRouting.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"

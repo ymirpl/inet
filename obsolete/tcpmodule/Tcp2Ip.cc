@@ -18,7 +18,7 @@
 
 #include <omnetpp.h>
 #include "TransportPacket.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 
 #include "IPv4Address.h"
 
@@ -49,7 +49,7 @@ void Tcp2Ip::handleMessage(cMessage *msg)
     tpacket->setDestinationPort(msg->hasPar("dest_port") ? (int)msg->par("dest_port") : 255);
 
     // add control info to tpacket
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setDestAddr(IPv4Address((int)msg->par("dest_addr")));
     controlInfo->setSrcAddr(IPv4Address((int)msg->par("src_addr")));
     controlInfo->setProtocol(IP_PROT_TCP);

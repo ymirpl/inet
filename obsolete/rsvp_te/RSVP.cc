@@ -17,7 +17,7 @@
 #include "IPv4Address.h"
 #include "MPLSModule.h"
 #include "IPAddressResolver.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"
 #include "RoutingTableAccess.h"
@@ -2497,7 +2497,7 @@ void RSVP::propagateTEDchanges()
 void RSVP::sendToIP(cMessage *msg, IPv4Address destAddr)
 {
     // attach control info to packet
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setDestAddr(destAddr);
     controlInfo->setProtocol(IP_PROT_RSVP);
     msg->setControlInfo(controlInfo);

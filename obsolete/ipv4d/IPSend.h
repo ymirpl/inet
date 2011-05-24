@@ -23,7 +23,7 @@
 //  Cleanup and rewrite: Andras Varga, 2004
 
 
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "IPDatagram.h"
 
 class InterfaceTable;

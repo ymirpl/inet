@@ -18,7 +18,7 @@
 
 #include <omnetpp.h>
 #include "TransportPacket.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 
 #include "IPv4Address.h"
 
@@ -41,7 +41,7 @@ void Ip2Tcp::handleMessage(cMessage *msg)
     bool ipv6 = false; // FIXME
 
     // get the source and destination address
-    IPControlInfo *controlInfo = check_and_cast<IPControlInfo *>(msg->removeControlInfo());
+    IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo *>(msg->removeControlInfo());
     IPv4Address src_addr = controlInfo->srcAddr();
     IPv4Address dest_addr = controlInfo->destAddr();
     delete controlInfo;

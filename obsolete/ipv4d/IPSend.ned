@@ -31,7 +31,7 @@
 //  - sets Protocol to received value
 //  - sets destination address to received value
 //  - sends datagram to IPRouting
-//  - if IPControlInfo is invalid (e.g. invalid source address), it is thrown away
+//  - if IPv4ControlInfo is invalid (e.g. invalid source address), it is thrown away
 //    without feedback
 //
 // Author: Jochen Reber

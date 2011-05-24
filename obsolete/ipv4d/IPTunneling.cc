@@ -24,7 +24,7 @@
 #include <string.h>
 
 #include "IPTunneling.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 
 
 Define_Module(IPTunneling);
@@ -37,7 +37,7 @@ void IPTunneling::handleMessage(cMessage *msg)
     IPv4Address dest = msg->par("destination_address").stringValue();
     delete msg;
 
-    IPControlInfo *controlInfo = new IPControlInfo();
+    IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
     controlInfo->setProtocol(IP_PROT_IP);
     controlInfo->setDestAddr(dest);
     datagram->setControlInfo(controlInfo);

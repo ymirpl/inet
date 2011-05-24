@@ -20,7 +20,7 @@
 #include <omnetpp.h>
 #include "IPInputQueue.h"
 #include "IPDatagram.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "ARPPacket_m.h"
 
 Define_Module(IPInputQueue);

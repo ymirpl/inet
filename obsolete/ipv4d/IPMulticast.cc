@@ -24,7 +24,7 @@
 #include <string.h>
 
 #include "IPMulticast.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"
 #include "RoutingTableAccess.h"

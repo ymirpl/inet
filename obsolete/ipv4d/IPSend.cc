@@ -26,7 +26,7 @@
 
 #include "IPSend.h"
 #include "IPDatagram.h"
-#include "IPControlInfo_m.h"
+#include "IPv4ControlInfo_m.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"
 #include "RoutingTableAccess.h"
@@ -61,7 +61,7 @@ IPDatagram *IPSend::encapsulate(cMessage *transportPacket)
         return NULL;
     }
 
-    IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(transportPacket->removeControlInfo());
+    IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(transportPacket->removeControlInfo());
 
     IPDatagram *datagram = new IPDatagram(transportPacket->name());
     datagram->setLength(8*IP_HEADER_BYTES);
