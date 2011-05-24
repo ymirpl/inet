@@ -33,7 +33,7 @@
 #include "SCTPAssociation.h"
 #endif
 
-#ifdef WITH_TCP_BASE
+#ifdef WITH_TCP_COMMON
 #include "TCPSegment.h"
 #endif
 
@@ -60,20 +60,22 @@ PacketDump::~PacketDump()
 void PacketDump::sctpDump(const char *label, SCTPMessage *sctpmsg,
         const std::string& srcAddr, const std::string& destAddr, const char *comment)
 {
-#ifdef WITH_SCTP
     std::ostream& out = *outp;
-    uint32 numberOfChunks;
-    SCTPChunk* chunk;
-    uint8 type;
+
     // seq and time (not part of the tcpdump format)
     char buf[30];
     sprintf(buf,"[%.3f%s] ", simulation.getSimTime().dbl(), label);
     out << buf;
 
+#ifndef WITH_SCTP
+    out << "[sctp] " << srcAddr  << " > " << destAddr;
+#else
+    uint32 numberOfChunks;
+    SCTPChunk* chunk;
+    uint8 type;
     // src/dest
-    out << srcAddr  << "." << sctpmsg->getSrcPort()  << " > ";
-
-    out << destAddr << "." << sctpmsg->getDestPort() << ": ";
+    out << srcAddr  << "." << sctpmsg->getSrcPort()  << " > "
+        << destAddr << "." << sctpmsg->getDestPort() << ": ";
 
     if (sctpmsg->hasBitError())
     {
@@ -356,13 +358,13 @@ void PacketDump::sctpDump(const char *label, SCTPMessage *sctpmsg,
             out << endl;
         }
     }
+#endif
 
     // comment
     if (comment)
         out << "# " << comment;
 
     out << endl;
-#endif
 }
 
 void PacketDump::dump(const char *label, const char *msg)
@@ -371,16 +373,16 @@ void PacketDump::dump(const char *label, const char *msg)
 
     // seq and time (not part of the tcpdump format)
     char buf[30];
+
     sprintf(buf,"[%.3f%s] ", simulation.getSimTime().dbl(), label);
-    out << buf;
-    out << msg << "\n";
+    out << buf << msg << endl;
 }
 
 void PacketDump::dumpPacket(bool l2r, cPacket *msg)
 {
     std::ostream& out = *outp;
 
-    #ifdef WITH_IPv4
+#ifdef WITH_IPv4
     if (dynamic_cast<IPDatagram *>(msg))
     {
         dumpIPv4(l2r, "", (IPDatagram *)msg, "");
@@ -394,7 +396,7 @@ void PacketDump::dumpPacket(bool l2r, cPacket *msg)
     }
     else
 #endif
-#ifdef WITH_TCP_BASE
+#ifdef WITH_TCP_COMMON
     if (dynamic_cast<TCPSegment *>(msg))
     {
         tcpDump(l2r, "", (TCPSegment *)msg, std::string(l2r ? "A" : "B"), std::string(l2r ? "B" : "A"));
@@ -443,14 +445,19 @@ void PacketDump::dumpPacket(bool l2r, cPacket *msg)
 void PacketDump::udpDump(bool l2r, const char *label, UDPPacket* udppkt,
         const std::string& srcAddr, const std::string& destAddr, const char *comment)
 {
-#ifdef WITH_UDP
     std::ostream& out = *outp;
 
-    // seq and time (not part of the tcpdump format)
     char buf[30];
     sprintf(buf,"[%.3f%s] ", simulation.getSimTime().dbl(), label);
     out << buf;
 
+#ifndef WITH_UDP
+    if (l2r)
+        out << "[UDP] "<< srcAddr << " > " << destAddr << ": ";
+    else
+        out << "[UDP] "<< destAddr << " < " << srcAddr << ": ";
+#else
+    // seq and time (not part of the tcpdump format)
     // src/dest
     if (l2r)
     {
@@ -475,14 +482,23 @@ void PacketDump::udpDump(bool l2r, const char *label, UDPPacket* udppkt,
     }
 #endif
 #endif
+
+    // comment
+    if (comment)
+        out << "# " << comment;
+
+    out << endl;
 }
 
 void PacketDump::dumpIPv4(bool l2r, const char *label, IPDatagram *dgram, const char *comment)
 {
+     std::ostream& out = *outp;
+     char buf[30];
+
 #ifdef WITH_IPv4
     cMessage *encapmsg = dgram->getEncapsulatedPacket();
 
-#ifdef WITH_TCP_BASE
+#ifdef WITH_TCP_COMMON
     if (dynamic_cast<TCPSegment *>(encapmsg))
     {
          // if TCP, dump as TCP
@@ -511,27 +527,40 @@ void PacketDump::dumpIPv4(bool l2r, const char *label, IPDatagram *dgram, const 
 #endif
     {
          // some other packet, dump what we can
-         std::ostream& out = *outp;
-
          // seq and time (not part of the tcpdump format)
-         char buf[30];
          sprintf(buf,"[%.3f%s] ", SIMTIME_DBL(simTime()), label);
          out << buf;
 
          // packet class and name
-         out << "? " << encapmsg->getClassName() << " \"" << encapmsg->getName() << "\"\n";
+         out << "? " << encapmsg->getClassName() << " \"" << encapmsg->getName() << "\"";
+
+         // comment
+         if (comment)
+             out << " # " << comment;
+
+         out << endl;
     }
 #else
-    throw cRuntimeError("INET compiled without IPv4 features!");
+    sprintf(buf,"[%.3f%s] ", SIMTIME_DBL(simTime()), label);
+    out << buf << "[IPv4]";
+
+    // comment
+    if (comment)
+        out << " # " << comment;
+
+    out << endl;
 #endif
 }
 
 void PacketDump::dumpIPv6(bool l2r, const char *label, IPv6Datagram *dgram, const char *comment)
 {
+     std::ostream& out = *outp;
+     char buf[30];
+
 #ifdef WITH_IPv6
     cMessage *encapmsg = dgram->getEncapsulatedPacket();
 
-#ifdef WITH_TCP_BASE
+#ifdef WITH_TCP_COMMON
     if (dynamic_cast<TCPSegment *>(encapmsg))
     {
          // if TCP, dump as TCP
@@ -542,25 +571,34 @@ void PacketDump::dumpIPv6(bool l2r, const char *label, IPv6Datagram *dgram, cons
 #endif
     {
          // some other packet, dump what we can
-         std::ostream& out = *outp;
-
          // seq and time (not part of the tcpdump format)
-         char buf[30];
          sprintf(buf,"[%.3f%s] ", SIMTIME_DBL(simTime()), label);
          out << buf;
 
          // packet class and name
          out << "? " << encapmsg->getClassName() << " \"" << encapmsg->getName() << "\"\n";
+
+         // comment
+         if (comment)
+             out << "# " << comment;
+
+         out << endl;
     }
 #else
-    throw cRuntimeError("INET compiled without IPv6 features!");
+    sprintf(buf,"[%.3f%s] ", SIMTIME_DBL(simTime()), label);
+    out << buf << "[IPv4]";
+
+    // comment
+    if (comment)
+        out << " # " << comment;
+
+    out << endl;
 #endif
 }
 
 void PacketDump::tcpDump(bool l2r, const char *label, TCPSegment *tcpseg,
         const std::string& srcAddr, const std::string& destAddr, const char *comment)
 {
-#ifdef WITH_TCP_BASE
      std::ostream& out = *outp;
 
     // seq and time (not part of the tcpdump format)
@@ -568,6 +606,12 @@ void PacketDump::tcpDump(bool l2r, const char *label, TCPSegment *tcpseg,
     sprintf(buf,"[%.3f%s] ", SIMTIME_DBL(simTime()), label);
     out << buf;
 
+#ifndef WITH_TCP_COMMON
+    if (l2r)
+        out << srcAddr << " > " << destAddr << ": ";
+    else
+        out << destAddr << " < " << srcAddr << ": ";
+#else
     // src/dest ports
     if (l2r)
     {
@@ -627,14 +671,12 @@ void PacketDump::tcpDump(bool l2r, const char *label, TCPSegment *tcpseg,
             out << (i+1) << ". option kind=" << kind << " length=" << length << "\n";
         }
     }
+#endif
 
     // comment
     if (comment)
         out << "# " << comment;
 
     out << endl;
-#else
-    throw cRuntimeError("INET compiled without any TCP features!");
-#endif
 }
 
