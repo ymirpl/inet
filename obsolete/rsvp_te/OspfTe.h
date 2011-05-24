@@ -18,7 +18,7 @@
 
 #include <omnetpp.h>
 #include <vector>
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IntServ_m.h"
 #include "TED.h"
 
@@ -31,7 +31,7 @@
  */
 struct CSPFVertex
 {
-    IPAddress vertexId;
+    IPv4Address vertexId;
     CSPFVertex *parent;  // FIXME pointer is a bad idea here! as std::vector reallocates,
                          // every Vertex in it moves to a new pointer address...
                          // --> dereferencing the ptr will CRASH!
@@ -52,12 +52,12 @@ private:
 
     CSPFVertexVector cshortestPathTree;
     TELinkStateVector ted;
-    IPAddress routerId;
+    IPv4Address routerId;
 
     void  TEAddCandidates(const FlowSpecObj_t& fspec,
                           CSPFVertexVector& candidatesList);
 
-    IPADDRVector doCalculateERO(const IPAddress& dest,
+    IPADDRVector doCalculateERO(const IPv4Address& dest,
                                 CSPFVertexVector& candidatesList,
                                 double& outTotalMetric);
 
@@ -90,7 +90,7 @@ public:
      * Returned vector contains router IP addresses as int; all hops are
      * to be understood as strict.
      */
-    IPADDRVector CalculateERO(const IPAddress& dest,
+    IPADDRVector CalculateERO(const IPv4Address& dest,
                               const FlowSpecObj_t& fspec,
                               double& outTotalMetric);
 
@@ -102,7 +102,7 @@ public:
      * Returned vector contains router IP addresses as int; all hops are
      * to be understood as strict.
      */
-    IPADDRVector CalculateERO(const IPAddress& dest,
+    IPADDRVector CalculateERO(const IPv4Address& dest,
                               const simple_link_tVector& links,
                               const FlowSpecObj_t& old_fspec,
                               const FlowSpecObj_t& new_fspec,

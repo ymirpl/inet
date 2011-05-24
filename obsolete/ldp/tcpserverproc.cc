@@ -15,7 +15,7 @@
 #include <omnetpp.h>
 #include "tcp.h"
 #include "ConstType.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 
 /**
@@ -120,8 +120,8 @@ void TCPServerProc::activity()
     local_addr = msg->par("dest_addr"); // own server IP-address
 
     // msg_length = msg->par("num_bit_req");
-    ev << "TCP_SERVER_PROC DEBUG:  LSR(" << IPAddress(local_addr) << ") received SYN from LSR(" <<
-        IPAddress(rem_addr) << ")\n";;
+    ev << "TCP_SERVER_PROC DEBUG:  LSR(" << IPv4Address(local_addr) << ") received SYN from LSR(" <<
+        IPv4Address(rem_addr) << ")\n";;
 
     delete msg;
 
@@ -135,8 +135,8 @@ void TCPServerProc::activity()
     tcp_mss = 8 * ((msg->par("mss")).longValue());  // bits
     msgLng = tcp_mss / 4;  // bits
 
-    ev << "TCP_SERVER_PROC DEBUG:  LSR(" << IPAddress(local_addr) << ") received ESTAB from LSR(" <<
-        IPAddress(rem_addr) << ")\n";;
+    ev << "TCP_SERVER_PROC DEBUG:  LSR(" << IPv4Address(local_addr) << ") received ESTAB from LSR(" <<
+        IPv4Address(rem_addr) << ")\n";;
 
     delete msg;
 
@@ -188,8 +188,8 @@ void TCPServerProc::issueTCP_RECEIVE()
     // send "receive" to "TcpModule"
     send(receive_call, "to_tcp");
 
-    ev << "TCP_SERVER_PROC DEBUG: " << IPAddress(local_addr) << " send TCP_C_RECEIVE to " <<
-        IPAddress(rem_addr) << "\n";
+    ev << "TCP_SERVER_PROC DEBUG: " << IPv4Address(local_addr) << " send TCP_C_RECEIVE to " <<
+        IPv4Address(rem_addr) << "\n";
 }
 
 void TCPServerProc::sendKEEP_ALIVE()
@@ -209,8 +209,8 @@ void TCPServerProc::sendKEEP_ALIVE()
     send_call->addPar("keep_alive") = 0;
     send_call->setTimestamp();
 
-    ev << "TCP_SERVER_PROC DEBUG: " << IPAddress(local_addr) << " sends KEEP ALIVE to " <<
-        IPAddress(rem_addr) << "\n";
+    ev << "TCP_SERVER_PROC DEBUG: " << IPv4Address(local_addr) << " sends KEEP ALIVE to " <<
+        IPv4Address(rem_addr) << "\n";
 
     send(send_call, "to_tcp");
 }
@@ -236,8 +236,8 @@ void TCPServerProc::sendData(cMessage * payload)
 
     send_call->setTimestamp();
 
-    ev << "TCP_SERVER_PROC DEBUG: " << IPAddress(local_addr) << " sends data to " <<
-        IPAddress(rem_addr) << "\n";
+    ev << "TCP_SERVER_PROC DEBUG: " << IPv4Address(local_addr) << " sends data to " <<
+        IPv4Address(rem_addr) << "\n";
 
     send(send_call, "to_tcp");
 }
@@ -334,16 +334,16 @@ void TCPServerProc::processData(cMessage * msg)
 
         else
         {
-            ev << "TCP_SERVER_PROC DEBUG: " << IPAddress(local_addr) <<
-                " receives KEEP ALIVE message from " << IPAddress(rem_addr) << "\n";
+            ev << "TCP_SERVER_PROC DEBUG: " << IPv4Address(local_addr) <<
+                " receives KEEP ALIVE message from " << IPv4Address(rem_addr) << "\n";
             delete msg;
         }
     }
 
     else
     {
-        ev << " TCP_CLIENT_DEBUG: " << IPAddress(local_addr) <<
-            " received something other than TCP_I_SEG_FWD from " << IPAddress(rem_addr) <<
+        ev << " TCP_CLIENT_DEBUG: " << IPv4Address(local_addr) <<
+            " received something other than TCP_I_SEG_FWD from " << IPv4Address(rem_addr) <<
             ", kind is " << msg->kind() << "\n";
 
         delete msg;

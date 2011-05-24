@@ -68,10 +68,10 @@ IPDatagram *IPSend::encapsulate(cMessage *transportPacket)
     datagram->encapsulate(transportPacket);
 
     // set source and destination address
-    IPAddress dest = controlInfo->destAddr();
+    IPv4Address dest = controlInfo->destAddr();
     datagram->setDestAddress(dest);
 
-    IPAddress src = controlInfo->srcAddr();
+    IPv4Address src = controlInfo->srcAddr();
 
     // when source address given in Interface Message, use it
     // (otherwise it'll get the address of the outgoing interface after routing)

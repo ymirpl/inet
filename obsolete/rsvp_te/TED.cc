@@ -104,7 +104,7 @@ void TED::buildDatabase()
 
         InterfaceTable *myIFT = IPAddressResolver().interfaceTableOf(module);
         RoutingTable *myRT = IPAddressResolver().routingTableOf(module);
-        IPAddress modAddr = myRT->getRouterId();
+        IPv4Address modAddr = myRT->getRouterId();
         if (modAddr.isUnspecified())
             modAddr = IPAddressResolver().getAddressFrom(myIFT).get4();
 
@@ -114,7 +114,7 @@ void TED::buildDatabase()
 
             InterfaceTable *neighbourIFT = IPAddressResolver().interfaceTableOf(neighbour);
             RoutingTable *neighbourRT = IPAddressResolver().routingTableOf(neighbour);
-            IPAddress neighbourAddr = neighbourRT->getRouterId();
+            IPv4Address neighbourAddr = neighbourRT->getRouterId();
             if (neighbourAddr.isUnspecified())
                 neighbourAddr = IPAddressResolver().getAddressFrom(neighbourIFT).get4();
 

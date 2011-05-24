@@ -20,7 +20,7 @@
 #include "TransportPacket.h"
 #include "IPControlInfo_m.h"
 
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 
 class Tcp2Ip: public cSimpleModule
@@ -50,8 +50,8 @@ void Tcp2Ip::handleMessage(cMessage *msg)
 
     // add control info to tpacket
     IPControlInfo *controlInfo = new IPControlInfo();
-    controlInfo->setDestAddr(IPAddress((int)msg->par("dest_addr")));
-    controlInfo->setSrcAddr(IPAddress((int)msg->par("src_addr")));
+    controlInfo->setDestAddr(IPv4Address((int)msg->par("dest_addr")));
+    controlInfo->setSrcAddr(IPv4Address((int)msg->par("src_addr")));
     controlInfo->setProtocol(IP_PROT_TCP);
     tpacket->setControlInfo(controlInfo);
 

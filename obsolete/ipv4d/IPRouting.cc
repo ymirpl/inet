@@ -56,7 +56,7 @@ void IPRouting::endService(cMessage *msg)
 
     // TBD add option handling code here!
 
-    IPAddress destAddress = datagram->destAddress();
+    IPv4Address destAddress = datagram->destAddress();
 
     ev << "Routing datagram `" << datagram->name() << "' with dest=" << destAddress << ": ";
 
@@ -99,7 +99,7 @@ void IPRouting::endService(cMessage *msg)
     }
 
     // get next-hop address
-    IPAddress nextHopAddr = rt->nextGatewayAddress(destAddress);
+    IPv4Address nextHopAddr = rt->nextGatewayAddress(destAddress);
 
     // set datagram source address if not yet set
     if (datagram->srcAddress().isUnspecified())

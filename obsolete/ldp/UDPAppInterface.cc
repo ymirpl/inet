@@ -16,7 +16,7 @@
 #include "UDPPacket.h"
 #include "UDPControlInfo_m.h"
 #include "IPControlInfo_m.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPAddressResolver.h"
 #include "RoutingTableAccess.h"
 
@@ -29,7 +29,7 @@ class UDPAppInterface : public cSimpleModule
     virtual void initialize();
 
   private:
-    IPAddress local_addr;
+    IPv4Address local_addr;
 };
 
 Define_Module(UDPAppInterface);
@@ -54,7 +54,7 @@ void UDPAppInterface::activity()
 
     UDPControlInfo *controlInfo = new UDPControlInfo();
     controlInfo->setSrcAddr(local_addr);
-    controlInfo->setDestAddr(IPAddress("224.0.0.0"));
+    controlInfo->setDestAddr(IPv4Address("224.0.0.0"));
     controlInfo->setSrcPort(100);
     controlInfo->setDestPort(100);
     msg->setControlInfo(controlInfo);
@@ -70,7 +70,7 @@ void UDPAppInterface::activity()
     while (true)
     {
         cMessage *msg1 = receive();
-        IPAddress srcAddr = check_and_cast<UDPControlInfo *>(msg1->controlInfo())->getSrcAddr();
+        IPv4Address srcAddr = check_and_cast<UDPControlInfo *>(msg1->controlInfo())->getSrcAddr();
         ev << "UDP_APP_INTERFACE DEBUG: Message from " << srcAddr << "\n";
         send(msg1, "toAppl");
     }

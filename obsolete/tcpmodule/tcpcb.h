@@ -197,7 +197,7 @@ class TCPCB : public PCB
  public:
 
   TCPCB(const TCPCB& tcpcb);
-  TCPCB(IPAddress laddr, PortNumber lport, IPAddress faddr, PortNumber fport);
+  TCPCB(IPv4Address laddr, PortNumber lport, IPv4Address faddr, PortNumber fport);
   TCPCB();
   TCPCB(const char* name);
   virtual ~TCPCB();

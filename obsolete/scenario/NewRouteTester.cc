@@ -65,8 +65,8 @@ void NewRouteTester::activity()
     modifiedGate->setDelay(par2);
 
     simple_link_t aLink;
-    aLink.advRouter = IPAddress("1.0.0.2").getInt();
-    aLink.id = IPAddress("1.0.0.4").getInt();
+    aLink.advRouter = IPv4Address("1.0.0.2").getInt();
+    aLink.id = IPv4Address("1.0.0.4").getInt();
 
     TED *ted = TED::getGlobalInstance();
     ted->updateLink(&aLink, 1, 6000);

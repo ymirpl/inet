@@ -14,7 +14,7 @@
 *********************************************************************/
 
 #include "RSVP.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "MPLSModule.h"
 #include "IPAddressResolver.h"
 #include "IPControlInfo_m.h"
@@ -32,42 +32,42 @@ inline bool equal(const SenderTemplateObj_t& a, const SenderTemplateObj_t& b)
 
 void print(RSVPPathMsg *p)
 {
-    ev << "DestAddr = " << IPAddress(p->getDestAddress()) << "\n" <<
+    ev << "DestAddr = " << IPv4Address(p->getDestAddress()) << "\n" <<
         "ProtId   = " << p->getProtId() << "\n" <<
         "DestPort = " << p->getDestPort() << "\n" <<
-        "SrcAddr  = " << IPAddress(p->getSrcAddress()) << "\n" <<
+        "SrcAddr  = " << IPv4Address(p->getSrcAddress()) << "\n" <<
         "SrcPort  = " << p->getSrcPort() << "\n" <<
         "Lsp_Id   = " << p->getLspId() << "\n" <<
-        "Next Hop = " << IPAddress(p->getNHOP()) << "\n" <<
-        "LIH      = " << IPAddress(p->getLIH()) << "\n" <<
+        "Next Hop = " << IPv4Address(p->getNHOP()) << "\n" <<
+        "LIH      = " << IPv4Address(p->getLIH()) << "\n" <<
         "Delay    = " << p->getDelay() << "\n" << "Bandwidth= " << p->getBW() << "\n";
 
 }
 
 void print(RSVPPathTear *p)
 {
-    ev << "DestAddr = " << IPAddress(p->getDestAddress()) << "\n" <<
+    ev << "DestAddr = " << IPv4Address(p->getDestAddress()) << "\n" <<
           "ProtId   = " << p->getProtId() << "\n" <<
           "DestPort = " << p->getDestPort() << "\n" <<
-          "SrcAddr  = " << IPAddress(p->getSrcAddress()) << "\n" <<
+          "SrcAddr  = " << IPv4Address(p->getSrcAddress()) << "\n" <<
           "SrcPort  = " << p->getSrcPort() << "\n" <<
-          "Next Hop = " << IPAddress(p->getNHOP()) << "\n" <<
-          "LIH      = " << IPAddress(p->getLIH()) << "\n";
+          "Next Hop = " << IPv4Address(p->getNHOP()) << "\n" <<
+          "LIH      = " << IPv4Address(p->getLIH()) << "\n";
 }
 
 void print(RSVPResvMsg *p)
 {
     int sIP = 0;
-    ev << "DestAddr = " << IPAddress(p->getDestAddress()) << "\n" <<
+    ev << "DestAddr = " << IPv4Address(p->getDestAddress()) << "\n" <<
           "ProtId   = " << p->getProtId() << "\n" <<
           "DestPort = " << p->getDestPort() << "\n" <<
-          "Next Hop = " << IPAddress(p->getNHOP()) << "\n" <<
-          "LIH      = " << IPAddress(p->getLIH()) << "\n";
+          "Next Hop = " << IPv4Address(p->getNHOP()) << "\n" <<
+          "LIH      = " << IPv4Address(p->getLIH()) << "\n";
 
     for (int i = 0; i < InLIST_SIZE; i++)
         if ((sIP = p->getFlow_descriptor_list(i).Filter_Spec_Object.SrcAddress) != 0)
         {
-            ev << "Receiver =" << IPAddress(sIP) <<
+            ev << "Receiver =" << IPv4Address(sIP) <<
                 ",OutLabel=" << p->getFlow_descriptor_list(i).label <<
                 ", BW=" << p->getFlow_descriptor_list(i).Flowspec_Object.req_bandwidth <<
                 ", Delay=" << p->getFlow_descriptor_list(i).Flowspec_Object.link_delay << "\n";
@@ -76,7 +76,7 @@ void print(RSVPResvMsg *p)
             {
                 IPADDR rroEle = p->getFlow_descriptor_list(i).RRO[c];
                 if (rroEle != 0)
-                    ev << IPAddress(rroEle) << ",";
+                    ev << IPv4Address(rroEle) << ",";
             }
             ev << "}\n";
         }
@@ -85,16 +85,16 @@ void print(RSVPResvMsg *p)
 void print(RSVPResvTear *p)
 {
     int sIP = 0;
-    ev << "DestAddr = " << IPAddress(p->getDestAddress()) << "\n" <<
+    ev << "DestAddr = " << IPv4Address(p->getDestAddress()) << "\n" <<
           "ProtId   = " << p->getProtId() << "\n" <<
           "DestPort = " << p->getDestPort() << "\n" <<
-          "Next Hop = " << IPAddress(p->getNHOP()) << "\n" <<
-          "LIH      = " << IPAddress(p->getLIH()) << "\n";
+          "Next Hop = " << IPv4Address(p->getNHOP()) << "\n" <<
+          "LIH      = " << IPv4Address(p->getLIH()) << "\n";
 
     for (int i = 0; i < InLIST_SIZE; i++)
         if ((sIP = p->getFlow_descriptor_list(i).Filter_Spec_Object.SrcAddress) != 0)
         {
-            ev << "Receiver =" << IPAddress(sIP) <<
+            ev << "Receiver =" << IPv4Address(sIP) <<
                 ", BW=" << p->getFlow_descriptor_list(i).Flowspec_Object.req_bandwidth <<
                 ", Delay=" << p->getFlow_descriptor_list(i).Flowspec_Object.link_delay << "\n";
 
@@ -147,7 +147,7 @@ void RSVP::initialize(int stage)
     // Debug:
     ev << fullPath() << " LocalAddress[] array:\n";
     for (i=0; i<InLIST_SIZE; i++)
-        ev << "  " << IPAddress(LocalAddress[i]) << "\n";
+        ev << "  " << IPv4Address(LocalAddress[i]) << "\n";
 }
 
 void RSVP::handleMessage(cMessage *msg)
@@ -216,7 +216,7 @@ void RSVP::processPathMsg(RSVPPathMsg * pmsg, int InIf)
     {
         for (int k = 0; k < MAX_ROUTE; k++)
         {
-            ev << "ROUTE: " << IPAddress(ERO[k].node) << "\n";
+            ev << "ROUTE: " << IPv4Address(ERO[k].node) << "\n";
         }
 
         for (removeIndex = 0; removeIndex < MAX_ROUTE; removeIndex++)
@@ -874,10 +874,10 @@ void RSVP::processResvMsg(RSVPResvMsg * rmsg)
                 Resv_Refresh_Needed = false;
                 RSVPResvError *errorMsg = new RSVPResvError("ResvErr");
                 errorMsg->setSession(activeRSB->Session_Object);
-                // errorMsg->addPar("dest_addr") = IPAddress(activeRSB->Session_Object.DestAddress).str().c_str();
-                // errorMsg->addPar("src_addr") = IPAddress(routerId).str().c_str();
+                // errorMsg->addPar("dest_addr") = IPv4Address(activeRSB->Session_Object.DestAddress).str().c_str();
+                // errorMsg->addPar("src_addr") = IPv4Address(routerId).str().c_str();
                 // send(errorMsg, "to_ip");
-                sendToIP(errorMsg, IPAddress(activeRSB->Session_Object.DestAddress));
+                sendToIP(errorMsg, IPv4Address(activeRSB->Session_Object.DestAddress));
             }
             else
                 Resv_Refresh_Needed = true;
@@ -918,11 +918,11 @@ void RSVP::processResvMsg(RSVPResvMsg * rmsg)
                         {
 
                             int outInf = rmsg->getLIH();
-                            int outInfIndex = rt->interfaceByAddress(IPAddress(outInf))->outputPort(); // FIXME ->outputPort(): is this OK? --AV
+                            int outInfIndex = rt->interfaceByAddress(IPv4Address(outInf))->outputPort(); // FIXME ->outputPort(): is this OK? --AV
                             int inInf = 0;
                             getIncInet(Refresh_PHOP_list[i], &inInf);
 
-                            int inInfIndex = rt->interfaceByAddress(IPAddress(inInf))->outputPort(); // FIXME ->outputPort(): is this OK? --AV
+                            int inInfIndex = rt->interfaceByAddress(IPv4Address(inInf))->outputPort(); // FIXME ->outputPort(): is this OK? --AV
                             int label = (*fdlist).label;
 
                             if (label != -1)
@@ -1012,11 +1012,11 @@ void RSVP::processPathTearMsg(RSVPPathTear * pmsg)
                 {
                     IPADDR peerIP = 0;
                     getPeerIPAddress(fPSB->OutInterface_List, &peerIP);
-                    ev << "Sending PATH TEAR MESSAGE to " << IPAddress(peerIP);
-                    //ptm->addPar("dest_addr") = IPAddress(peerIP).str().c_str();
-                    //ptm->addPar("src_addr") = IPAddress(routerId).str().c_str();
+                    ev << "Sending PATH TEAR MESSAGE to " << IPv4Address(peerIP);
+                    //ptm->addPar("dest_addr") = IPv4Address(peerIP).str().c_str();
+                    //ptm->addPar("src_addr") = IPv4Address(routerId).str().c_str();
                     //send(ptm, "to_ip");
-                    sendToIP(ptm, IPAddress(peerIP));
+                    sendToIP(ptm, IPv4Address(peerIP));
                 }
 
                 /*
@@ -1234,11 +1234,11 @@ void RSVP::processPathErrorMsg(RSVPPathError * pmsg)
         // delete pmsg;
         // return;
     }
-    ev << "Propagate PATH_ERROR back to " << IPAddress(p_iter.Previous_Hop_Address) << "\n";
-    //pmsg->addPar("src_addr") = IPAddress(routerId).str().c_str();
-    //pmsg->addPar("dest_addr") = IPAddress(p_iter.Previous_Hop_Address).str().c_str();
+    ev << "Propagate PATH_ERROR back to " << IPv4Address(p_iter.Previous_Hop_Address) << "\n";
+    //pmsg->addPar("src_addr") = IPv4Address(routerId).str().c_str();
+    //pmsg->addPar("dest_addr") = IPv4Address(p_iter.Previous_Hop_Address).str().c_str();
     //send(pmsg, "to_ip");
-    sendToIP(pmsg, IPAddress(p_iter.Previous_Hop_Address));
+    sendToIP(pmsg, IPv4Address(p_iter.Previous_Hop_Address));
 }
 
 void RSVP::processResvErrorMsg(RSVPResvError * rmsg)
@@ -1301,14 +1301,14 @@ void RSVP::refreshPath(PathStateBlock_t * psbEle, int OI, EroObj_t * ero)
 
     // ev << "CHECK ERO\n";
     // for(int j=0;j< MAX_ROUTE;j++)
-    // ev << IPAddress(ero[j]).str() << "\n";
+    // ev << IPv4Address(ero[j]).str() << "\n";
 
     // pm->setLength(1); // Other small value so no fragmentation, 1-dummy value
 
-    //pm->addPar("src_addr") = IPAddress(routerId).str().c_str();
+    //pm->addPar("src_addr") = IPv4Address(routerId).str().c_str();
 
     IPADDR finalAddr = pm->getDestAddress();
-    ev << "Final address " << IPAddress(finalAddr) << "\n";
+    ev << "Final address " << IPv4Address(finalAddr) << "\n";
     IPADDR nextPeerIP = 0;
     int nextPeerInf = 0;
     int index = 0;
@@ -1335,9 +1335,9 @@ void RSVP::refreshPath(PathStateBlock_t * psbEle, int OI, EroObj_t * ero)
         getPeerIPAddress(nextPeerInf, &nextPeerIP);
     }
 
-    ev << "Next peer IP " << IPAddress(nextPeerIP) << "\n";
+    ev << "Next peer IP " << IPv4Address(nextPeerIP) << "\n";
     pm->addPar("peerInf") = nextPeerInf;
-    sendToIP(pm, IPAddress(nextPeerIP));
+    sendToIP(pm, IPv4Address(nextPeerIP));
 }
 
 void RSVP::refreshResv(ResvStateBlock_t * rsbEle, IPADDR PH)
@@ -1509,13 +1509,13 @@ void RSVP::refreshResv(ResvStateBlock_t * rsbEle, IPADDR PH)
 
     outRM->setFlowDescriptor(flow_descriptor_list);
 
-    ev << "Send RESV message to " << IPAddress(PH) << "\n";
+    ev << "Send RESV message to " << IPv4Address(PH) << "\n";
     ev << "RESV content is: \n";
     print(outRM);
-    //outRM->addPar("dest_addr") = IPAddress(PH).str().c_str();
-    //resvMsg->addPar("src_addr")=IPAddress(outRM->Rsvp_Hop_Object.Next_Hop_Address).str().c_str();
+    //outRM->addPar("dest_addr") = IPv4Address(PH).str().c_str();
+    //resvMsg->addPar("src_addr")=IPv4Address(outRM->Rsvp_Hop_Object.Next_Hop_Address).str().c_str();
     //send(outRM, "to_ip");
-    sendToIP(outRM, IPAddress(PH));
+    sendToIP(outRM, IPv4Address(PH));
 }
 
 void RSVP::RTearFwd(ResvStateBlock_t * rsbEle, IPADDR PH)
@@ -1548,12 +1548,12 @@ void RSVP::RTearFwd(ResvStateBlock_t * rsbEle, IPADDR PH)
     hop.Logical_Interface_Handle = peerInf;
     hop.Next_Hop_Address = PH;
     outRM->setHop(hop);
-    ev << "Send RESV TEAR message to " << IPAddress(PH) << "\n";
+    ev << "Send RESV TEAR message to " << IPv4Address(PH) << "\n";
     ev << "RESV TEAR content is: \n";
     print(outRM);
-    //outRM->addPar("dest_addr") = IPAddress(PH).str().c_str();
+    //outRM->addPar("dest_addr") = IPv4Address(PH).str().c_str();
     //send(outRM, "to_ip");
-    sendToIP(outRM, IPAddress(PH));
+    sendToIP(outRM, IPv4Address(PH));
 }
 
 void RSVP::removeTrafficControl(ResvStateBlock_t * activeRSB)
@@ -1676,7 +1676,7 @@ int RSVP::updateTrafficControl(ResvStateBlock_t * activeRSB)
                     }
                     Path_Te->req_bandwidth += p_iter.Sender_Tspec_Object.req_bandwidth;
                     Path_Te->link_delay += p_iter.Sender_Tspec_Object.link_delay;
-                    ev << "Update Path_Te for interface " << IPAddress(activeRSB->OI) << "\n";
+                    ev << "Update Path_Te for interface " << IPv4Address(activeRSB->OI) << "\n";
                     ev << "Bandwidth: " << Path_Te->req_bandwidth << "\n";
                     ev << "Delay:     " << Path_Te->link_delay << "\n";
                 }
@@ -1729,7 +1729,7 @@ int RSVP::updateTrafficControl(ResvStateBlock_t * activeRSB)
                 if (r_iter.Filter_Spec_Object[k].SrcAddress != 0)
                     TC_Filter_Spec[inx++] = r_iter.Filter_Spec_Object[k];
 
-            ev << "Update Flowspec for interface: " << IPAddress(activeRSB->OI) << "\n";
+            ev << "Update Flowspec for interface: " << IPv4Address(activeRSB->OI) << "\n";
             ev << "Bandwidth: " << Tc_Flowspec->req_bandwidth << "\n";
             ev << "Delay:     " << Tc_Flowspec->link_delay << "\n";
 
@@ -2117,7 +2117,7 @@ void RSVP::Mcast_Route_Query(IPADDR srcAddr, int iad, IPADDR destAddr, int *outl
     int foundIndex;
     // int j=0;
 
-    foundIndex = rt->outputPortNo(IPAddress(destAddr));
+    foundIndex = rt->outputPortNo(IPv4Address(destAddr));
     (*outl) = ift->interfaceByPortNo(foundIndex)->ipv4()->inetAddress().getInt();   // FIXME why not return???
 
     return;
@@ -2210,7 +2210,7 @@ void RSVP::getPeerIPAddress(IPADDR dest, IPADDR *peerIP, int *peerInf)
 void RSVP::printSessionObject(SessionObj_t * s)
 {
     ev << "Session: (destAddr, prot_id, destPort, setupPri, holdingPri, Tunnel_Id, XTunnel_Id) = ("
-        << IPAddress(s->DestAddress) << "," << s->Protocol_Id << "," << s->DestPort << "," << s->
+        << IPv4Address(s->DestAddress) << "," << s->Protocol_Id << "," << s->DestPort << "," << s->
         setupPri << "," << s->holdingPri << "," << s->Tunnel_Id << "," << s->
         Extended_Tunnel_Id << ")\n";
 
@@ -2219,7 +2219,7 @@ void RSVP::printSessionObject(SessionObj_t * s)
 void RSVP::printRSVPHopObject(RsvpHopObj_t * r)
 {
     ev << "RSVP HOP: (NextHopAddress, LogicalInterfaceHandle) = (" <<
-        IPAddress(r->Next_Hop_Address) << "," << IPAddress(r->Logical_Interface_Handle) << ")\n";
+        IPv4Address(r->Next_Hop_Address) << "," << IPv4Address(r->Logical_Interface_Handle) << ")\n";
 }
 
 void RSVP::printSenderTemplateObject(SenderTemplateObj_t * s)
@@ -2227,7 +2227,7 @@ void RSVP::printSenderTemplateObject(SenderTemplateObj_t * s)
     if ((s->SrcAddress) != 0)
     {
         ev << "SenderTemplate: (srcAddr, srcPort)=(" <<
-            IPAddress(s->SrcAddress) << "," << s->SrcPort << "," << s->Lsp_Id << ")\n";
+            IPv4Address(s->SrcAddress) << "," << s->SrcPort << "," << s->Lsp_Id << ")\n";
     }
 }
 
@@ -2252,16 +2252,16 @@ void RSVP::printPSB(PathStateBlock_t * p)
     printSessionObject(&p->Session_Object);
     printSenderTemplateObject(&p->Sender_Template_Object);
     printSenderTspecObject(&p->Sender_Tspec_Object);
-    ev << "Previous Hop Address = " << IPAddress(p->Previous_Hop_Address) << "\n";
-    ev << "Logical Interface Handle=" << IPAddress(p->LIH) << "\n";
-    ev << "Out Interface List = " << IPAddress(p->OutInterface_List) << "\n";
+    ev << "Previous Hop Address = " << IPv4Address(p->Previous_Hop_Address) << "\n";
+    ev << "Logical Interface Handle=" << IPv4Address(p->LIH) << "\n";
+    ev << "Out Interface List = " << IPv4Address(p->OutInterface_List) << "\n";
 }
 
 void RSVP::printRSB(ResvStateBlock_t * r)
 {
     printSessionObject(&r->Session_Object);
-    ev << "Next Hop Address=" << IPAddress(r->Next_Hop_Address) << "\n";
-    ev << "OI = " << IPAddress(r->OI) << "\n";
+    ev << "Next Hop Address=" << IPv4Address(r->Next_Hop_Address) << "\n";
+    ev << "OI = " << IPv4Address(r->OI) << "\n";
 
     printSenderTemplateObject((SenderTemplateObj_t *) (&r->Filter_Spec_Object));
     printSenderTspecObject((SenderTspecObj_t *) (&r->Flowspec_Object));
@@ -2322,7 +2322,7 @@ void RSVP::setTCTspecforTCSB(TrafficControlStateBlock_t * t, SenderTspecObj_t * 
 void RSVP::printTCSB(TrafficControlStateBlock_t * t)
 {
     printSessionObject(&t->Session_Object);
-    ev << "OI=" << IPAddress(t->OI) << "\n";
+    ev << "OI=" << IPv4Address(t->OI) << "\n";
     ev << "Filter spec list:\n";
     for (int i = 0; i < InLIST_SIZE; i++)
     {
@@ -2411,11 +2411,11 @@ bool RSVP::doCACCheck(RSVPPathMsg * pmsg, int OI)
                 pe->setSession(pmsg->getSession());
                 pe->setSenderTemplate(pmsg->getSenderTemplate());
                 pe->setSenderTspec(pmsg->getSenderTspec());
-                ev << "Propagate PATH ERROR to " << IPAddress(pmsg->getNHOP()) << "\n";
-                //pe->addPar("src_addr") = IPAddress(routerId).str().c_str();
-                //pe->addPar("dest_addr") = IPAddress(pmsg->getNHOP()).str().c_str();
+                ev << "Propagate PATH ERROR to " << IPv4Address(pmsg->getNHOP()) << "\n";
+                //pe->addPar("src_addr") = IPv4Address(routerId).str().c_str();
+                //pe->addPar("dest_addr") = IPv4Address(pmsg->getNHOP()).str().c_str();
                 //send(pe, "to_ip");
-                sendToIP(pe, IPAddress(pmsg->getNHOP()));
+                sendToIP(pe, IPv4Address(pmsg->getNHOP()));
                 return false;
             }
         }
@@ -2454,11 +2454,11 @@ void RSVP::preemptTunnel(int tunnelId)
                 {
                     IPADDR peerIP = 0;
                     getPeerIPAddress(PSBList[m].OutInterface_List, &peerIP);
-                    ev << "Sending PATH TEAR MESSAGE to " << IPAddress(peerIP);
-                    //ptMsg->addPar("dest_addr") = IPAddress(peerIP).str().c_str();
-                    //ptMsg->addPar("src_addr") = IPAddress(routerId).str().c_str();
+                    ev << "Sending PATH TEAR MESSAGE to " << IPv4Address(peerIP);
+                    //ptMsg->addPar("dest_addr") = IPv4Address(peerIP).str().c_str();
+                    //ptMsg->addPar("src_addr") = IPv4Address(routerId).str().c_str();
                     //send(ptMsg, "to_ip");
-                    sendToIP(ptMsg, IPAddress(peerIP));
+                    sendToIP(ptMsg, IPv4Address(peerIP));
                 }
 
                 // PSBList.erase(p_iterI); // This line is very unsafe !!!!
@@ -2494,7 +2494,7 @@ void RSVP::propagateTEDchanges()
     TED::getGlobalInstance()->updateTED(ted);
 }
 
-void RSVP::sendToIP(cMessage *msg, IPAddress destAddr)
+void RSVP::sendToIP(cMessage *msg, IPv4Address destAddr)
 {
     // attach control info to packet
     IPControlInfo *controlInfo = new IPControlInfo();

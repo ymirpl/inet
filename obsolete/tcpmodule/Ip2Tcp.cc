@@ -20,7 +20,7 @@
 #include "TransportPacket.h"
 #include "IPControlInfo_m.h"
 
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 
 
@@ -42,8 +42,8 @@ void Ip2Tcp::handleMessage(cMessage *msg)
 
     // get the source and destination address
     IPControlInfo *controlInfo = check_and_cast<IPControlInfo *>(msg->removeControlInfo());
-    IPAddress src_addr = controlInfo->srcAddr();
-    IPAddress dest_addr = controlInfo->destAddr();
+    IPv4Address src_addr = controlInfo->srcAddr();
+    IPv4Address dest_addr = controlInfo->destAddr();
     delete controlInfo;
 
     cMessage *tcpmessage = new cMessage (*tpacket);

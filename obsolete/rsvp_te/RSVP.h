@@ -171,7 +171,7 @@ private:
     std::vector<TrafficControlStateBlock_t> TCSBList; //Traffic Control State Block
     std::vector<TELinkState>  ted;
 
-    IPADDR routerId;  // FIXME change to IPAddress
+    IPADDR routerId;  // FIXME change to IPv4Address
     int NoOfLinks;
     IPADDR LocalAddress[InLIST_SIZE];
     bool IsIR;
@@ -228,7 +228,7 @@ private:
     void preemptTunnel(int tunnelId);
     void propagateTEDchanges();
 
-    void sendToIP(cMessage *msg, IPAddress destAddr);
+    void sendToIP(cMessage *msg, IPv4Address destAddr);
 
     void Mcast_Route_Query(IPADDR srcAddr, int iad, IPADDR destAddr, int *outl);
 

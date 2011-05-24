@@ -21,10 +21,10 @@
 //
 
 cplusplus {{
-#include "IPAddress.h"
+#include "IPv4Address.h"
 }}
 
-class noncobject IPAddress;
+class noncobject IPv4Address;
 
 //
 // NOT YET IN USE!
@@ -33,8 +33,8 @@ message TCPInterfacePacket extends cMessage
 {
     fields:
         int tcpConnId;
-        IPAddress srcAddr;
-        IPAddress destAddr;
+        IPv4Address srcAddr;
+        IPv4Address destAddr;
         int srcPort;
         int destPort;
         simtime_t timeout;

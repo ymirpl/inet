@@ -13,7 +13,7 @@
 *
 *********************************************************************/
 #include "OspfTe.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPAddressResolver.h"
 #include "RoutingTableAccess.h"
 
@@ -145,7 +145,7 @@ void OspfTe::TEAddCandidates(const FlowSpecObj_t& fspec,
     CspfBuildSPT(fspec, candidatesList);
 }
 
-IPADDRVector OspfTe::doCalculateERO(const IPAddress& dest,
+IPADDRVector OspfTe::doCalculateERO(const IPv4Address& dest,
                                     CSPFVertexVector& candidatesList,
                                     double &outTotalMetric)
 {
@@ -215,7 +215,7 @@ void OspfTe::CspfBuildSPT(const FlowSpecObj_t& fspec, CSPFVertexVector &candidat
 }
 
 
-IPADDRVector OspfTe::CalculateERO(const IPAddress& dest,
+IPADDRVector OspfTe::CalculateERO(const IPv4Address& dest,
                                   const FlowSpecObj_t& fspec, double& outMetric)
 {
     Enter_Method("CalculateERO()");
@@ -266,7 +266,7 @@ void OspfTe::printTED()
     }
 }
 
-IPADDRVector OspfTe::CalculateERO(const IPAddress& dest,
+IPADDRVector OspfTe::CalculateERO(const IPv4Address& dest,
                                   const simple_link_tVector &links,
                                   const FlowSpecObj_t& old_fspec,
                                   const FlowSpecObj_t& new_fspec,

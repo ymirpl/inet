@@ -66,7 +66,7 @@ class SocketLayer : public cSimpleModule
 
   void _init();
   void _findRoutingTable();
-  IPAddress _defaultIPAddr();
+  IPv4Address _defaultIPAddr();
   Socket::Filedesc _newSocket(Socket::Domain dom, Socket::Type type,
                               Socket::Protocol proto, int from_appl_gate);
   void _deleteSocket(Socket::Filedesc desc);
@@ -108,7 +108,7 @@ class SocketLayer : public cSimpleModule
   Socket* getSocket(Socket::Filedesc desc, bool fullyspecified = false, int from_appl_gate_id = -1) const;
 
   // getSocket() - retrieve a socket by its address fields
-  Socket* getSocket(Socket::Protocol proto, IPAddress laddr, PortNumber lport, IPAddress faddr, PortNumber fport);
+  Socket* getSocket(Socket::Protocol proto, IPv4Address laddr, PortNumber lport, IPv4Address faddr, PortNumber fport);
 
 
 };

@@ -21,7 +21,7 @@ Define_Module(LDPInterface);
 
 void LDPInterface::initialize()
 {
-    local_addr = IPAddress(par("local_addr").stringValue()).getInt();
+    local_addr = IPv4Address(par("local_addr").stringValue()).getInt();
     //local_addr = IPAddressResolver().getAddressFrom(RoutingTableAccess().get()).getInt();
 
     local_port = ConstType::ldp_port;
@@ -34,7 +34,7 @@ void LDPInterface::initialize()
 
     appl_timeout = 0;  // FIXME Unused par("appl_timeout").doubleValue();
 
-    // rem_addr = IPAddress(par("server_addr").stringValue()).getInt();
+    // rem_addr = IPv4Address(par("server_addr").stringValue()).getInt();
 }
 
 
@@ -182,7 +182,7 @@ void LDPInterface::activity()
                     ldpSessions[i].tcp_conn_id = conID;
                     ev << "LDP INTERFACE DEBUG: Update modid-tcpCon-peerIP " <<
                         ldpSessions[i].mod_id << "    " << ldpSessions[i].tcp_conn_id << "    " <<
-                        IPAddress(ldpSessions[i].peerAddr) << "\n";
+                        IPv4Address(ldpSessions[i].peerAddr) << "\n";
                     modID = ldpSessions[i].mod_id;
                     break;
                 }
@@ -260,7 +260,7 @@ int LDPInterface::getModidByPeerIP(int peerIP)
         if (peerIP == ldpSessions[i].peerAddr)
             return ldpSessions[i].mod_id;
     }
-    ev << "LDP PROC DEBUG: Unknown Peer IP: " << IPAddress(peerIP) << "\n";
+    ev << "LDP PROC DEBUG: Unknown Peer IP: " << IPv4Address(peerIP) << "\n";
     return id();  // FIXME is this good??? Andras
 }
 

@@ -45,7 +45,7 @@ void IPMulticast::handleMessage(cMessage *msg)
     IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision *>(msg->controlInfo());
     int inputPort = controlInfo->inputPort();
 
-    IPAddress destAddress = datagram->destAddress();
+    IPv4Address destAddress = datagram->destAddress();
 
     // DVMRP: process datagram only if sent locally or arrived on
     // the shortest route; otherwise discard and continue.
@@ -97,7 +97,7 @@ void IPMulticast::handleMessage(cMessage *msg)
             if (outputPort>=0 && outputPort!=inputPort)
             {
                 IPDatagram *datagramCopy = (IPDatagram *) datagram->dup();
-                IPAddress nextHopAddr = routes[i].gateway;
+                IPv4Address nextHopAddr = routes[i].gateway;
 
                 // add a copy of the control info (OMNeT++ doesn't copy it) --FIXME needed?
                 IPRoutingDecision *newControlInfo = new IPRoutingDecision();

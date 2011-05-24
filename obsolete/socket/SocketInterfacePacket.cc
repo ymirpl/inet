@@ -123,7 +123,7 @@ void SocketInterfacePacket::socket(Socket::Domain domain, Socket::Type type, Soc
   _proto  = proto;
 }
 
-void SocketInterfacePacket::bind(Socket::Filedesc desc, IPAddress addr, PortNumber port)
+void SocketInterfacePacket::bind(Socket::Filedesc desc, IPv4Address addr, PortNumber port)
 {
   _check();
   _action = SA_BIND;
@@ -151,7 +151,7 @@ void SocketInterfacePacket::accept(Socket::Filedesc desc)
 }
 
 // client interface functions
-void SocketInterfacePacket::connect(Socket::Filedesc desc, IPAddress faddr, PortNumber fport)
+void SocketInterfacePacket::connect(Socket::Filedesc desc, IPv4Address faddr, PortNumber fport)
 {
   _check();
   _action = SA_CONNECT;
@@ -197,7 +197,7 @@ void SocketInterfacePacket::close(Socket::Filedesc desc)
 
 }
 
-void SocketInterfacePacket::setSockPair(const IPAddress& laddr, PortNumber& lport, const IPAddress& faddr, PortNumber& fport)
+void SocketInterfacePacket::setSockPair(const IPv4Address& laddr, PortNumber& lport, const IPv4Address& faddr, PortNumber& fport)
 {
   _laddr = laddr;
   _lport = lport;
@@ -212,7 +212,7 @@ void SocketInterfacePacket::socket_ret(Socket::Filedesc desc)
   setFiledesc(desc);
 }
 
-void SocketInterfacePacket::accept_ret(Socket::Filedesc desc, const IPAddress& fadd, PortNumber& fport)
+void SocketInterfacePacket::accept_ret(Socket::Filedesc desc, const IPv4Address& fadd, PortNumber& fport)
 {
   _check();
   _action = SA_ACCEPT_RET;
@@ -228,7 +228,7 @@ void SocketInterfacePacket::connect_ret(Socket::Filedesc desc)
   setFiledesc(desc);
 }
 
-void SocketInterfacePacket::read_ret(Socket::Filedesc desc, cMessage* msg, IPAddress faddr, PortNumber fport)
+void SocketInterfacePacket::read_ret(Socket::Filedesc desc, cMessage* msg, IPv4Address faddr, PortNumber fport)
 {
   _check();
   _filedesc   = desc;

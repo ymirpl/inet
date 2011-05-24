@@ -41,7 +41,7 @@ void IPFragmentation::handleMessage(cMessage *msg)
     IPDatagram *datagram  = check_and_cast<IPDatagram *>(msg);
     IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision *>(msg->controlInfo());
     int outputPort = controlInfo->outputPort();
-    IPAddress nextHopAddr = controlInfo->nextHopAddr();
+    IPv4Address nextHopAddr = controlInfo->nextHopAddr();
 
     int mtu = ift->interfaceByPortNo(outputPort)->mtu();
 
@@ -99,7 +99,7 @@ void IPFragmentation::handleMessage(cMessage *msg)
 }
 
 
-void IPFragmentation::sendDatagramToOutput(IPDatagram *datagram, int outputPort, IPAddress nextHopAddr)
+void IPFragmentation::sendDatagramToOutput(IPDatagram *datagram, int outputPort, IPv4Address nextHopAddr)
 {
     // attach next hop address if needed
     IPRoutingDecision *routingDecision = new IPRoutingDecision();

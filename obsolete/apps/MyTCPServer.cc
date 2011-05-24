@@ -2,7 +2,7 @@
 
 #include "tcp.h"
 #include <omnetpp.h>
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 class MyTCPServer: public cSimpleModule
 {
@@ -106,7 +106,7 @@ void MyTCPServer::passiveOpen(double timeout, cModuleType* procserver_type)
     cMessage *open_passive;
 
     int local_port = 1;
-    int local_addr = IPAddress(par("local_addr").stringValue()).getInt();
+    int local_addr = IPv4Address(par("local_addr").stringValue()).getInt();
 
     int rem_port = -1; //set to -1 since not yet specified (passive open)
     int rem_addr = -1; //set to -1 since not yet specified (passive open)

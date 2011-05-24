@@ -133,10 +133,10 @@ void RSVPAppl::processRSVP_PATH(RSVPPathMsg *pMessage)
     Unicast_Route_Query(receiverIP, &outInf);
 
     // Convert to name
-    InterfaceEntry *outInfP = rt->interfaceByAddress(IPAddress(outInf));
-    InterfaceEntry *inInfP = rt->interfaceByAddress(IPAddress(inInf));
-    if (!outInfP) error("no interface with outInf address %s",IPAddress(outInf).str().c_str());
-    if (!inInfP) error("no interface with inInf address %s",IPAddress(inInf).str().c_str());
+    InterfaceEntry *outInfP = rt->interfaceByAddress(IPv4Address(outInf));
+    InterfaceEntry *inInfP = rt->interfaceByAddress(IPv4Address(inInf));
+    if (!outInfP) error("no interface with outInf address %s",IPv4Address(outInf).str().c_str());
+    if (!inInfP) error("no interface with inInf address %s",IPv4Address(inInf).str().c_str());
 
     const char *outInfName = outInfP->name();
     const char *inInfName = inInfP->name();
@@ -230,7 +230,7 @@ void RSVPAppl::processRSVP_RESV(RSVPResvMsg *rMessage)
                             (rInfo->route)[c] = routerId;
                             includeMe = true;
                         }
-                        ev << IPAddress((rInfo->route)[c]) << " ";
+                        ev << IPv4Address((rInfo->route)[c]) << " ";
                     }
                     ev << "\n";
 
@@ -244,12 +244,12 @@ void RSVPAppl::processRSVP_RESV(RSVPResvMsg *rMessage)
                     // signalMPLS->addPar("dest") = aTunnel.Session.DestAddress;
                     // Install new label
                     int outInf = rMessage->getLIH();
-                    int outInfIndex = rt->interfaceByAddress(IPAddress(outInf))->outputPort(); // FIXME ->outputPort(): is this OK? --AV
+                    int outInfIndex = rt->interfaceByAddress(IPv4Address(outInf))->outputPort(); // FIXME ->outputPort(): is this OK? --AV
                     const char *outInfName = (ift->interfaceByPortNo(outInfIndex))->name();
                     const char *inInfName = (ift->interfaceByPortNo(aTunnel.inInfIndex))->name();
 
                     ev << "INSTALL new label \n";
-                    ev << "src=" << IPAddress(aTunnel.Sender_Template.
+                    ev << "src=" << IPv4Address(aTunnel.Sender_Template.
                                               SrcAddress) << "\n";
                     lt->installNewLabel(label, string(inInfName),
                                         string(outInfName), lsp_id, PUSH_OPER);
@@ -452,8 +452,8 @@ void RSVPAppl::processSignalFromTester(cMessage *msg)
 
 void RSVPAppl::processCommand_NEW_BW_REQUEST(cMessage *msg)
 {
-    int rSrc = IPAddress(msg->par("src").stringValue()).getInt();
-    int rDest = IPAddress(msg->par("dest").stringValue()).getInt();
+    int rSrc = IPv4Address(msg->par("src").stringValue()).getInt();
+    int rDest = IPv4Address(msg->par("dest").stringValue()).getInt();
     double bw = msg->par("bandwidth").doubleValue();
 
     int k = 0;
@@ -628,8 +628,8 @@ void RSVPAppl::sendResvMessage(RSVPPathMsg * pMsg, int inLabel)
     // int peerIp=0;
     // getPeerIPAddress(inInf, &peerIp);
 
-    rMsg->addPar("dest_addr") = IPAddress(pMsg->getNHOP()).str().c_str();
-    ev << "Next peer " << IPAddress(pMsg->getNHOP());
+    rMsg->addPar("dest_addr") = IPv4Address(pMsg->getNHOP()).str().c_str();
+    ev << "Next peer " << IPv4Address(pMsg->getNHOP());
     ev << "RESV MESSAGE content: \n";
     print(rMsg);
     send(rMsg, "to_rsvp");
@@ -671,7 +671,7 @@ void RSVPAppl::sendPathMessage(SessionObj_t * s, traffic_request_t * t, int lspI
     pMsg->setSenderTspec(* static_cast < SenderTspecObj_t * >(Flowspec_Object));
 
     // Setup routing information
-    pMsg->addPar("src_addr") = IPAddress(routerId).str().c_str();
+    pMsg->addPar("src_addr") = IPv4Address(routerId).str().c_str();
 
     IPADDR peerIP = 0;
     int peerInf = 0;
@@ -679,7 +679,7 @@ void RSVPAppl::sendPathMessage(SessionObj_t * s, traffic_request_t * t, int lspI
     getPeerIPAddress(destAddr, &peerIP, &peerInf);
 
 
-    pMsg->addPar("dest_addr") = IPAddress(peerIP).str().c_str();
+    pMsg->addPar("dest_addr") = IPv4Address(peerIP).str().c_str();
     pMsg->addPar("peerInf") = peerInf;
 
 
@@ -705,8 +705,8 @@ void RSVPAppl::sendPathMessage(SessionObj_t * s, traffic_request_t * t, int lspI
             {
                 // No input ER from the administrator for this path
                 // Find ER based on CSPF routing algorithm
-                ev << "OSPF PATH calculation: from " << IPAddress(routerId) <<
-                    " to " << IPAddress(destAddr) << "\n";
+                ev << "OSPF PATH calculation: from " << IPv4Address(routerId) <<
+                    " to " << IPv4Address(destAddr) << "\n";
 
                 double delayTime = 0;
                 std::vector<IPADDR> ero = ospfte->CalculateERO(destAddr, *Flowspec_Object, delayTime);
@@ -720,7 +720,7 @@ void RSVPAppl::sendPathMessage(SessionObj_t * s, traffic_request_t * t, int lspI
                 int hopCount = 0;
                 for (unsigned int n = 0; n < ero.size(); n++)
                 {
-                    ev << IPAddress(ero[n]) << "\n";
+                    ev << IPv4Address(ero[n]) << "\n";
                     ERO[hopCount].node = ero[n];
                     ERO[hopCount].L = false;
                     hopCount++;
@@ -785,8 +785,8 @@ void RSVPAppl::sendPathMessage(SessionObj_t * s, traffic_request_t * t, int lspI
 
 
     // Finish buidling packet, send it off
-    ev << "Final Dest Address is : " << IPAddress(destAddr) << "\n";
-    ev << "Set Dest Address to: " << IPAddress(peerIP) << "\n";
+    ev << "Final Dest Address is : " << IPv4Address(destAddr) << "\n";
+    ev << "Set Dest Address to: " << IPv4Address(peerIP) << "\n";
 
 
     ev << "PATH message content sent:\n";
@@ -801,7 +801,7 @@ void RSVPAppl::Unicast_Route_Query(IPADDR da, int *outl)
 {
     int foundIndex;
     // int j=0;
-    foundIndex = rt->outputPortNo(IPAddress(da));
+    foundIndex = rt->outputPortNo(IPv4Address(da));
     (*outl) = ift->interfaceByPortNo(foundIndex)->ipv4()->inetAddress().getInt();   // FIXME why not return outl???
 
     return;
@@ -812,7 +812,7 @@ void RSVPAppl::Mcast_Route_Query(IPADDR sa, int iad, IPADDR da, int *outl)
 {
     int foundIndex;
     // int j=0;
-    foundIndex = rt->outputPortNo(IPAddress(da));
+    foundIndex = rt->outputPortNo(IPv4Address(da));
     (*outl) = ift->interfaceByPortNo(foundIndex)->ipv4()->inetAddress().getInt();   // FIXME why not return outl???
 
     return;
@@ -838,7 +838,7 @@ void RSVPAppl::getIncInet(int remoteInet, int *incInet)
 {
     std::vector < TELinkState >::iterator tedIter;
 
-    ev << "Find incoming inf for peerOutgoinglink=" << IPAddress(remoteInet) << "\n";
+    ev << "Find incoming inf for peerOutgoinglink=" << IPv4Address(remoteInet) << "\n";
     updateTED();
     for (tedIter = ted.begin(); tedIter != ted.end(); tedIter++)
     {
@@ -925,11 +925,11 @@ RSVPAppl::traffic_request_t RSVPAppl::parseTrafficRequest(const cXMLElement *con
     {
         if (!strcmp(child->getTagName(),"src"))
         {
-            aTR.src = IPAddress(child->getNodeValue()).getInt();
+            aTR.src = IPv4Address(child->getNodeValue()).getInt();
         }
         else if (!strcmp(child->getTagName(),"dest"))
         {
-            aTR.dest = IPAddress(child->getNodeValue()).getInt();
+            aTR.dest = IPv4Address(child->getNodeValue()).getInt();
         }
         else if (!strcmp(child->getTagName(),"setupPri"))
         {
@@ -964,12 +964,12 @@ RSVPAppl::traffic_request_t RSVPAppl::parseTrafficRequest(const cXMLElement *con
             const char *aField;
             while ((aField = tokenizer.nextToken()) != NULL)
             {
-                aTR.route[rCount].node = IPAddress(aField).getInt();
+                aTR.route[rCount].node = IPv4Address(aField).getInt();
                 if ((aField = tokenizer.nextToken()) != NULL)
                     aTR.route[rCount].L = atoi(aField);
                 else
                     aTR.route[rCount].L = 0;
-                ev << "Add node from admin, node=" << IPAddress(aTR.route[rCount].node) <<
+                ev << "Add node from admin, node=" << IPv4Address(aTR.route[rCount].node) <<
                     " lBit=" << aTR.route[rCount].L << "\n";
                 rCount++;
                 if (rCount > MAX_ROUTE)
@@ -977,8 +977,8 @@ RSVPAppl::traffic_request_t RSVPAppl::parseTrafficRequest(const cXMLElement *con
             }
         }
     }
-    ev << "Adding (src, dest, delay, bw) = (" << IPAddress(aTR.src) << "," <<
-        IPAddress(aTR.dest) << "," << aTR.delay << "," << aTR.bandwidth << ")\n";
+    ev << "Adding (src, dest, delay, bw) = (" << IPv4Address(aTR.src) << "," <<
+        IPv4Address(aTR.dest) << "," << aTR.delay << "," << aTR.bandwidth << ")\n";
     if (aTR.holdingPri > aTR.setupPri)
         error("Holding priority is greater than setup priority (setup priority must be greater than or equal)");
 
@@ -1090,8 +1090,8 @@ bool RSVPAppl::hasPath(int lspid, FlowSpecObj_t * newFlowspec)
     ev << "Current total path metric: " << currentTotalDelay << "\n";
     // Calculate ERO
 
-    ev << "OSPF PATH calculation: from " << IPAddress(routerId) <<
-        " to " << IPAddress(destAddr) << "\n";
+    ev << "OSPF PATH calculation: from " << IPv4Address(routerId) <<
+        " to " << IPv4Address(destAddr) << "\n";
 
     std::vector<IPADDR> ero;
     double totalDelay = 0;
@@ -1141,13 +1141,13 @@ bool RSVPAppl::hasPath(int lspid, FlowSpecObj_t * newFlowspec)
     // print old route and new route for debugging
     ev << "Old route for LSP with id=" << lspid << " was:\n";
     for (int k = 0; k < MAX_ROUTE; k++)
-        ev << IPAddress(rInfo.route[k]) << " ";
+        ev << IPv4Address(rInfo.route[k]) << " ";
     ev << "\n";
 
     ev << "New route for this LSP is :\n";
     for (ero_iterI = ero.begin(); ero_iterI != ero.end(); ero_iterI++)
     {
-        ev << IPAddress((*ero_iterI)) << " ";
+        ev << IPv4Address((*ero_iterI)) << " ";
     }
     ev << "\n";
     return true;

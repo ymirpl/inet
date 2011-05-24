@@ -114,8 +114,8 @@ void RSVPInterface::processMsgFromApp(cMessage * msg)
     send(msg, "to_ip");
 
 /*
-    IPAddress src_addr = msg->hasPar("src_addr") ? msg->par("src_addr").stringValue() : IPAddress();
-    IPAddress dest_addr = msg->hasPar("dest_addr") ? msg->par("dest_addr").stringValue() :  IPAddress();
+    IPv4Address src_addr = msg->hasPar("src_addr") ? msg->par("src_addr").stringValue() : IPv4Address();
+    IPv4Address dest_addr = msg->hasPar("dest_addr") ? msg->par("dest_addr").stringValue() :  IPv4Address();
 
     // attach control info to transport packet
     IPControlInfo *controlInfo = new IPControlInfo();
@@ -134,10 +134,10 @@ void RSVPInterface::processMsgFromApp(cMessage * msg)
     tpacket->addPar("rsvp_data") = msg; // FIXME ???
 
 
-    // FIXME eliminate MY_ERROR_IP_ADDRESS? NULL and IPAddress.isNull() should be OK instead
-    IPAddress src_addr =
+    // FIXME eliminate MY_ERROR_IP_ADDRESS? NULL and IPv4Address.isNull() should be OK instead
+    IPv4Address src_addr =
         msg->hasPar("src_addr") ? msg->par("src_addr").stringValue() : MY_ERROR_IP_ADDRESS;
-    IPAddress dest_addr =
+    IPv4Address dest_addr =
         msg->hasPar("dest_addr") ? msg->par("dest_addr").stringValue() : MY_ERROR_IP_ADDRESS;
 
     // attach control info to transport packet

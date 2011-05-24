@@ -48,7 +48,7 @@ void SocketLayer::_findRoutingTable()
     error("Module routingTable not found!");
 }
 
-IPAddress SocketLayer::_defaultIPAddr()
+IPv4Address SocketLayer::_defaultIPAddr()
 {
   if (_rt)
     return _rt->interfaceByPortNo(0)->inetAddr;
@@ -501,7 +501,7 @@ Socket* SocketLayer::getSocket(Socket::Filedesc desc, bool fullyspecified, int f
   return socket;
 }
 
-Socket* SocketLayer::getSocket(Socket::Protocol proto, IPAddress laddr, PortNumber lport, IPAddress faddr, PortNumber fport)
+Socket* SocketLayer::getSocket(Socket::Protocol proto, IPv4Address laddr, PortNumber lport, IPv4Address faddr, PortNumber fport)
 {
   Socket* socket      = NULL;
   Socket* sock_listen = NULL;   // a socket in listen mode

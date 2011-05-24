@@ -64,9 +64,9 @@ private:
   SockAction _action;   // identifies the current action
 
   // address info
-  IPAddress _laddr;       // local
+  IPv4Address _laddr;       // local
   PortNumber _lport;
-  IPAddress _faddr;       // foreign
+  IPv4Address _faddr;       // foreign
   PortNumber _fport;
 
   // socket info
@@ -123,7 +123,7 @@ public:
   // bind() is used to associate a previously created socket with a local
   // network transport address. This needs to be done by a server application to
   // specify the local address/port for connection admission.
-  void bind(Socket::Filedesc desc, IPAddress addr, PortNumber port);
+  void bind(Socket::Filedesc desc, IPv4Address addr, PortNumber port);
 
   // listen() makes the transport layer accept connection requests by remote applications
   // (TCP passive open)
@@ -134,7 +134,7 @@ public:
 
   // connect() initiates a connection request to a remote application (TCP
   // active open)
-  void connect(Socket::Filedesc desc, IPAddress faddr, PortNumber fport);
+  void connect(Socket::Filedesc desc, IPv4Address faddr, PortNumber fport);
 
   // read/write calls
   void write(Socket::Filedesc desc, cMessage* msg);
@@ -148,14 +148,14 @@ public:
   // API SocketLayer --> Application
   //
 
-  void setSockPair(const IPAddress& laddr, PortNumber& lport, const IPAddress& faddr, PortNumber& fport);
+  void setSockPair(const IPv4Address& laddr, PortNumber& lport, const IPv4Address& faddr, PortNumber& fport);
   void setFiledesc(Socket::Filedesc desc) {_filedesc = desc;}
 
   void socket_ret(Socket::Filedesc desc);
-  void accept_ret(Socket::Filedesc desc, const IPAddress& fadd, PortNumber& fport);
+  void accept_ret(Socket::Filedesc desc, const IPv4Address& fadd, PortNumber& fport);
   void connect_ret(Socket::Filedesc desc);
 
-  void read_ret(Socket::Filedesc desc, cMessage* msg, IPAddress faddr, PortNumber fport);
+  void read_ret(Socket::Filedesc desc, cMessage* msg, IPv4Address faddr, PortNumber fport);
 
   //
   // general
@@ -163,9 +163,9 @@ public:
   // accessing private data (mainly by the SocketLayer)
 
   SockAction action() const {return _action;}
-  const IPAddress& lAddr() const {return _laddr;}
+  const IPv4Address& lAddr() const {return _laddr;}
   const PortNumber& lPort() const {return _lport;}
-  const IPAddress& fAddr() const {return _faddr;}
+  const IPv4Address& fAddr() const {return _faddr;}
   const PortNumber& fPort() const {return _fport;}
 
   Socket::Domain domain() const {return _domain;}

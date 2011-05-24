@@ -1,7 +1,7 @@
 
 #include <omnetpp.h>
 #include "tcp.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 class MyTCPServerProc : public cSimpleModule
 {
@@ -73,7 +73,7 @@ void MyTCPServerProc::activity()
 
     cModule* mod = parentModule();
 
-    local_addr    =  IPAddress(mod->par("local_addr").stringValue()).getInt();
+    local_addr    =  IPv4Address(mod->par("local_addr").stringValue()).getInt();
 
     timeout = mod->par("timeout");
 
@@ -125,8 +125,8 @@ void MyTCPServerProc::activity()
 
       msgLng = tcp_mss/4;  //bits
 
-       ev << "MY_TCP_SERVER_PROC DEBUG:  LSR(" << IPAddress(local_addr) << ") received ESTAB from LSR(" <<
-       IPAddress(rem_addr) << ")\n";;
+       ev << "MY_TCP_SERVER_PROC DEBUG:  LSR(" << IPv4Address(local_addr) << ") received ESTAB from LSR(" <<
+       IPv4Address(rem_addr) << ")\n";;
 
       delete msg;
 
@@ -192,8 +192,8 @@ void MyTCPServerProc::issueTCP_RECEIVE()
           //send "receive" to "TcpModule"
           send(receive_call, "out");
 
-        ev << "TCP_SERVER_PROC DEBUG: " << IPAddress(local_addr) << " send TCP_C_RECEIVE to " <<
-        IPAddress(rem_addr) << "\n";
+        ev << "TCP_SERVER_PROC DEBUG: " << IPv4Address(local_addr) << " send TCP_C_RECEIVE to " <<
+        IPv4Address(rem_addr) << "\n";
 }
 
 
@@ -225,8 +225,8 @@ void MyTCPServerProc::sendKEEP_ALIVE()
 
       send_call->setTimestamp();
 
-      ev << "TCP_SERVER_PROC DEBUG: " << IPAddress(local_addr) << " send DATA to " <<
-        IPAddress(rem_addr) << "\n";
+      ev << "TCP_SERVER_PROC DEBUG: " << IPv4Address(local_addr) << " send DATA to " <<
+        IPv4Address(rem_addr) << "\n";
       send(send_call, "out");
 
 
@@ -280,8 +280,8 @@ void MyTCPServerProc::processData(cMessage* msg)
     if ((msg->kind()) == TCP_I_SEG_FWD)
     {
 
-    ev << "MY_TCP_SERVER_PROC DEBUG: " << IPAddress(local_addr) << " receives data from " <<
-    IPAddress(rem_addr) << "\n";
+    ev << "MY_TCP_SERVER_PROC DEBUG: " << IPv4Address(local_addr) << " receives data from " <<
+    IPv4Address(rem_addr) << "\n";
 
     delete msg;
 

@@ -41,7 +41,7 @@ PCB::PCB(const PCB& pcb) : cObject()
   operator=(pcb);
 }
 
-PCB::PCB(IPAddress laddr, PortNumber lport, IPAddress faddr, PortNumber fport) : cObject()
+PCB::PCB(IPv4Address laddr, PortNumber lport, IPv4Address faddr, PortNumber fport) : cObject()
 {
   _init();
 

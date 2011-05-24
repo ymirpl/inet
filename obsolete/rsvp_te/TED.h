@@ -29,11 +29,11 @@
  */
 struct TELinkState
 {
-    IPAddress advrouter;
+    IPv4Address advrouter;
     int type;
-    IPAddress linkid;
-    IPAddress local;
-    IPAddress remote;
+    IPv4Address linkid;
+    IPv4Address local;
+    IPv4Address remote;
     double metric;
     double MaxBandwith;
     double MaxResvBandwith;

@@ -2,7 +2,7 @@
 
 #include <omnetpp.h>
 #include "tcp.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 
 class MyTCPClient: public cSimpleModule
@@ -69,8 +69,8 @@ void MyTCPClient::initialize()
 
 void MyTCPClient::activity()
 {
-    local_addr = IPAddress(par("local_addr").stringValue()).getInt();
-    rem_addr= IPAddress(par("server_addr").stringValue()).getInt();
+    local_addr = IPv4Address(par("local_addr").stringValue()).getInt();
+    rem_addr= IPv4Address(par("server_addr").stringValue()).getInt();
     keepAliveTime = par("data_interarrival_time");
     timeout = par("timeout");;
     double startTime = par("start_time");
@@ -171,8 +171,8 @@ void MyTCPClient::sendKEEP_ALIVE()
     send_call->addPar("keep_alive") =0;
     send_call->setTimestamp();
 
-    ev << "MY TCP CLIENT DEBUG: " << IPAddress(local_addr) << " send data to " <<
-    IPAddress(rem_addr) << "\n";
+    ev << "MY TCP CLIENT DEBUG: " << IPv4Address(local_addr) << " send data to " <<
+    IPv4Address(rem_addr) << "\n";
     send(send_call, "out");
 }
 
@@ -213,8 +213,8 @@ void MyTCPClient::processData(cMessage* msg)
 {
     if ((msg->kind()) == TCP_I_SEG_FWD)
     {
-        ev << "MY TCP CLIENT DEBUG: " << IPAddress(local_addr) << " receives data from " <<
-        IPAddress(rem_addr) << "\n";
+        ev << "MY TCP CLIENT DEBUG: " << IPv4Address(local_addr) << " receives data from " <<
+        IPv4Address(rem_addr) << "\n";
         delete msg;
     }
     else

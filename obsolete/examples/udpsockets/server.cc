@@ -35,7 +35,7 @@ void UDPSocketTestServer::activity()
     SocketInterfacePacket* sockipack;
     Socket::Filedesc filedesc, filedesc_reply;
     SocketInterfacePacket::SockAction action;
-    IPAddress remote_addr;
+    IPv4Address remote_addr;
     PortNumber remote_port;
     cQueue garbage("garbage"); // FIXME check what it collects...
 

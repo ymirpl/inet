@@ -34,7 +34,7 @@ void IPTunneling::handleMessage(cMessage *msg)
 {
     IPDatagram *dgram0 = (IPDatagram *)(msg->parList().get("datagram"));  // FIXME cPar!!!
     IPDatagram *datagram = new IPDatagram(*dgram0);
-    IPAddress dest = msg->par("destination_address").stringValue();
+    IPv4Address dest = msg->par("destination_address").stringValue();
     delete msg;
 
     IPControlInfo *controlInfo = new IPControlInfo();

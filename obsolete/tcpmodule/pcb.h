@@ -37,16 +37,16 @@
 #include <omnetpp.h>
 #include <iostream>
 
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 
 class PCB : public cObject
 {
  private:
 
-  IPAddress _faddr;       // foreign address
+  IPv4Address _faddr;       // foreign address
   PortNumber _fport;       // foreign port
-  IPAddress _laddr;       // local address
+  IPv4Address _laddr;       // local address
   PortNumber _lport;       // local port
 
   // private member functions
@@ -56,7 +56,7 @@ class PCB : public cObject
 
   // creation, duplication, destruction
   PCB(const PCB& pcb);
-  PCB(IPAddress laddr, PortNumber lport, IPAddress faddr, PortNumber fport);
+  PCB(IPv4Address laddr, PortNumber lport, IPv4Address faddr, PortNumber fport);
   PCB();
   explicit PCB(const char* name);
   //PCB(const char* name, cOjbect* ownerobj);
@@ -67,14 +67,14 @@ class PCB : public cObject
   PCB& operator=(const PCB& pcb);
 
   // new member functions
-  const IPAddress& fAddr() const {return _faddr;}
-  const IPAddress& lAddr() const {return _laddr;}
+  const IPv4Address& fAddr() const {return _faddr;}
+  const IPv4Address& lAddr() const {return _laddr;}
 
   const PortNumber& fPort() const {return _fport;}
   const PortNumber& lPort() const {return _lport;}
 
-  void setFAddr(const IPAddress& addr) {_faddr = addr;}
-  void setLAddr(const IPAddress& addr) {_laddr = addr;}
+  void setFAddr(const IPv4Address& addr) {_faddr = addr;}
+  void setLAddr(const IPv4Address& addr) {_laddr = addr;}
 
   void setFPort(const PortNumber& port) {_fport = port;}
   void setLPort(const PortNumber& port) {_lport = port;}

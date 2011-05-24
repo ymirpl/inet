@@ -39,7 +39,7 @@ class INET_API IPFragmentation: public cSimpleModule
     InterfaceTable *ift;
     ICMPAccess icmpAccess;
 
-    void sendDatagramToOutput(IPDatagram *datagram, int outputPort, IPAddress nextHopAddr);
+    void sendDatagramToOutput(IPDatagram *datagram, int outputPort, IPv4Address nextHopAddr);
 
   public:
     Module_Class_Members(IPFragmentation, cSimpleModule, 0);

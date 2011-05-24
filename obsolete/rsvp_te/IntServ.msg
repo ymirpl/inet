@@ -16,17 +16,17 @@
 //
 
 cplusplus {{
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 #define MAX_ROUTE 10
 #define InLIST_SIZE 5
 
-typedef uint32 IPADDR;  //FIXME this definition should go!!!  IPADDR should be IPAddress
-//typedef IPAddress IPADDR;
+typedef uint32 IPADDR;  //FIXME this definition should go!!!  IPADDR should be IPv4Address
+//typedef IPv4Address IPADDR;
 }}
 class noncobject IPADDR;
 
-class noncobject IPAddress;
+class noncobject IPv4Address;
 
 //
 // Intserv/RSVP: Session Structure
