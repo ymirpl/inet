@@ -1458,7 +1458,7 @@ OLSR::send_pkt()
     int num_pkts = (num_msgs%OLSR_MAX_MSGS == 0) ? num_msgs/OLSR_MAX_MSGS :
                    (num_msgs/OLSR_MAX_MSGS + 1);
 
-    Uint128 destAdd = IPAddress::ALLONES_ADDRESS;
+    Uint128 destAdd = IPv4Address::ALLONES_ADDRESS;
 
     for (int i = 0; i < num_pkts; i++)
     {

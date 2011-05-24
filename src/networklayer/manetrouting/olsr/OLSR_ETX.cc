@@ -1621,7 +1621,7 @@ OLSR_ETX::send_pkt()
         return;
 
     Uint128 destAdd;
-    destAdd = IPAddress::ALLONES_ADDRESS;
+    destAdd = IPv4Address::ALLONES_ADDRESS;
     // Calculates the number of needed packets
     int num_pkts = (num_msgs % OLSR_ETX_MAX_MSGS == 0) ? num_msgs / OLSR_ETX_MAX_MSGS :
                    (num_msgs / OLSR_ETX_MAX_MSGS + 1);

@@ -20,7 +20,7 @@
 
 #include <omnetpp.h>
 #include "INETDefs.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 class IInterfaceTable;
 class IRoutingTable;
@@ -41,7 +41,7 @@ class INET_API FlatNetworkConfigurator : public cSimpleModule
         bool isIPNode;
         IInterfaceTable *ift;
         IRoutingTable *rt;
-        IPAddress address;
+        IPv4Address address;
         bool usesDefaultRoute;
     };
     typedef std::vector<NodeInfo> NodeInfoVector;

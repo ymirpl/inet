@@ -156,7 +156,7 @@ void BGPRouting::processMessageFromTCP(cMessage *msg)
         socket = new TCPSocket(msg);
         socket->readDataTransferModePar(*this);
         socket->setOutputGate(gate("tcpOut"));
-        IPAddress peerAddr = socket->getRemoteAddress().get4();
+        IPv4Address peerAddr = socket->getRemoteAddress().get4();
         BGP::SessionID i = findIdFromPeerAddr(_BGPSessions, peerAddr);
         if (i==-1)
         {
@@ -255,7 +255,7 @@ void BGPRouting::processMessage(const BGPUpdateMessage& msg)
     _BGPSessions[_currSessionId]->getFSM()->UpdateMsgEvent();
 
     unsigned char               decisionProcessResult;
-    IPAddress                   netMask(IPAddress::ALLONES_ADDRESS);
+    IPv4Address                   netMask(IPv4Address::ALLONES_ADDRESS);
     BGP::RoutingTableEntry*     entry           = new BGP::RoutingTableEntry();
     const unsigned char         length          = msg.getNLRI().length;
     unsigned int                ASValueCount    = msg.getPathAttributeList(0).getAsPath(0).getValue(0).getAsValueArraySize();
@@ -431,7 +431,7 @@ void BGPRouting::updateSendProcess(const unsigned char type, BGP::SessionID sess
             InterfaceEntry*  iftEntry = (*sessionIt).second->getLinkIntf();
             content.getOrigin().setValue((*sessionIt).second->getType());
             content.getNextHop().setValue(iftEntry->ipv4Data()->getIPAddress());
-            IPAddress netMask = entry->getNetmask();
+            IPv4Address netMask = entry->getNetmask();
             NLRI.prefix = entry->getHost().doAnd(netMask);
             NLRI.length = (unsigned char) netMask.getNetmaskLength();
             {
@@ -448,7 +448,7 @@ void BGPRouting::updateSendProcess(const unsigned char type, BGP::SessionID sess
 
 bool BGPRouting::checkExternalRoute(const IPRoute* route)
 {
-    OSPF::IPv4Address OSPFRoute;
+    IPv4Address OSPFRoute;
     OSPFRoute = ipv4AddressFromULong(route->getHost().getInt());
     OSPFRouting* ospf = OSPFRoutingAccess().getIfExists();
     bool returnValue = ospf->checkExternalRoute(OSPFRoute);
@@ -490,7 +490,7 @@ BGP::ASID BGPRouting::findMyAS(cXMLElementList& asList, int& outRouterPosition)
         outRouterPosition = 1;
         for (cXMLElementList::iterator routerListIt = routerList.begin(); routerListIt != routerList.end(); routerListIt++)
         {
-            IPAddress routerAddr = IPAddress((*routerListIt)->getAttribute("interAddr"));
+            IPv4Address routerAddr = IPv4Address((*routerListIt)->getAttribute("interAddr"));
             for (int i=0; i<_inft->getNumInterfaces(); i++) {
                 if (_inft->getInterface(i)->ipv4Data()->getIPAddress() == routerAddr)
                     return atoi((*routerListIt)->getParentNode()->getAttribute("id"));
@@ -508,14 +508,14 @@ void BGPRouting::loadSessionConfig(cXMLElementList& sessionList, simtime_t* dela
     for (cXMLElementList::iterator sessionListIt = sessionList.begin(); sessionListIt != sessionList.end(); sessionListIt++, delayTab[3] = saveStartDelay)
     {
         const char* exterAddr = (*sessionListIt)->getFirstChild()->getAttribute("exterAddr");
-        IPAddress routerAddr1 = IPAddress(exterAddr);
+        IPv4Address routerAddr1 = IPv4Address(exterAddr);
         exterAddr = (*sessionListIt)->getLastChild()->getAttribute("exterAddr");
-        IPAddress routerAddr2 = IPAddress(exterAddr);
+        IPv4Address routerAddr2 = IPv4Address(exterAddr);
         if (isInIPTable(_rt, routerAddr1) == -1 && isInIPTable(_rt, routerAddr2) == -1)
         {
             continue;
         }
-        IPAddress peerAddr;
+        IPv4Address peerAddr;
         if (isInIPTable(_rt, routerAddr1) != -1)
         {
             peerAddr = routerAddr2;
@@ -548,7 +548,7 @@ std::vector<const char *> BGPRouting::loadASConfig(cXMLElementList& ASConfig)
         std::string nodeName = (*ASConfigIt)->getTagName();
         if (nodeName == "Router")
         {
-            if (isInIPTable(_rt, IPAddress((*ASConfigIt)->getAttribute("interAddr"))) == -1)
+            if (isInIPTable(_rt, IPv4Address((*ASConfigIt)->getAttribute("interAddr"))) == -1)
             {
                 routerInSameASList.push_back((*ASConfigIt)->getAttribute("interAddr"));
             }
@@ -717,7 +717,7 @@ BGP::SessionID BGPRouting::createSession(BGP::type typeSession, const char* peer
 }
 
 
-BGP::SessionID BGPRouting::findIdFromPeerAddr(std::map<BGP::SessionID, BGPSession*> sessions, IPAddress peerAddr)
+BGP::SessionID BGPRouting::findIdFromPeerAddr(std::map<BGP::SessionID, BGPSession*> sessions, IPv4Address peerAddr)
 {
     for (std::map<BGP::SessionID, BGPSession*>::iterator sessionIterator = sessions.begin();
         sessionIterator != sessions.end(); sessionIterator ++)
@@ -747,7 +747,7 @@ bool BGPRouting::deleteBGPRoutingEntry(BGP::RoutingTableEntry* entry){
 }
 
 /*return index of the IP table if the route is found, -1 else*/
-int BGPRouting::isInIPTable(IRoutingTable* rtTable, IPAddress addr)
+int BGPRouting::isInIPTable(IRoutingTable* rtTable, IPv4Address addr)
 {
     for (int i = 0; i < rtTable->getNumRoutes(); i++)
     {

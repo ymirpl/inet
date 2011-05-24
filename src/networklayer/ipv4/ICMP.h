@@ -42,7 +42,7 @@ class INET_API ICMP : public cSimpleModule
     virtual void processEchoRequest (ICMPMessage *);
     virtual void processEchoReply (ICMPMessage *);
     virtual void sendEchoRequest(cPacket *);
-    virtual void sendToIP(ICMPMessage *, const IPAddress& dest);
+    virtual void sendToIP(ICMPMessage *, const IPv4Address& dest);
     virtual void sendToIP(ICMPMessage *msg);
 
   public:

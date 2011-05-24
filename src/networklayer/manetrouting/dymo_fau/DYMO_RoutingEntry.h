@@ -24,7 +24,7 @@
 #include <string.h>
 #include <sstream>
 
-#include <IPAddress.h>
+#include <IPv4Address.h>
 #include <InterfaceTable.h>
 #include "RoutingTable.h"
 #include "DYMO_Timer.h"
@@ -44,9 +44,9 @@ class DYMO_RoutingEntry
      * @name DYMO Mandatory Fields
      */
     /*@{*/
-    IPAddress routeAddress; /**< The IP destination address of the getNode(s) associated with the routing table entry. */
+    IPv4Address routeAddress; /**< The IP destination address of the getNode(s) associated with the routing table entry. */
     unsigned int routeSeqNum; /**< The DYMO SeqNum associated with this routing information. */
-    IPAddress routeNextHopAddress; /**< The IP address of the next DYMO router on the path toward the Route.Address. */
+    IPv4Address routeNextHopAddress; /**< The IP address of the next DYMO router on the path toward the Route.Address. */
     InterfaceEntry* routeNextHopInterface; /**< The interface used to send packets toward the Route.Address. */
     bool routeBroken; /**< A flag indicating whether this Route is broken.  This flag is set if the next hop becomes unreachable or in response to processing a RERR (see Section 5.5.4). */
     /*@}*/

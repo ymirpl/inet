@@ -51,8 +51,8 @@
 
 
 #ifdef MobilityFramework
-#ifndef IPAddress
-#define IPAddress int
+#ifndef IPv4Address
+#define IPv4Address int
 #endif
 #ifndef IPDatagram
 #define IPDatagram NetwPkt
@@ -228,24 +228,24 @@ class DSRUU:public cSimpleModule, public INotifiable
     struct ETXEntry;
     int etxNumRetry;
 
-    typedef std::map<IPAddress, ETXEntry*> ETXNeighborTable;
+    typedef std::map<IPv4Address, ETXEntry*> ETXNeighborTable;
     struct ETXEntry
     {
         double deliveryDirect;
         double deliveryReverse;
         std::vector<simtime_t> timeVector;
-        //IPAddress address;
+        //IPv4Address address;
     };
 // In dsr-uu-omnet.cc used for ETX
     ETXNeighborTable etxNeighborTable;
     void EtxMsgSend(unsigned long data);
     void EtxMsgProc(cMessage *msg);
-    double getCost(IPAddress add);
+    double getCost(IPv4Address add);
     void AddCost(struct dsr_pkt *,struct dsr_srt *);
     void ExpandCost(struct dsr_pkt *);
     double PathCost(struct dsr_pkt *dp);
 
-    void linkFailed(IPAddress);
+    void linkFailed(IPv4Address);
 //************++
 
 #ifndef MobilityFramework

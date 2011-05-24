@@ -96,7 +96,7 @@ bool IPAddressResolver::tryResolve(const char *s, IPvXAddress& result, int addrT
     return !result.isUnspecified();
 }
 
-IPAddress IPAddressResolver::routerIdOf(cModule *host)
+IPv4Address IPAddressResolver::routerIdOf(cModule *host)
 {
 #ifdef WITH_IPv4
     IRoutingTable *rt = routingTableOf(host);
@@ -182,10 +182,10 @@ IPvXAddress IPAddressResolver::getAddressFrom(InterfaceEntry *ie, int addrType)
     return ret;
 }
 
-IPAddress IPAddressResolver::getIPv4AddressFrom(IInterfaceTable *ift)
+IPv4Address IPAddressResolver::getIPv4AddressFrom(IInterfaceTable *ift)
 {
 #ifdef WITH_IPv4
-    IPAddress addr;
+    IPv4Address addr;
     if (ift->getNumInterfaces()==0)
         throw cRuntimeError("IPAddressResolver: interface table `%s' has no interface registered "
                   "(yet? try in a later init stage!)", ift->getFullPath().c_str());

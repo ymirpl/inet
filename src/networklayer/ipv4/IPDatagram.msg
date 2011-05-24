@@ -17,12 +17,12 @@
 //
 
 
-class noncobject IPAddress;
+class noncobject IPv4Address;
 
 enum IPProtocolId;
 
 cplusplus {{
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPProtocolId_m.h"
 
 // default IP header length: 20 bytes
@@ -81,7 +81,7 @@ enum TimestampFlag
 //
 class IPRecordRouteOption
 {
-    IPAddress recordAddress[MAX_IPADDR_OPTION_ENTRIES];
+    IPv4Address recordAddress[MAX_IPADDR_OPTION_ENTRIES];
     short nextAddressPtr;
 }
 
@@ -96,7 +96,7 @@ class IPTimestampOption
 
     // use either up to 4 addresses with timestamps or
     // only up to 9 timestamps, according to the flag
-    IPAddress recordAddress[MAX_TIMESTAMP_OPTION_ENTRIES];
+    IPv4Address recordAddress[MAX_TIMESTAMP_OPTION_ENTRIES];
     simtime_t recordTimestamp[MAX_IPADDR_OPTION_ENTRIES];
 }
 
@@ -105,7 +105,7 @@ class IPTimestampOption
 //
 class IPSourceRoutingOption
 {
-    IPAddress recordAddress[MAX_IPADDR_OPTION_ENTRIES];
+    IPv4Address recordAddress[MAX_IPADDR_OPTION_ENTRIES];
     short nextAddressPtr;
     short lastAddressPtr;
 }
@@ -128,8 +128,8 @@ packet IPDatagram
     short version = 4;
     short headerLength = IP_HEADER_BYTES;
 
-    IPAddress srcAddress;
-    IPAddress destAddress;
+    IPv4Address srcAddress;
+    IPv4Address destAddress;
 
     int transportProtocol enum(IPProtocolId) = IP_PROT_NONE;
     short timeToLive;

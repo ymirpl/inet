@@ -208,9 +208,9 @@ static struct maint_entry *maint_entry_create(struct dsr_pkt *dp,
             dgram = new IPDatagram();
 
 #ifndef MobilityFramework
-        IPAddress destAddress_var((uint32_t)dp->dst.s_addr);
+        IPv4Address destAddress_var((uint32_t)dp->dst.s_addr);
         dgram->setDestAddress(destAddress_var);
-        IPAddress srcAddress_var((uint32_t)dp->src.s_addr);
+        IPv4Address srcAddress_var((uint32_t)dp->src.s_addr);
         dgram->setSrcAddress(srcAddress_var);
         dgram->setHeaderLength(dp->nh.iph->ihl); // Header length
         dgram->setVersion(dp->nh.iph->version); // Ip version

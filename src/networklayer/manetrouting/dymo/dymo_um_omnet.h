@@ -164,7 +164,7 @@ class DYMOUM : public ManetRoutingBase
     ICMPAccess icmpAccess;
 
 
-    IPAddress *ipNodeId;
+    IPv4Address *ipNodeId;
     DYMO_element * send_buf;
     struct host_info this_host;
     u_int32_t dev_indices[DYMO_MAX_NR_INTERFACES];
@@ -239,7 +239,7 @@ class DYMOUM : public ManetRoutingBase
     int startDYMOUMAgent();
     void scheduleNextEvent();
     const char *if_indextoname(int, char *);
-    IPDatagram *pkt_encapsulate(IPDatagram *, IPAddress);
+    IPDatagram *pkt_encapsulate(IPDatagram *, IPv4Address);
     IPDatagram *pkt_decapsulate(IPDatagram *);
     virtual void handleMessage(cMessage *msg);
     virtual void finish();
@@ -257,7 +257,7 @@ class DYMOUM : public ManetRoutingBase
 
     int initialized;
     int  node_id;
-    IPAddress *gateWayAddress;
+    IPv4Address *gateWayAddress;
     int NS_DEV_NR;
     uint32_t NS_IFINDEX;
     // cModule *ipmod;

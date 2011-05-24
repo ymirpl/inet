@@ -19,8 +19,8 @@
 
 #ifdef MobilityFramework
 #include <NetwPkt_m.h>
-#ifndef IPAddress
-#define IPAddress int
+#ifndef IPv4Address
+#define IPv4Address int
 #endif
 #define IPDatagram NetwPkt
 #else
@@ -34,8 +34,8 @@
 #define IPDatagram NetwPkt
 #endif
 
-#ifndef IPAddress
-#define IPAddress int
+#ifndef IPv4Address
+#define IPv4Address int
 
 #endif
 
@@ -48,7 +48,7 @@
 class EtxCost
 {
   public:
-    IPAddress address;
+    IPv4Address address;
     double cost;
     ~EtxCost() {}
 };
@@ -59,8 +59,8 @@ class DSRPkt : public IPDatagram
   protected:
     struct dsr_opt_hdr *options;
     IPProtocolId encap_protocol;
-    IPAddress previous;
-    IPAddress next;
+    IPv4Address previous;
+    IPv4Address next;
     EtxCost  *costVector;
     unsigned int costVectorSize;
     int dsr_ttl;
@@ -82,15 +82,15 @@ class DSRPkt : public IPDatagram
     void setEncapProtocol(IPProtocolId procotol) {encap_protocol = procotol;}
     IPProtocolId getEncapProtocol() {return encap_protocol;}
 #ifdef MobilityFramework
-    const IPAddress& prevAddress() const {return previous;}
-    void setPrevAddress(const IPAddress& address_var) {previous = address_var;}
-    const IPAddress& nextAddress() const {return next;}
-    void setNextAddress(const IPAddress& address_var) {next = address_var;}
+    const IPv4Address& prevAddress() const {return previous;}
+    void setPrevAddress(const IPv4Address& address_var) {previous = address_var;}
+    const IPv4Address& nextAddress() const {return next;}
+    void setNextAddress(const IPv4Address& address_var) {next = address_var;}
 #else
-    const IPAddress prevAddress() const {return previous;}
-    void setPrevAddress(const IPAddress address_var) {previous = address_var;}
-    const IPAddress nextAddress() const {return next;}
-    void setNextAddress(const IPAddress address_var) {next = address_var;}
+    const IPv4Address prevAddress() const {return previous;}
+    void setPrevAddress(const IPv4Address address_var) {previous = address_var;}
+    const IPv4Address nextAddress() const {return next;}
+    void setNextAddress(const IPv4Address address_var) {next = address_var;}
 #endif
     struct dsr_opt_hdr * getOptions() const {return options;}
     void  setOptions(dsr_opt_hdr * op) {if (options !=NULL) free(options);  options=op;}
@@ -113,7 +113,7 @@ class DSRPkt : public IPDatagram
 class EtxList
 {
   public:
-    IPAddress address;
+    IPv4Address address;
     double delivery;// the simulation suppose that the code use a u_int32_t
 };
 

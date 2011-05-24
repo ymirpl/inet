@@ -107,7 +107,7 @@ void ICMP::sendErrorMessage(IPDatagram *origDatagram, ICMPType type, ICMPCode co
     {
         // pretend it came from the IP layer
         IPControlInfo *controlInfo = new IPControlInfo();
-        controlInfo->setSrcAddr(IPAddress::LOOPBACK_ADDRESS); // FIXME maybe use configured loopback address
+        controlInfo->setSrcAddr(IPv4Address::LOOPBACK_ADDRESS); // FIXME maybe use configured loopback address
         controlInfo->setProtocol(IP_PROT_ICMP);
         errorMessage->setControlInfo(controlInfo);
 
@@ -179,8 +179,8 @@ void ICMP::processEchoRequest(ICMPMessage *request)
     // swap src and dest
     // TBD check what to do if dest was multicast etc?
     IPControlInfo *ctrl = check_and_cast<IPControlInfo *>(reply->getControlInfo());
-    IPAddress src = ctrl->getSrcAddr();
-    IPAddress dest = ctrl->getDestAddr();
+    IPv4Address src = ctrl->getSrcAddr();
+    IPv4Address dest = ctrl->getDestAddr();
     // A. Ariza Modification 5/1/2011 clean the interface id, this forces the use of routing table in the IP layer
     ctrl->setInterfaceId(-1);
     ctrl->setSrcAddr(dest);
@@ -209,7 +209,7 @@ void ICMP::sendEchoRequest(cPacket *msg)
     sendToIP(request);
 }
 
-void ICMP::sendToIP(ICMPMessage *msg, const IPAddress& dest)
+void ICMP::sendToIP(ICMPMessage *msg, const IPv4Address& dest)
 {
     IPControlInfo *controlInfo = new IPControlInfo();
     controlInfo->setDestAddr(dest);

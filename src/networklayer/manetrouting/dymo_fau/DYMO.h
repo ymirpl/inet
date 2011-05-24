@@ -22,7 +22,7 @@
 
 #include <omnetpp.h>
 
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IP.h"
 #include "IInterfaceTable.h"
 #include "InterfaceTableAccess.h"
@@ -100,7 +100,7 @@ class DYMO : public ManetRoutingBase
     DYMO_RoutingTable* getDYMORoutingTable();
 
     /** @brief guesses which router the given address belongs to, might return 0 */
-    cModule* getRouterByAddress(IPAddress address);
+    cModule* getRouterByAddress(IPv4Address address);
 
 
   private:
@@ -233,7 +233,7 @@ class DYMO : public ManetRoutingBase
 
     int RESPONSIBLE_ADDRESSES_PREFIX; /**< NED parameter: netmask of network this DYMO router is responsible for, -1 for self only */
     const char* DYMO_INTERFACES; /**< NED parameter: list of interfaces to run DYMO on, separated by a single space character */
-    IPAddress AUTOASSIGN_ADDRESS_BASE; /**< NED parameter: start of address range from which to automatically assign an address to the DYMO_INTERFACES */
+    IPv4Address AUTOASSIGN_ADDRESS_BASE; /**< NED parameter: start of address range from which to automatically assign an address to the DYMO_INTERFACES */
     int ROUTE_AGE_MIN_TIMEOUT;
     int ROUTE_AGE_MAX_TIMEOUT;
     int ROUTE_NEW_TIMEOUT;

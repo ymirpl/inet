@@ -24,7 +24,7 @@
 #include <list>
 #include <map>
 #include <omnetpp.h>
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPControlInfo_m.h"
 #include "IPDatagram.h"
 #include "InterfaceTable.h"
@@ -40,10 +40,10 @@ enum Result {DROP, ACCEPT};
 class DYMO_QueuedData
 {
   public:
-    DYMO_QueuedData(IPDatagram* dgram, IPAddress destAddr) : destAddr(destAddr) {datagram =dgram;}
+    DYMO_QueuedData(IPDatagram* dgram, IPv4Address destAddr) : destAddr(destAddr) {datagram =dgram;}
 
     IPDatagram* datagram;
-    IPAddress destAddr;
+    IPv4Address destAddr;
 
   public:
     friend std::ostream& operator<<(std::ostream& os, const DYMO_QueuedData& o);
@@ -69,8 +69,8 @@ class DYMO_DataQueue : public cObject
 
     void queuePacket(const IPDatagram* datagram);
 
-    void dequeuePacketsTo(IPAddress destAddr, int prefix);
-    void dropPacketsTo(IPAddress destAddr, int prefix,std::list<IPDatagram*>* datagrams=NULL);
+    void dequeuePacketsTo(IPv4Address destAddr, int prefix);
+    void dropPacketsTo(IPv4Address destAddr, int prefix,std::list<IPDatagram*>* datagrams=NULL);
 
   protected:
     cSimpleModule *moduleOwner;
@@ -80,7 +80,7 @@ class DYMO_DataQueue : public cObject
     int BUFFER_SIZE_PACKETS; /**< NED configuration parameter: maximum number of queued packets, -1 for no limit */
     int BUFFER_SIZE_BYTES; /**< NED configuration parameter: maximum total size of queued packets, -1 for no limit */
 
-    void reinjectDatagramsTo(IPAddress destAddr, int prefix, Result verdict,std::list<IPDatagram*> *datagrams=NULL);
+    void reinjectDatagramsTo(IPv4Address destAddr, int prefix, Result verdict,std::list<IPDatagram*> *datagrams=NULL);
 
   public:
     friend std::ostream& operator<<(std::ostream& os, const DYMO_DataQueue& o);

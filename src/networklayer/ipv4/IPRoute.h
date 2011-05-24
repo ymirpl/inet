@@ -21,7 +21,7 @@
 #include <vector>
 #include <omnetpp.h>
 #include "INETDefs.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 class InterfaceEntry;
 
@@ -54,9 +54,9 @@ class INET_API IPRoute : public cPolymorphic
     };
 
   protected:
-    IPAddress host;     ///< Destination
-    IPAddress netmask;  ///< Route mask
-    IPAddress gateway;  ///< Next hop
+    IPv4Address host;     ///< Destination
+    IPv4Address netmask;  ///< Route mask
+    IPv4Address gateway;  ///< Next hop
     InterfaceEntry *interfacePtr; ///< interface
     RouteType type;     ///< direct or remote
     RouteSource source; ///< manual, routing prot, etc.
@@ -79,22 +79,22 @@ class INET_API IPRoute : public cPolymorphic
     virtual std::string info() const;
     virtual std::string detailedInfo() const;
 
-    void setHost(IPAddress host)  {this->host = host;}
-    void setNetmask(IPAddress netmask)  {this->netmask = netmask;}
-    void setGateway(IPAddress gateway)  {this->gateway = gateway;}
+    void setHost(IPv4Address host)  {this->host = host;}
+    void setNetmask(IPv4Address netmask)  {this->netmask = netmask;}
+    void setGateway(IPv4Address gateway)  {this->gateway = gateway;}
     void setInterface(InterfaceEntry *interfacePtr)  {this->interfacePtr = interfacePtr;}
     void setType(RouteType type)  {this->type = type;}
     void setSource(RouteSource source)  {this->source = source;}
     void setMetric(int metric)  {this->metric = metric;}
 
     /** Destination address prefix to match */
-    IPAddress getHost() const {return host;}
+    IPv4Address getHost() const {return host;}
 
     /** Represents length of prefix to match */
-    IPAddress getNetmask() const {return netmask;}
+    IPv4Address getNetmask() const {return netmask;}
 
     /** Next hop address */
-    IPAddress getGateway() const {return gateway;}
+    IPv4Address getGateway() const {return gateway;}
 
     /** Next hop interface */
     InterfaceEntry *getInterface() const {return interfacePtr;}

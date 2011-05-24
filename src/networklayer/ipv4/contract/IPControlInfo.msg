@@ -19,11 +19,11 @@
 
 enum IPProtocolId;
 
-class noncobject IPAddress;
+class noncobject IPv4Address;
 class noncobject MACAddress;
 
 cplusplus {{
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPProtocolId_m.h"
 #include "MACAddress.h"
 }}
@@ -63,8 +63,8 @@ cplusplus {{
 class IPControlInfo
 {
     @customize(true);
-    IPAddress destAddr;   // destination IP address
-    IPAddress srcAddr;    // source IP address
+    IPv4Address destAddr;   // destination IP address
+    IPv4Address srcAddr;    // source IP address
     int interfaceId = -1; // interface on which the datagram was received, or
                           // should be sent (see ~InterfaceTable)
     short protocol enum(IPProtocolId);  // encapsulated protocol
@@ -72,7 +72,7 @@ class IPControlInfo
     short timeToLive;     // maximum hop count
     bool dontFragment;    // "don't fragment" bit
 //     Used in the DSR protocol
-    IPAddress nextHopAddr; //Next hop Address (DSR)
+    IPv4Address nextHopAddr; //Next hop Address (DSR)
     bool moreFragments;    // more fragment" bit (DSR protocol)
     MACAddress macSrc;  // src MAC address (can be left empty when sending)
     MACAddress macDest; // dest MAC address
@@ -90,7 +90,7 @@ class IPControlInfo
 class IPRoutingDecision
 {
     int interfaceId = -1; // interface on which dgram should be sent (see ~InterfaceTable)
-    IPAddress nextHopAddr;
+    IPv4Address nextHopAddr;
 }
 
 

@@ -352,8 +352,8 @@ dsr_pkt * dsr_pkt_alloc(cPacket  * p)
             delete ctrl;
         }
 
-        // IPAddress dest = dgram->getDestAddress();
-        // IPAddress src = dgram->getSrcAddress();
+        // IPv4Address dest = dgram->getDestAddress();
+        // IPv4Address src = dgram->getSrcAddress();
 
         dp->src.s_addr = dgram->getSrcAddress().getInt();
         dp->dst.s_addr =dgram->getDestAddress().getInt();

@@ -50,7 +50,7 @@ class INET_API IPAddressResolver
 {
   protected:
     // internal
-    virtual IPAddress getIPv4AddressFrom(IInterfaceTable *ift);
+    virtual IPv4Address getIPv4AddressFrom(IInterfaceTable *ift);
     // internal
     virtual IPv6Address getIPv6AddressFrom(IInterfaceTable *ift);
     // internal
@@ -106,7 +106,7 @@ class INET_API IPAddressResolver
      * Returns the router Id of the given router. Router Id is obtained from
      * the getRouterId() method of the IRoutingTable submodule.
      */
-    virtual IPAddress routerIdOf(cModule *host);
+    virtual IPv4Address routerIdOf(cModule *host);
 
     /**
      * Returns the IPv4 or IPv6 address of the given host or router, given its IInterfaceTable

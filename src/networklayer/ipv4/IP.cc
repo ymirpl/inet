@@ -214,8 +214,8 @@ void IP::handleMessageFromHL(cPacket *msg)
 
     // encapsulate and send
     InterfaceEntry *destIE=NULL; // will be filled in by encapsulate() or dsrFillDestIE
-    IPAddress nextHopAddress;
-    IPAddress *nextHopAddressPrt=NULL;
+    IPv4Address nextHopAddress;
+    IPv4Address *nextHopAddressPrt=NULL;
 
     // if HL send a Ipdatagram routing the packet
     if (dynamic_cast<IPDatagram *>(msg))
@@ -248,7 +248,7 @@ void IP::handleMessageFromHL(cPacket *msg)
         routeMulticastPacket(datagram, destIE, NULL);
 }
 
-void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, IPAddress* nextHopAddrPtr)
+void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, IPv4Address* nextHopAddrPtr)
 {
     // TBD add option handling code here
 
@@ -257,14 +257,14 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
         IPSourceRoutingOption rtOpt = datagram->getSourceRoutingOption();
         if (rtOpt.getNextAddressPtr()<rtOpt.getLastAddressPtr())
         {
-            IPAddress nextRouteAddress = rtOpt.getRecordAddress(rtOpt.getNextAddressPtr()/4);
+            IPv4Address nextRouteAddress = rtOpt.getRecordAddress(rtOpt.getNextAddressPtr()/4);
             rtOpt.setNextAddressPtr(rtOpt.getNextAddressPtr()+4);
             datagram->setSrcAddress(rt->getRouterId());
             datagram->setDestAddress(nextRouteAddress);
         }
     }
 
-    IPAddress destAddr = datagram->getDestAddress();
+    IPv4Address destAddr = datagram->getDestAddress();
 
     EV << "Routing datagram `" << datagram->getName() << "' with dest=" << destAddr << ": ";
 
@@ -283,7 +283,7 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
         return;
     }
     // JcM Fix: broadcast limited address 255.255.255.255 or network broadcast, i.e. 192.168.0.255/24
-    if (destAddr == IPAddress::ALLONES_ADDRESS || rt->isLocalBroadcastAddress(destAddr))
+    if (destAddr == IPv4Address::ALLONES_ADDRESS || rt->isLocalBroadcastAddress(destAddr))
     {
         // check if local
         if (!fromHL)
@@ -300,7 +300,7 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
             {
                 if (datagram->getSrcAddress().isUnspecified())
                      datagram->setSrcAddress(destIE->ipv4Data()->getIPAddress());
-                fragmentAndSend(datagram, destIE, IPAddress::ALLONES_ADDRESS);
+                fragmentAndSend(datagram, destIE, IPv4Address::ALLONES_ADDRESS);
             }
             else if (destIE!=NULL && forceBroadcast)
             {
@@ -312,7 +312,7 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
                         IPDatagram * dataAux = datagram->dup();
                         if (dataAux->getSrcAddress().isUnspecified())
                              dataAux->setSrcAddress(ie->ipv4Data()->getIPAddress());
-                        fragmentAndSend(datagram->dup(), ie, IPAddress::ALLONES_ADDRESS);
+                        fragmentAndSend(datagram->dup(), ie, IPv4Address::ALLONES_ADDRESS);
                     }
                 }
                 delete datagram;
@@ -335,7 +335,7 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
         return;
     }
 
-    IPAddress nextHopAddr;
+    IPv4Address nextHopAddr;
     // if output port was explicitly requested, use that, otherwise use IP routing
     if (destIE)
     {
@@ -415,7 +415,7 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL, 
 
 void IP::routeMulticastPacket(IPDatagram *datagram, InterfaceEntry *destIE, InterfaceEntry *fromIE)
 {
-    IPAddress destAddr = datagram->getDestAddress();
+    IPv4Address destAddr = datagram->getDestAddress();
     EV << "Routing multicast datagram `" << datagram->getName() << "' with dest=" << destAddr << "\n";
 
     numMulticast++;
@@ -503,7 +503,7 @@ void IP::routeMulticastPacket(IPDatagram *datagram, InterfaceEntry *destIE, Inte
                     datagramCopy->setSrcAddress(destIE->ipv4Data()->getIPAddress());
 
                 // send
-                IPAddress nextHopAddr = routes[i].gateway;
+                IPv4Address nextHopAddr = routes[i].gateway;
                 fragmentAndSend(datagramCopy, destIE, nextHopAddr);
             }
         }
@@ -604,7 +604,7 @@ cPacket *IP::decapsulateIP(IPDatagram *datagram)
 }
 
 #ifndef NEWFRAGMENT
-void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPAddress nextHopAddr)
+void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     int mtu = ie->getMTU();
 
@@ -681,13 +681,13 @@ IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, I
     datagram->encapsulate(transportPacket);
 
     // set source and destination address
-    IPAddress dest = controlInfo->getDestAddr();
+    IPv4Address dest = controlInfo->getDestAddr();
     datagram->setDestAddress(dest);
 
     // IP_MULTICAST_IF option, but allow interface selection for unicast packets as well
     destIE = ift->getInterfaceById(controlInfo->getInterfaceId());
 
-    IPAddress src = controlInfo->getSrcAddr();
+    IPv4Address src = controlInfo->getSrcAddr();
 
     // when source address was given, use it; otherwise it'll get the address
     // of the outgoing interface after routing
@@ -732,7 +732,7 @@ IPDatagram *IP::createIPDatagram(const char *name)
     return new IPDatagram(name);
 }
 
-void IP::sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPAddress nextHopAddr)
+void IP::sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     // hop counter check
     if (datagram->getTimeToLive() <= 0)
@@ -753,10 +753,10 @@ void IP::sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPAddres
 
 }
 
-void IP::dsrFillDestIE(IPDatagram *datagram, InterfaceEntry *&destIE,IPAddress &nextHopAddress)
+void IP::dsrFillDestIE(IPDatagram *datagram, InterfaceEntry *&destIE,IPv4Address &nextHopAddress)
 {
 
-    nextHopAddress= IPAddress::UNSPECIFIED_ADDRESS;
+    nextHopAddress= IPv4Address::UNSPECIFIED_ADDRESS;
 
     if (datagram->getTransportProtocol()!=IP_PROT_DSR)
         return; // Not Dsr packet
@@ -814,7 +814,7 @@ void IP::controlMessageToManetRouting(int code,IPDatagram *datagram)
 #endif
 
 #ifdef NEWFRAGMENT
-void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPAddress nextHopAddr)
+void IP::fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     int mtu = ie->getMTU();
 

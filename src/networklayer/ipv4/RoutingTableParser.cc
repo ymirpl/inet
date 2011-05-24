@@ -207,7 +207,7 @@ void RoutingTableParser::parseInterfaces(char *ifconfigFile)
 
         // inet_addr entry
         if (streq(ifconfigFile + charpointer, "inet_addr:")) {
-            ie->ipv4Data()->setIPAddress(IPAddress(parseEntry(ifconfigFile, "inet_addr:", charpointer,buf)));
+            ie->ipv4Data()->setIPAddress(IPv4Address(parseEntry(ifconfigFile, "inet_addr:", charpointer,buf)));
             continue;
         }
 
@@ -220,7 +220,7 @@ void RoutingTableParser::parseInterfaces(char *ifconfigFile)
 
         // Mask entry
         if (streq(ifconfigFile + charpointer, "Mask:")) {
-            ie->ipv4Data()->setNetmask(IPAddress(parseEntry(ifconfigFile, "Mask:", charpointer,buf)));
+            ie->ipv4Data()->setNetmask(IPv4Address(parseEntry(ifconfigFile, "Mask:", charpointer,buf)));
             continue;
         }
 
@@ -294,17 +294,17 @@ void RoutingTableParser::parseMulticastGroups(char *groupStr, InterfaceEntry *it
     IPv4InterfaceData::IPAddressVector mcg = itf->ipv4Data()->getMulticastGroups();
 
     // add "224.0.0.1" automatically
-    mcg.push_back(IPAddress::ALL_HOSTS_MCAST);
+    mcg.push_back(IPv4Address::ALL_HOSTS_MCAST);
 
     // add 224.0.0.2" only if Router (IP forwarding enabled)
     if (rt->isIPForwardingEnabled())
-        mcg.push_back(IPAddress::ALL_ROUTERS_MCAST);
+        mcg.push_back(IPv4Address::ALL_ROUTERS_MCAST);
 
     // Parse string (IP addresses separated by colons)
     cStringTokenizer tokenizer(groupStr,":");
     const char *token;
     while ((token = tokenizer.nextToken())!=NULL)
-        mcg.push_back(IPAddress(token));
+        mcg.push_back(IPv4Address(token));
 
     itf->ipv4Data()->setMulticastGroups(mcg);
 }
@@ -324,10 +324,10 @@ void RoutingTableParser::parseRouting(char *routeFile)
         if (strcmp(str, "default:"))
         {
             // if entry is not the default entry
-            if (!IPAddress::isWellFormed(str))
+            if (!IPv4Address::isWellFormed(str))
                 throw cRuntimeError("Syntax error in routing file: `%s' on 1st column should be `default:' or a valid IP address", str);
 
-            e->setHost(IPAddress(str));
+            e->setHost(IPv4Address(str));
         }
 
         // 2nd entry: Gateway
@@ -335,23 +335,23 @@ void RoutingTableParser::parseRouting(char *routeFile)
         skipBlanks(routeFile, pos);
         if (!strcmp(str, "*") || !strcmp(str, "0.0.0.0"))
         {
-            e->setGateway(IPAddress::UNSPECIFIED_ADDRESS);
+            e->setGateway(IPv4Address::UNSPECIFIED_ADDRESS);
         }
         else
         {
-            if (!IPAddress::isWellFormed(str))
+            if (!IPv4Address::isWellFormed(str))
                 throw cRuntimeError("Syntax error in routing file: `%s' on 2nd column should be `*' or a valid IP address", str);
 
-            e->setGateway(IPAddress(str));
+            e->setGateway(IPv4Address(str));
         }
 
         // 3rd entry: Netmask
         pos += strcpyword(str, routeFile + pos);
         skipBlanks(routeFile, pos);
-        if (!IPAddress::isWellFormed(str))
+        if (!IPv4Address::isWellFormed(str))
             throw cRuntimeError("Syntax error in routing file: `%s' on 3rd column should be a valid IP address", str);
 
-        e->setNetmask(IPAddress(str));
+        e->setNetmask(IPv4Address(str));
 
         // 4th entry: flags
         pos += strcpyword(str, routeFile + pos);
@@ -434,7 +434,7 @@ void RoutingTableParser::parseRules(char *rulesFile)
                    pos += strcpyword(str, rulesFile + pos);
                    skipBlanks(rulesFile, pos);
                    // find mask
-                   IPAddress mask("255.255.255.255");
+                   IPv4Address mask("255.255.255.255");
                    char * p = strstr(str,"/");
                    if (p!=NULL)
                    {
@@ -446,14 +446,14 @@ void RoutingTableParser::parseRules(char *rulesFile)
                        {
                            m=(m<<1)|m;
                        }
-                       IPAddress aux(m);
+                       IPv4Address aux(m);
                        mask = aux;
                        *p='\0';
                    }
 
-                   if (!IPAddress::isWellFormed(str))
+                   if (!IPv4Address::isWellFormed(str))
                        opp_error("Syntax error in routing file: `%s' should be a valid IP address", str);
-                   e->setSrcAddress(IPAddress(str));
+                   e->setSrcAddress(IPv4Address(str));
                    e->setSrcNetmask(mask);
                    continue;
               }
@@ -461,7 +461,7 @@ void RoutingTableParser::parseRules(char *rulesFile)
               {
                    pos += strcpyword(str, rulesFile + pos);
                    skipBlanks(rulesFile, pos);
-                   IPAddress mask("255.255.255.255");
+                   IPv4Address mask("255.255.255.255");
                    char * p = strstr(str,"/");
                    if (p!=NULL)
                    {
@@ -473,13 +473,13 @@ void RoutingTableParser::parseRules(char *rulesFile)
                        {
                            m=(m<<1)|m;
                        }
-                       IPAddress aux(m);
+                       IPv4Address aux(m);
                        mask = aux;
                        *p='\0';
                    }
-                   if (!IPAddress::isWellFormed(str))
+                   if (!IPv4Address::isWellFormed(str))
                        opp_error("Syntax error in routing file: `%s' should be a valid IP address", str);
-                   e->setDestAddress(IPAddress(str));
+                   e->setDestAddress(IPv4Address(str));
                    e->setDestNetmask(mask);
                    continue;
                }

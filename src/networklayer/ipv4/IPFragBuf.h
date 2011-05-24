@@ -40,8 +40,8 @@ class INET_API IPFragBuf
     struct Key
     {
         ushort id;
-        IPAddress src;
-        IPAddress dest;
+        IPv4Address src;
+        IPv4Address dest;
 
         inline bool operator<(const Key& b) const {
             return (id!=b.id) ? (id<b.id) : (src!=b.src) ? (src<b.src) : (dest<b.dest);

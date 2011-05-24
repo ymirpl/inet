@@ -139,7 +139,7 @@ class AODVUU : public ManetRoutingBase
     int startAODVUUAgent();
     void scheduleNextEvent();
     const char *if_indextoname(int, char *);
-    IPDatagram *pkt_encapsulate(IPDatagram *, IPAddress);
+    IPDatagram *pkt_encapsulate(IPDatagram *, IPv4Address);
     IPDatagram *pkt_decapsulate(IPDatagram *);
     virtual void handleMessage(cMessage *msg);
     virtual void finish();
@@ -155,7 +155,7 @@ class AODVUU : public ManetRoutingBase
 
     int initialized;
     int  node_id;
-    IPAddress *gateWayAddress;
+    IPv4Address *gateWayAddress;
 
     int NS_DEV_NR;
     int NS_IFINDEX;

@@ -56,7 +56,7 @@ public:
     BGP::SessionID  getSessionID()                              { return _info.sessionID;}
     BGP::type       getType()                                   { return _info.sessionType;}
     InterfaceEntry* getLinkIntf()                               { return _info.linkIntf;}
-    IPAddress       getPeerAddr()                               { return _info.peerAddr;}
+    IPv4Address       getPeerAddr()                               { return _info.peerAddr;}
     TCPSocket*      getSocket()                                 { return _info.socket;}
     TCPSocket*      getSocketListen()                           { return _info.socketListen;}
     IRoutingTable*  getIPRoutingTable()                         { return _bgpRouting.getIPRoutingTable();}

@@ -21,7 +21,7 @@
 
 #include <omnetpp.h>
 
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IInterfaceTable.h"
 #include "InterfaceTableAccess.h"
 #include "IRoutingTable.h"

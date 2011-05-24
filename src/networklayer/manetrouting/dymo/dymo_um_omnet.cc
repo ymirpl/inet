@@ -38,13 +38,13 @@
 
 
 #include "ProtocolMap.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPvXAddress.h"
 #include "ControlManetRouting_m.h"
 
 
 const int UDP_HEADER_BYTES = 8;
-typedef std::vector<IPAddress> IPAddressVector;
+typedef std::vector<IPv4Address> IPAddressVector;
 
 Define_Module(DYMOUM);
 
@@ -82,7 +82,7 @@ void DYMOUM::initialize(int stage)
 
         debug = 0;
 
-        gateWayAddress = new IPAddress("0.0.0.0");
+        gateWayAddress = new IPv4Address("0.0.0.0");
         /* Set host parameters */
         memset(&this_host, 0, sizeof(struct host_info));
         memset(dev_indices, 0, sizeof(unsigned int) * DYMO_MAX_NR_INTERFACES);
@@ -156,7 +156,7 @@ void DYMOUM::initialize(int stage)
         if ((RREQ_TRIES = (int) par("RREQTries"))==-1)
             RREQ_TRIES = 3;
 
-        ipNodeId = new IPAddress(interface80211ptr->ipv4Data()->getIPAddress());
+        ipNodeId = new IPv4Address(interface80211ptr->ipv4Data()->getIPAddress());
 
         rtable_init();
 
@@ -488,7 +488,7 @@ int DYMOUM::startDYMOUMAgent()
 
 
 // for use with gateway in the future
-IPDatagram * DYMOUM::pkt_encapsulate(IPDatagram *p, IPAddress gateway)
+IPDatagram * DYMOUM::pkt_encapsulate(IPDatagram *p, IPv4Address gateway)
 {
     IPDatagram *datagram = new IPDatagram(p->getName());
     datagram->setByteLength(IP_HEADER_BYTES);
@@ -497,7 +497,7 @@ IPDatagram * DYMOUM::pkt_encapsulate(IPDatagram *p, IPAddress gateway)
     // set source and destination address
     datagram->setDestAddress(gateway);
 
-    IPAddress src = p->getSrcAddress();
+    IPv4Address src = p->getSrcAddress();
 
     // when source address was given, use it; otherwise it'll get the address
     // of the outgoing interface after routing
@@ -685,7 +685,7 @@ void DYMOUM::processPacket(IPDatagram * p,unsigned int ifindex )
     }
     InterfaceEntry *   ie = getInterfaceEntry(ifindex);
     phops = ie->ipv4Data()->getMulticastGroups();
-    IPAddress mcastAdd;
+    IPv4Address mcastAdd;
     bool isMcast=false;
     for (unsigned int  i=0; i<phops.size(); i++)
     {

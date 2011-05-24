@@ -19,13 +19,13 @@
 
 cplusplus {{
 #include "INETDefs.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "RTPPacket.h"
 #include "RTPSenderControlMessage_m.h"
 #include "RTPSenderStatusMessage_m.h"
 }}
 
-class noncobject IPAddress;
+class noncobject IPv4Address;
 
 //
 // This enumeration is a list of all possibly types of
@@ -75,7 +75,7 @@ packet RTPInnerPacket
     int rtcpPercentage;
 
     // The IP address
-    IPAddress address = IPAddress::UNSPECIFIED_ADDRESS;
+    IPv4Address address = IPv4Address::UNSPECIFIED_ADDRESS;
 
     // The port number
     int port = PORT_UNDEF;

@@ -129,7 +129,7 @@ void UDPBasicBurst::initialize(int stage)
             }
         }
         else if ( strstr (token,"Broadcast")!=NULL)
-            destAddresses.push_back(IPAddress::ALLONES_ADDRESS);
+            destAddresses.push_back(IPv4Address::ALLONES_ADDRESS);
         else
             destAddresses.push_back(IPAddressResolver().resolve(token));
     }

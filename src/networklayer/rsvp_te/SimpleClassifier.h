@@ -19,7 +19,7 @@
 #include <vector>
 #include <string>
 #include "ConstType.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPDatagram.h"
 #include "IScriptable.h"
 #include "IRSVPClassifier.h"
@@ -38,8 +38,8 @@ class INET_API SimpleClassifier: public cSimpleModule, public IScriptable, publi
     {
         int id;
 
-        IPAddress src;
-        IPAddress dest;
+        IPv4Address src;
+        IPv4Address dest;
 
         SessionObj_t session;
         SenderTemplateObj_t sender;
@@ -48,7 +48,7 @@ class INET_API SimpleClassifier: public cSimpleModule, public IScriptable, publi
     };
 
   protected:
-    IPAddress routerId;
+    IPv4Address routerId;
     int maxLabel;
 
     std::vector<FECEntry> bindings;

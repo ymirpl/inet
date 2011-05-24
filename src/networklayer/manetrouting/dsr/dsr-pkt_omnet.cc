@@ -144,9 +144,9 @@ DSRPkt::DSRPkt(struct dsr_pkt *dp,int interface_id) : IPDatagram()
         setTtl (dp->nh.iph->ttl); // TTL
         setTransportProtocol(IP_PROT_DSR); // Transport protocol
 #else
-        IPAddress destAddress_var((uint32_t)dp->dst.s_addr);
+        IPv4Address destAddress_var((uint32_t)dp->dst.s_addr);
         setDestAddress(destAddress_var);
-        IPAddress srcAddress_var((uint32_t)dp->src.s_addr);
+        IPv4Address srcAddress_var((uint32_t)dp->src.s_addr);
         setSrcAddress(srcAddress_var);
         setHeaderLength(dp->nh.iph->ihl); // Header length
         setVersion(dp->nh.iph->version); // Ip version
@@ -209,9 +209,9 @@ void DSRPkt::ModOptions (struct dsr_pkt *dp,int interface_id)
         setTtl (dp->nh.iph->ttl); // TTL
         setTransportProtocol(IP_PROT_DSR); // Transport protocol
 #else
-        IPAddress destAddress_var((uint32_t)dp->dst.s_addr);
+        IPv4Address destAddress_var((uint32_t)dp->dst.s_addr);
         setDestAddress(destAddress_var);
-        IPAddress srcAddress_var((uint32_t)dp->src.s_addr);
+        IPv4Address srcAddress_var((uint32_t)dp->src.s_addr);
         setSrcAddress(srcAddress_var);
         // ¿como gestionar el MAC
         // dp->mac.raw = p->access(hdr_mac::offset_);
@@ -301,12 +301,12 @@ std::string DSRPkt::detailedInfo() const
         {
             out << " DSR_OPT_RREQ "  << "\n"; // Khmm...
             dsr_rreq_opt *rreq_opt = (dsr_rreq_opt*)dopt;
-            IPAddress add(rreq_opt->target);
+            IPv4Address add(rreq_opt->target);
             out <<" Target :"<< add << "\n"; // Khmm
             int j = 0;
             for (int m=0; m<DSR_RREQ_ADDRS_LEN(rreq_opt); m+=sizeof(u_int32_t))
             {
-                IPAddress add(rreq_opt->addrs[j]);
+                IPv4Address add(rreq_opt->addrs[j]);
                 out << add << "\n"; // Khmm
                 j++;
             }
@@ -334,7 +334,7 @@ std::string DSRPkt::detailedInfo() const
             int length = srt_opt->length/sizeof(u_int32_t);
             for (int j=0; j<length; j++)
             {
-                IPAddress add(srt_opt->addrs[j]);
+                IPv4Address add(srt_opt->addrs[j]);
                 out << add << "\n"; // Khmm
             }
         }
@@ -482,7 +482,7 @@ void DSRPkt::setCostVectorSize(EtxCost newLinkCost)
 void DSRPkt::setCostVectorSize(u_int32_t addr, double cost)
 {
     EtxCost newLinkCost;
-    IPAddress address(addr);
+    IPv4Address address(addr);
     newLinkCost.address = address;
     newLinkCost.cost = cost;
     setCostVectorSize(newLinkCost);

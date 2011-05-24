@@ -66,10 +66,10 @@ public:
 
     void                   setDestinationType(RoutingDestinationType type)  { destinationType = type; }
     RoutingDestinationType getDestinationType() const  { return destinationType; }
-    void                   setDestinationID(IPAddress destID)  { host = destID; }
-    IPAddress              getDestinationID() const  { return host; }
-    void                   setAddressMask(IPAddress destMask)  { netmask = destMask; }
-    IPAddress              getAddressMask() const  { return netmask; }
+    void                   setDestinationID(IPv4Address destID)  { host = destID; }
+    IPv4Address              getDestinationID() const  { return host; }
+    void                   setAddressMask(IPv4Address destMask)  { netmask = destMask; }
+    IPv4Address              getAddressMask() const  { return netmask; }
     void                   setOptionalCapabilities(OSPFOptions options)  { optionalCapabilities = options; }
     OSPFOptions            getOptionalCapabilities() const  { return optionalCapabilities; }
     void                   setArea(AreaID source)  { area = source; }

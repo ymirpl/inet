@@ -35,14 +35,14 @@
 
 
 #include "ProtocolMap.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IPvXAddress.h"
 #include "ControlManetRouting_m.h"
 #include "Ieee802Ctrl_m.h"
 
 
 const int UDP_HEADER_BYTES = 8;
-typedef std::vector<IPAddress> IPAddressVector;
+typedef std::vector<IPv4Address> IPAddressVector;
 
 Define_Module(AODVUU);
 
@@ -130,7 +130,7 @@ void NS_CLASS initialize(int stage)
         if (par("llfeedback"))
             llfeedback = 1;
         internet_gw_mode = (int) par("internet_gw_mode");
-        gateWayAddress = new IPAddress(par("internet_gw_address").stringValue());
+        gateWayAddress = new IPv4Address(par("internet_gw_address").stringValue());
 
         if (llfeedback)
         {
@@ -561,7 +561,7 @@ int NS_CLASS startAODVUUAgent()
 
 
 // for use with gateway in the future
-IPDatagram * NS_CLASS pkt_encapsulate(IPDatagram *p, IPAddress gateway)
+IPDatagram * NS_CLASS pkt_encapsulate(IPDatagram *p, IPv4Address gateway)
 {
     IPDatagram *datagram = new IPDatagram(p->getName());
     datagram->setByteLength(IP_HEADER_BYTES);
@@ -570,7 +570,7 @@ IPDatagram * NS_CLASS pkt_encapsulate(IPDatagram *p, IPAddress gateway)
     // set source and destination address
     datagram->setDestAddress(gateway);
 
-    IPAddress src = p->getSrcAddress();
+    IPv4Address src = p->getSrcAddress();
 
     // when source address was given, use it; otherwise it'll get the address
     // of the outgoing interface after routing
@@ -744,7 +744,7 @@ void NS_CLASS processPacket(IPDatagram * p,unsigned int ifindex)
     /* If this is a TCP packet and we don't have a route, we should
        set the gratuituos flag in the RREQ. */
     phops = ie->ipv4Data()->getMulticastGroups();
-    IPAddress mcastAdd;
+    IPv4Address mcastAdd;
     bool isMcast=false;
     for (unsigned int  i=0; i<phops.size(); i++)
     {

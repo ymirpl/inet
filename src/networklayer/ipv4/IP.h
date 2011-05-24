@@ -125,7 +125,7 @@ class INET_API IP : public QueueBase
      * to handleMulticastPacket() for multicast packets, or drops the packet if
      * it's unroutable or forwarding is off.
      */
-    virtual void routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL,IPAddress* nextHopAddrPtr);
+    virtual void routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL,IPv4Address* nextHopAddrPtr);
 
     /**
      * Forwards packets to all multicast destinations, using fragmentAndSend().
@@ -147,17 +147,17 @@ class INET_API IP : public QueueBase
      * Fragment packet if needed, then send it to the selected interface using
      * sendDatagramToOutput().
      */
-    virtual void fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPAddress nextHopAddr);
+    virtual void fragmentAndSend(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr);
 
     /**
      * Last TTL check, then send datagram on the given interface.
      */
-    virtual void sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPAddress nextHopAddr);
+    virtual void sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr);
 
 #ifdef WITH_MANET
     virtual void controlMessageToManetRouting(int,IPDatagram *datagram);
 #endif
-    virtual void dsrFillDestIE(IPDatagram *, InterfaceEntry *&destIE,IPAddress &nextHopAddress);
+    virtual void dsrFillDestIE(IPDatagram *, InterfaceEntry *&destIE,IPv4Address &nextHopAddress);
 
     const IPRouteRule * checkInputRule(const IPDatagram*);
     const IPRouteRule * checkOutputRule(const IPDatagram*,const InterfaceEntry*);

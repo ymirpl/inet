@@ -140,8 +140,8 @@ void DSDV_2::handleMessage(cMessage *msg)
             //  {ie = ift->getInterface(k); numIntf++;}
 
             // Filling the DSDV_HelloMessage fields
-            // IPAddress source = (ie->ipv4()->getIPAddress());
-            IPAddress source = (interface80211ptr->ipv4Data()->getIPAddress());
+            // IPv4Address source = (ie->ipv4()->getIPAddress());
+            IPv4Address source = (interface80211ptr->ipv4Data()->getIPAddress());
             Hello->setBitLength(128);///size of Hello message in bits
             Hello->setSrcIPAddress(source);
             sequencenumber+=2;
@@ -163,7 +163,7 @@ void DSDV_2::handleMessage(cMessage *msg)
             */
             //new control info for DSDV_HelloMessage
             IPControlInfo *controlInfo = new IPControlInfo();
-            controlInfo->setDestAddr(IPAddress(255,255,255,255));//let's try the limited broadcast 255.255.255.255 but multicast goes from 224.0.0.0 to 239.255.255.255
+            controlInfo->setDestAddr(IPv4Address(255,255,255,255));//let's try the limited broadcast 255.255.255.255 but multicast goes from 224.0.0.0 to 239.255.255.255
             controlInfo->setSrcAddr(source);//let's try the limited broadcast
             controlInfo->setProtocol(IP_PROT_MANET);
             controlInfo->setInterfaceId(interface80211ptr->getInterfaceId());
@@ -215,7 +215,7 @@ void DSDV_2::handleMessage(cMessage *msg)
             if (msg->getControlInfo() != NULL )
                 delete msg->removeControlInfo();
             IPControlInfo *controlInfo = new IPControlInfo();
-            controlInfo->setDestAddr(IPAddress(255,255,255,255));//let's try the limited broadcast 255.255.255.255 but multicast goes from 224.0.0.0 to 239.255.255.255
+            controlInfo->setDestAddr(IPv4Address(255,255,255,255));//let's try the limited broadcast 255.255.255.255 but multicast goes from 224.0.0.0 to 239.255.255.255
 
             // int numIntf = 0;
             if (ift!=NULL)
@@ -258,7 +258,7 @@ void DSDV_2::handleMessage(cMessage *msg)
 
             bubble("Received hello message");
 
-            IPAddress source = interface80211ptr->ipv4Data()->getIPAddress();
+            IPv4Address source = interface80211ptr->ipv4Data()->getIPAddress();
 
             //pointer to interface and routing table
             //rt = RoutingTableAccess_DSDV().get(); // RoutingTable *rt = nodeInfo[i].rt;
@@ -268,9 +268,9 @@ void DSDV_2::handleMessage(cMessage *msg)
             //reads DSDV hello message fields
 #ifdef      NOforwardHello
 
-            IPAddress src = recHello->getSrcIPAddress();
+            IPv4Address src = recHello->getSrcIPAddress();
             unsigned int msgsequencenumber = recHello->getSequencenumber();
-            IPAddress next = recHello->getNextIPAddress();
+            IPv4Address next = recHello->getNextIPAddress();
             int numHops = recHello->getHopdistance();
 
             if (src==source)
@@ -287,9 +287,9 @@ void DSDV_2::handleMessage(cMessage *msg)
                 return;
             }
 #else
-            IPAddress src = fhp->hello->getSrcIPAddress();
+            IPv4Address src = fhp->hello->getSrcIPAddress();
             unsigned int msgsequencenumber = fhp->hello->getSequencenumber();
-            IPAddress next = fhp->hello->getNextIPAddress();
+            IPv4Address next = fhp->hello->getNextIPAddress();
             int numHops = fhp->hello->getHopdistance();
 
             if (src==source)
@@ -314,7 +314,7 @@ void DSDV_2::handleMessage(cMessage *msg)
             //  {ie = ift->getInterface(k); numIntf++;}
             //
             //Tests if the DSDV hello message that arrived is originally from another node
-            //IPAddress source = (ie->ipv4()->getIPAddress());
+            //IPv4Address source = (ie->ipv4()->getIPAddress());
 
 
 
@@ -327,7 +327,7 @@ void DSDV_2::handleMessage(cMessage *msg)
                 //changes information that exists in routing table according to information in hello message
                 if (entrada_routing != NULL)
                 {
-                    IPAddress netmask = IPAddress(par("netmask").stringValue());//reads from omnetpp.ini
+                    IPv4Address netmask = IPv4Address(par("netmask").stringValue());//reads from omnetpp.ini
                     entrada_routing->setHost(src);
                     entrada_routing->setNetmask(netmask);
                     entrada_routing->setGateway(next);
@@ -342,7 +342,7 @@ void DSDV_2::handleMessage(cMessage *msg)
                 //adds new information to routing table according to information in hello message
                 else
                 {
-                    IPAddress netmask = IPAddress(par("netmask").stringValue());
+                    IPv4Address netmask = IPv4Address(par("netmask").stringValue());
                     IPRoute *e = new IPRoute();
                     e->setHost (src);
                     e->setNetmask (netmask);

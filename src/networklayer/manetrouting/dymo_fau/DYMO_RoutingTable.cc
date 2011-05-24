@@ -24,7 +24,7 @@
 #include "DYMO.h"
 
 
-DYMO_RoutingTable::DYMO_RoutingTable(cObject* host, const IPAddress& myAddr)
+DYMO_RoutingTable::DYMO_RoutingTable(cObject* host, const IPv4Address& myAddr)
 {
     // get our host module
     if (!host) throw std::runtime_error("No parent module found");
@@ -165,7 +165,7 @@ void DYMO_RoutingTable::maintainAssociatedRoutingTable()
 /*
  */
 //=================================================================================================
-DYMO_RoutingEntry* DYMO_RoutingTable::getByAddress(IPAddress addr)
+DYMO_RoutingEntry* DYMO_RoutingTable::getByAddress(IPv4Address addr)
 {
 
     std::vector<DYMO_RoutingEntry *>::iterator iter;
@@ -187,7 +187,7 @@ DYMO_RoutingEntry* DYMO_RoutingTable::getByAddress(IPAddress addr)
 /*
  */
 //=================================================================================================
-DYMO_RoutingEntry* DYMO_RoutingTable::getForAddress(IPAddress addr)
+DYMO_RoutingEntry* DYMO_RoutingTable::getForAddress(IPv4Address addr)
 {
     std::vector<DYMO_RoutingEntry *>::iterator iter;
 
@@ -226,7 +226,7 @@ void DYMO_RoutingTable::maintainAssociatedRoutingEntryFor(DYMO_RoutingEntry* ent
     if (!entry->routeBroken)
     {
         // entry is valid
-        Uint128 mask (IPAddress::ALLONES_ADDRESS.getInt());
+        Uint128 mask (IPv4Address::ALLONES_ADDRESS.getInt());
         Uint128 gtw (entry->routeNextHopAddress.getInt());
         (dynamic_cast <DYMO*> (dymoProcess))->setIpEntry (dest,gtw,mask,entry->routeDist);
 

@@ -33,10 +33,10 @@ IPRouteRule::IPRouteRule()
     interfacePtr = NULL;
     rule = NONE;
     sPort=dPort=-1;
-    srcAddress=IPAddress::UNSPECIFIED_ADDRESS;
-    srcNetmask=IPAddress::UNSPECIFIED_ADDRESS;
-    destAddress=IPAddress::UNSPECIFIED_ADDRESS;
-    destNetmask=IPAddress::UNSPECIFIED_ADDRESS;
+    srcAddress=IPv4Address::UNSPECIFIED_ADDRESS;
+    srcNetmask=IPv4Address::UNSPECIFIED_ADDRESS;
+    destAddress=IPv4Address::UNSPECIFIED_ADDRESS;
+    destNetmask=IPv4Address::UNSPECIFIED_ADDRESS;
     protocol=IP_PROT_NONE;
 
 }

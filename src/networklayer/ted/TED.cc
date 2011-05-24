@@ -80,8 +80,8 @@ void TED::initialize(int stage)
                 break;
         }
         ASSERT(rentry);
-        IPAddress linkid = rentry->getHost();
-        IPAddress remote = rentry->getGateway();
+        IPv4Address linkid = rentry->getHost();
+        IPv4Address remote = rentry->getGateway();
         ASSERT(!remote.isUnspecified());
 
         // find bandwidth of the link
@@ -152,7 +152,7 @@ std::ostream & operator<<(std::ostream & os, const TELinkStateInfo& info)
 }
 
 // FIXME should this be called findOrCreateVertex() or something like that?
-int TED::assignIndex(std::vector<vertex_t>& vertices, IPAddress nodeAddr)
+int TED::assignIndex(std::vector<vertex_t>& vertices, IPv4Address nodeAddr)
 {
     // find node in vertices[] whose IP address is nodeAddr
     for (unsigned int i = 0 ; i < vertices.size(); i++)
@@ -262,7 +262,7 @@ void TED::rebuildRoutingTable()
 
         if (V[i].node == V[nHop].node)
         {
-            entry->setGateway(IPAddress());
+            entry->setGateway(IPv4Address());
             entry->setType(entry->DIRECT);
         }
         else
@@ -288,7 +288,7 @@ void TED::rebuildRoutingTable()
         IPRoute *entry = new IPRoute;
 
         entry->setHost(getPeerByLocalAddress(interfaceAddrs[i]));
-        entry->setGateway(IPAddress());
+        entry->setGateway(IPv4Address());
         entry->setType(entry->DIRECT);
         entry->setInterface(rt->getInterfaceByAddress(interfaceAddrs[i]));
         entry->setSource(IPRoute::OSPF);
@@ -302,17 +302,17 @@ void TED::rebuildRoutingTable()
     }
 }
 
-IPAddress TED::getInterfaceAddrByPeerAddress(IPAddress peerIP)
+IPv4Address TED::getInterfaceAddrByPeerAddress(IPv4Address peerIP)
 {
     std::vector<TELinkStateInfo>::iterator it;
     for (it = ted.begin(); it != ted.end(); it++)
         if (it->linkid == peerIP && it->advrouter == routerId)
             return it->local;
     error("not a local peer: %s", peerIP.str().c_str());
-    return IPAddress(); // prevent warning
+    return IPv4Address(); // prevent warning
 }
 
-IPAddress TED::peerRemoteInterface(IPAddress peerIP)
+IPv4Address TED::peerRemoteInterface(IPv4Address peerIP)
 {
     ASSERT(isLocalPeer(peerIP));
     std::vector<TELinkStateInfo>::iterator it;
@@ -320,10 +320,10 @@ IPAddress TED::peerRemoteInterface(IPAddress peerIP)
         if (it->linkid == peerIP && it->advrouter == routerId)
             return it->remote;
     error("not a local peer: %s", peerIP.str().c_str());
-    return IPAddress(); // prevent warning
+    return IPv4Address(); // prevent warning
 }
 
-bool TED::isLocalPeer(IPAddress inetAddr)
+bool TED::isLocalPeer(IPv4Address inetAddr)
 {
     std::vector<TELinkStateInfo>::iterator it;
     for (it = ted.begin(); it != ted.end(); it++)
@@ -355,7 +355,7 @@ std::vector<TED::vertex_t> TED::calculateShortestPaths(const TELinkStateInfoVect
         edges.push_back(edge);
     }
 
-    IPAddress srcAddr = routerId;
+    IPv4Address srcAddr = routerId;
 
     int srcIndex = assignIndex(vertices, srcAddr);
     vertices[srcIndex].dist = 0.0;
@@ -428,7 +428,7 @@ bool TED::checkLinkValidity(TELinkStateInfo link, TELinkStateInfo *&match)
     return true;
 }
 
-unsigned int TED::linkIndex(IPAddress localInf)
+unsigned int TED::linkIndex(IPv4Address localInf)
 {
     for (unsigned int i = 0; i < ted.size(); i++)
         if (ted[i].advrouter == routerId && ted[i].local == localInf)
@@ -437,7 +437,7 @@ unsigned int TED::linkIndex(IPAddress localInf)
     return -1; // to eliminate warning
 }
 
-unsigned int TED::linkIndex(IPAddress advrouter, IPAddress linkid)
+unsigned int TED::linkIndex(IPv4Address advrouter, IPv4Address linkid)
 {
     for (unsigned int i = 0; i < ted.size(); i++)
         if (ted[i].advrouter == advrouter && ted[i].linkid == linkid)
@@ -446,7 +446,7 @@ unsigned int TED::linkIndex(IPAddress advrouter, IPAddress linkid)
     return -1; // to eliminate warning
 }
 
-bool TED::isLocalAddress(IPAddress addr)
+bool TED::isLocalAddress(IPv4Address addr)
 {
     for (unsigned int i = 0; i < interfaceAddrs.size(); i++)
         if (interfaceAddrs[i] == addr)
@@ -467,7 +467,7 @@ IPAddressVector TED::getLocalAddress()
     return interfaceAddrs;
 }
 
-IPAddress TED::primaryAddress(IPAddress localInf) // only used in RSVP::processHelloMsg
+IPv4Address TED::primaryAddress(IPv4Address localInf) // only used in RSVP::processHelloMsg
 {
     for (unsigned int i = 0; i < ted.size(); i++)
     {
@@ -478,10 +478,10 @@ IPAddress TED::primaryAddress(IPAddress localInf) // only used in RSVP::processH
             return ted[i].linkid;
     }
     ASSERT(false);
-    return IPAddress(); // to eliminate warning
+    return IPv4Address(); // to eliminate warning
 }
 
-IPAddress TED::getPeerByLocalAddress(IPAddress localInf)
+IPv4Address TED::getPeerByLocalAddress(IPv4Address localInf)
 {
     unsigned int index = linkIndex(localInf);
     return ted[index].linkid;

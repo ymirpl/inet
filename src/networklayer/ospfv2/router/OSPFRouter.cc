@@ -106,14 +106,16 @@ OSPF::Area* OSPF::Router::getArea(OSPF::AreaID areaID)
  * NULL if there's no such area connected to the Router.
  * @param address [in] The IP address whose containing Area we're looking for.
  */
-OSPF::Area* OSPF::Router::getArea(OSPF::IPv4Address address)
+OSPF::Area* OSPF::Router::getArea(IPv4Address address)
 {
     long areaCount = areas.size();
-    for (long i = 0; i < areaCount; i++) {
-        if (areas[i]->containsAddress(address)) {
+
+    for (long i = 0; i < areaCount; i++)
+    {
+        if (areas[i]->containsAddress(address))
             return areas[i];
-        }
     }
+
     return NULL;
 }
 
@@ -126,7 +128,9 @@ OSPF::Area* OSPF::Router::getArea(OSPF::IPv4Address address)
 OSPF::Interface* OSPF::Router::getNonVirtualInterface(unsigned char ifIndex)
 {
     long areaCount = areas.size();
-    for (long i = 0; i < areaCount; i++) {
+
+    for (long i = 0; i < areaCount; i++)
+    {
         OSPF::Interface* intf = areas[i]->getInterface(ifIndex);
         if (intf != NULL) {
             return intf;
@@ -552,7 +556,7 @@ bool OSPF::Router::floodLSA(OSPFLSA* lsa, OSPF::AreaID areaID /*= BACKBONE_AREAI
  * IP address ranges, false otherwise.
  * @param address [in] The IP address to look for.
  */
-bool OSPF::Router::isLocalAddress(OSPF::IPv4Address address) const
+bool OSPF::Router::isLocalAddress(IPv4Address address) const
 {
     long areaCount = areas.size();
     for (long i = 0; i < areaCount; i++) {
@@ -609,7 +613,7 @@ OSPF::ASExternalLSA* OSPF::Router::originateASExternalLSA(OSPF::ASExternalLSA* l
  */
 bool OSPF::Router::isDestinationUnreachable(OSPFLSA* lsa) const
 {
-    IPAddress destination = lsa->getHeader().getLinkStateID();
+    IPv4Address destination = lsa->getHeader().getLinkStateID();
 
     OSPFRouterLSA* routerLSA = dynamic_cast<OSPFRouterLSA*> (lsa);
     OSPFNetworkLSA* networkLSA = dynamic_cast<OSPFNetworkLSA*> (lsa);
@@ -628,7 +632,7 @@ bool OSPF::Router::isDestinationUnreachable(OSPFLSA* lsa) const
         if (toRouterLSA != NULL) {
             bool destinationFound = false;
             bool unnumberedPointToPointLink = false;
-            IPAddress firstNumberedIfAddress;
+            IPv4Address firstNumberedIfAddress;
 
             for (unsigned int i = 0; i < linkCount; i++) {
                 Link& link = routerLSA->getLinks(i);
@@ -728,7 +732,7 @@ bool OSPF::Router::isDestinationUnreachable(OSPFLSA* lsa) const
  * @param table       [in] The routing table to do the lookup in.
  * @return The RoutingTableEntry describing the input destination if there's one, false otherwise.
  */
-OSPF::RoutingTableEntry* OSPF::Router::lookup(IPAddress destination, std::vector<OSPF::RoutingTableEntry*>* table /*= NULL*/) const
+OSPF::RoutingTableEntry* OSPF::Router::lookup(IPv4Address destination, std::vector<OSPF::RoutingTableEntry*>* table /*= NULL*/) const
 {
     const std::vector<OSPF::RoutingTableEntry*>& rTable = (table == NULL) ? routingTable : (*table);
     unsigned long dest = destination.getInt();
@@ -1043,7 +1047,7 @@ OSPF::RoutingTableEntry* OSPF::Router::getPreferredEntry(const OSPFLSA& lsa, boo
     unsigned short lsAge = lsaHeader.getLsAge();
     OSPF::RouterID originatingRouter = lsaHeader.getAdvertisingRouter().getInt();
     bool selfOriginated = (originatingRouter == routerID);
-    IPAddress forwardingAddress; // 0.0.0.0
+    IPv4Address forwardingAddress; // 0.0.0.0
 
     if (asExternalLSA != NULL) {
         forwardingAddress = asExternalLSA->getContents().getForwardingAddress();
@@ -1106,7 +1110,7 @@ void OSPF::Router::calculateASExternalRoutes(std::vector<OSPF::RoutingTableEntry
             continue;
         }
 
-        IPAddress destination = currentHeader.getLinkStateID() & currentLSA->getContents().getNetworkMask().getInt();
+        IPv4Address destination = currentHeader.getLinkStateID() & currentLSA->getContents().getNetworkMask().getInt();
 
         Metric preferredCost = preferredEntry->getCost();
         OSPF::RoutingTableEntry* destinationEntry = lookup(destination, &newRoutingTable);   // (5)
@@ -1280,7 +1284,7 @@ OSPF::LinkStateID OSPF::Router::getUniqueLinkStateID(OSPF::IPv4AddressRange dest
     if (foundLSA == NULL) {
         return lsaKey.linkStateID;
     } else {
-        OSPF::IPv4Address existingMask = ipv4AddressFromULong(foundLSA->getContents().getNetworkMask().getInt());
+        IPv4Address existingMask = ipv4AddressFromULong(foundLSA->getContents().getNetworkMask().getInt());
 
         if (destination.mask >= existingMask) {
             return (lsaKey.linkStateID | (~(ulongFromIPv4Address(destination.mask))));
@@ -1530,7 +1534,7 @@ void OSPF::Router::notifyAboutRoutingTableChanges(std::vector<OSPF::RoutingTable
  * @param externalRouteContents [in] Route configuration data for the external route.
  * @param ifIndex               [in]
  */
-void OSPF::Router::updateExternalRoute(OSPF::IPv4Address networkAddress, const OSPFASExternalLSAContents& externalRouteContents, int ifIndex)
+void OSPF::Router::updateExternalRoute(IPv4Address networkAddress, const OSPFASExternalLSAContents& externalRouteContents, int ifIndex)
 {
     OSPF::ASExternalLSA* asExternalLSA = new OSPF::ASExternalLSA;
     OSPFLSAHeader& lsaHeader = asExternalLSA->getHeader();
@@ -1541,7 +1545,8 @@ void OSPF::Router::updateExternalRoute(OSPF::IPv4Address networkAddress, const O
     unsigned long routingEntryNumber = simRoutingTable->getNumRoutes();
     bool inRoutingTable = false;
     // add the external route to the routing table if it was not added by another module
-    for (unsigned long i = 0; i < routingEntryNumber; i++) {
+    for (unsigned long i = 0; i < routingEntryNumber; i++)
+    {
         const IPRoute *entry = simRoutingTable->getRoute(i);
         if ((entry->getHost().getInt() & entry->getNetmask().getInt()) ==
             (ulongFromIPv4Address(networkAddress) & externalRouteContents.getNetworkMask().getInt()))
@@ -1549,7 +1554,9 @@ void OSPF::Router::updateExternalRoute(OSPF::IPv4Address networkAddress, const O
             inRoutingTable = true;
         }
     }
-    if (!inRoutingTable) {
+
+    if (!inRoutingTable)
+    {
         IPRoute* entry = new IPRoute;
         entry->setHost(ulongFromIPv4Address(networkAddress));
         entry->setNetmask(externalRouteContents.getNetworkMask());
@@ -1592,7 +1599,7 @@ void OSPF::Router::updateExternalRoute(OSPF::IPv4Address networkAddress, const O
  * @param externalRouteContents [in] Route configuration data for the external route.
  * @param ifIndex               [in]
  */
-void OSPF::Router::addExternalRouteInIPTable(OSPF::IPv4Address networkAddress, const OSPFASExternalLSAContents& externalRouteContents, int ifIndex)
+void OSPF::Router::addExternalRouteInIPTable(IPv4Address networkAddress, const OSPFASExternalLSAContents& externalRouteContents, int ifIndex)
 {
     IRoutingTable* simRoutingTable = RoutingTableAccess().get();
     IInterfaceTable* simInterfaceTable = InterfaceTableAccess().get();
@@ -1626,7 +1633,7 @@ void OSPF::Router::addExternalRouteInIPTable(OSPF::IPv4Address networkAddress, c
  * @param networkAddress [in] The network address of the external route which
  *                            needs to be removed.
  */
-void OSPF::Router::removeExternalRoute(OSPF::IPv4Address networkAddress)
+void OSPF::Router::removeExternalRoute(IPv4Address networkAddress)
 {
     OSPF::LSAKeyType lsaKey;
 
@@ -1640,7 +1647,7 @@ void OSPF::Router::removeExternalRoute(OSPF::IPv4Address networkAddress)
         floodLSA(lsaIt->second, OSPF::BACKBONE_AREAID);
     }
 
-    std::map<OSPF::IPv4Address, OSPFASExternalLSAContents, OSPF::IPv4Address_Less>::iterator externalIt = externalRoutes.find(networkAddress);
+    std::map<IPv4Address, OSPFASExternalLSAContents, OSPF::IPv4Address_Less>::iterator externalIt = externalRoutes.find(networkAddress);
     if (externalIt != externalRoutes.end()) {
         externalRoutes.erase(externalIt);
     }

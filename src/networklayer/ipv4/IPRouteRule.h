@@ -24,7 +24,7 @@
 #include <omnetpp.h>
 #include "INETDefs.h"
 #include "IPProtocolId_m.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 
 class InterfaceEntry;
 
@@ -36,7 +36,7 @@ class InterfaceEntry;
 class NatElement : public cPolymorphic
 {
 public:
-    IPAddress addr;
+    IPv4Address addr;
     int port;
 private:
   // copying not supported: following are private and also left undefined
@@ -72,10 +72,10 @@ class INET_API IPRouteRule : public cPolymorphic
              }
         };
     };
-    IPAddress srcAddress;     ///< Destination
-    IPAddress srcNetmask;  ///< Route mask
-    IPAddress destAddress;     ///< Destination
-    IPAddress destNetmask;  ///< Route mask
+    IPv4Address srcAddress;     ///< Destination
+    IPv4Address srcNetmask;  ///< Route mask
+    IPv4Address destAddress;     ///< Destination
+    IPv4Address destNetmask;  ///< Route mask
     int sPort;  ///
     int dPort;  ///
 
@@ -95,11 +95,11 @@ class INET_API IPRouteRule : public cPolymorphic
     virtual std::string info() const;
     virtual std::string detailedInfo() const;
 
-    void setSrcAddress(IPAddress host)  {this->srcAddress = host;}
-    void setSrcNetmask(IPAddress netmask)  {this->srcNetmask = netmask;}
+    void setSrcAddress(IPv4Address host)  {this->srcAddress = host;}
+    void setSrcNetmask(IPv4Address netmask)  {this->srcNetmask = netmask;}
     void setSrcPort(int port)  {this->sPort = sPort;}
-    void setDestAddress(IPAddress host)  {this->destAddress = host;}
-    void setDestNetmask(IPAddress netmask)  {this->destNetmask = netmask;}
+    void setDestAddress(IPv4Address host)  {this->destAddress = host;}
+    void setDestNetmask(IPv4Address netmask)  {this->destNetmask = netmask;}
     void setDestPort(int port)  {this->dPort = dPort;}
 
 
@@ -107,11 +107,11 @@ class INET_API IPRouteRule : public cPolymorphic
     void setRoule(Rule rule);
     void setProtocol(IPProtocolId protocol){this->protocol = protocol;}
 
-    IPAddress getSrcAddress() const {return srcAddress;}
-    IPAddress getSrcNetmask() const {return srcNetmask;}
+    IPv4Address getSrcAddress() const {return srcAddress;}
+    IPv4Address getSrcNetmask() const {return srcNetmask;}
     const int getSrcPort() const {return sPort;}
-    IPAddress getDestAddress() const {return destAddress;}
-    IPAddress getDestNetmask() const {return destNetmask;}
+    IPv4Address getDestAddress() const {return destAddress;}
+    IPv4Address getDestNetmask() const {return destNetmask;}
     const int getDestPort() const {return dPort;}
 
     const IPProtocolId getProtocol() const {return protocol;}

@@ -389,7 +389,7 @@ void Established::entry()
     for (int i=1; i<IPRoutingTable->getNumRoutes(); i++)
     {
         rtEntry = IPRoutingTable->getRoute(i);
-        if (rtEntry->getNetmask() == IPAddress::ALLONES_ADDRESS ||
+        if (rtEntry->getNetmask() == IPv4Address::ALLONES_ADDRESS ||
             rtEntry->getSource()  == IPRoute::IFACENETMASK      ||
             rtEntry->getSource()  == IPRoute::MANUAL            ||
             rtEntry->getSource()  == IPRoute::BGP)

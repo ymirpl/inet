@@ -33,10 +33,10 @@ public:
     RoutingTableEntry(const IPRoute* entry);
     virtual ~RoutingTableEntry(void) {}
 
-    void            setDestinationID(IPAddress destID)              { host = destID; }
-    IPAddress       getDestinationID(void) const                    { return host; }
-    void            setAddressMask(IPAddress destMask)              { netmask = destMask; }
-    IPAddress       getAddressMask(void) const                      { return netmask; }
+    void            setDestinationID(IPv4Address destID)              { host = destID; }
+    IPv4Address       getDestinationID(void) const                    { return host; }
+    void            setAddressMask(IPv4Address destMask)              { netmask = destMask; }
+    IPv4Address       getAddressMask(void) const                      { return netmask; }
     void            setNextHop(NextHop hop)                         { _nextHop = hop; }
     NextHop         getNextHop(void) const                          { return _nextHop; }
     void            setPathType(RoutingPathType type)               { _pathType = type; }

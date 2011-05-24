@@ -31,7 +31,7 @@
 #include <vector>
 #include <omnetpp.h>
 #include "INETDefs.h"
-#include "IPAddress.h"
+#include "IPv4Address.h"
 #include "IInterfaceTable.h"
 #include "NotificationBoard.h"
 #include "IRoutingTable.h"
@@ -75,7 +75,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     IInterfaceTable *ift; // cached pointer
     NotificationBoard *nb; // cached pointer
 
-    IPAddress routerId;
+    IPv4Address routerId;
     bool IPForward;
 
     // DSDV parameters
@@ -88,7 +88,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     RouteVector multicastRoutes; // Multicast route array
 
     // routing cache: maps destination address to the route
-    typedef std::map<IPAddress, const IPRoute *> RoutingCache;
+    typedef std::map<IPv4Address, const IPRoute *> RoutingCache;
     mutable RoutingCache routingCache;
 
     typedef std::vector<IPRouteRule *> RoutingRule;
@@ -97,7 +97,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
 
 
     // local addresses cache (to speed up isLocalAddress())
-    typedef std::set<IPAddress> AddressSet;
+    typedef std::set<IPv4Address> AddressSet;
     mutable AddressSet localAddresses;
     // JcM add: to handle the local broadcast address
     mutable AddressSet localBroadcastAddresses;
@@ -108,7 +108,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
 
     // check if a route table entry corresponds to the following parameters
     virtual bool routeMatches(const IPRoute *entry,
-        const IPAddress& target, const IPAddress& nmask, const IPAddress& gw,
+        const IPv4Address& target, const IPv4Address& nmask, const IPv4Address& gw,
         int metric, const char *dev) const;
 
     // set router Id
@@ -158,7 +158,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     /**
      * Returns an interface given by its address. Returns NULL if not found.
      */
-    virtual InterfaceEntry *getInterfaceByAddress(const IPAddress& address) const;
+    virtual InterfaceEntry *getInterfaceByAddress(const IPv4Address& address) const;
     //@}
 
     /**
@@ -169,30 +169,30 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     /**
      * Returns routerId.
      */
-    virtual IPAddress getRouterId()  {return routerId;}
+    virtual IPv4Address getRouterId()  {return routerId;}
 
     /**
      * Sets routerId.
      */
-    virtual void setRouterId(IPAddress a)  {routerId = a;}
+    virtual void setRouterId(IPv4Address a)  {routerId = a;}
 
     /** @name Routing functions (query the route table) */
     //@{
     /**
      * Checks if the address is a local one, i.e. one of the host's.
      */
-    virtual bool isLocalAddress(const IPAddress& dest) const;
+    virtual bool isLocalAddress(const IPv4Address& dest) const;
     /** @name Routing functions (query the route table) */
 	//@{
 	/**
 	 * Checks if the address is a local broadcast one, i.e. 192.168.0.255/24
 	 */
-	virtual bool isLocalBroadcastAddress(const IPAddress& dest) const;
+	virtual bool isLocalBroadcastAddress(const IPv4Address& dest) const;
 
     /**
      * The routing function.
      */
-    virtual const IPRoute *findBestMatchingRoute(const IPAddress& dest) const;
+    virtual const IPRoute *findBestMatchingRoute(const IPv4Address& dest) const;
 
     /**
      * Convenience function based on findBestMatchingRoute().
@@ -200,7 +200,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
      * Returns the interface Id to send the packets with dest as
      * destination address, or -1 if destination is not in routing table.
      */
-    virtual InterfaceEntry *getInterfaceForDestAddr(const IPAddress& dest) const;
+    virtual InterfaceEntry *getInterfaceForDestAddr(const IPv4Address& dest) const;
 
     /**
      * Convenience function based on findBestMatchingRoute().
@@ -209,7 +209,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
      * if the destination is not in routing table or there is
      * no gateway (local delivery).
      */
-    virtual IPAddress getGatewayForDestAddr(const IPAddress& dest) const;
+    virtual IPv4Address getGatewayForDestAddr(const IPv4Address& dest) const;
     //@}
 
     /** @name Multicast routing functions */
@@ -219,12 +219,12 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
      * Checks if the address is in one of the local multicast group
      * address list.
      */
-    virtual bool isLocalMulticastAddress(const IPAddress& dest) const;
+    virtual bool isLocalMulticastAddress(const IPv4Address& dest) const;
 
     /**
      * Returns routes for a multicast address.
      */
-    virtual MulticastRoutes getMulticastRoutesFor(const IPAddress& dest) const;
+    virtual MulticastRoutes getMulticastRoutesFor(const IPv4Address& dest) const;
     //@}
 
     /** @name Route table manipulation */
@@ -246,8 +246,8 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     /**
      * Finds the first route with the given parameters.
      */
-    virtual const IPRoute *findRoute(const IPAddress& target, const IPAddress& netmask,
-        const IPAddress& gw, int metric = 0, const char *dev = NULL) const;
+    virtual const IPRoute *findRoute(const IPv4Address& target, const IPv4Address& netmask,
+        const IPv4Address& gw, int metric = 0, const char *dev = NULL) const;
 
     /**
      * Finds and returns the default route, or NULL if it doesn't exist
@@ -270,7 +270,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     /**
      * Utility function: Returns a vector of all addresses of the node.
      */
-    virtual std::vector<IPAddress> gatherAddresses() const;
+    virtual std::vector<IPv4Address> gatherAddresses() const;
     //@}
     virtual void setTimeToLiveRoutingEntry(simtime_t a){timetolive_routing_entry = a;}
     virtual simtime_t getTimeToLiveRoutingEntry(){return timetolive_routing_entry;}
@@ -283,7 +283,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     virtual void delRule(IPRouteRule *entry);
     virtual const IPRouteRule * getRule(bool output,int index) const;
     virtual int getNumRules(bool output);
-    virtual const IPRouteRule * findRule(bool output,int prot,int sPort,const IPAddress &srcAddr,int dPort,const IPAddress &destAddr,const InterfaceEntry *) const;
+    virtual const IPRouteRule * findRule(bool output,int prot,int sPort,const IPv4Address &srcAddr,int dPort,const IPv4Address &destAddr,const InterfaceEntry *) const;
 
 };
 
