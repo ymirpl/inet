@@ -33,6 +33,12 @@ package inet.util;
 // module. To record elements of a module vector, add "[*]" to the name
 // (example: "eth[*]").
 //
+// <b>Which frames to record to pcap file:</b> This module records IPDatagram packets to pcap file.
+// When received packet is not an IPDatagram packet, the recorder search an IPDatagram
+// in encapsulated packets.
+// The tcpdump-like print accepts IPDatagram, SCTPMessage, TCPSegment, ICMPMessage
+// or any packets with encapsulated IPDatagram/IPv6Datagram.
+//
 // <b>Operation:</b> PcapRecorder adds signal listeners to the recorded
 // modules. The signals subscribed to are "packetSentToLower" and
 // "packetReceivedFromLower", but these names can be overridden with the
@@ -49,3 +55,4 @@ simple PcapRecorder {
         string sendingSignalNames = default("packetSentToLower"); // space-separated list of outbound packet signals to subscribe to
         string receivingSignalNames = default("packetReceivedFromLower"); // space-separated list of inbound packet signals to subscribe to
 }
+

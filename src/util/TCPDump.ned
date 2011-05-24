@@ -28,16 +28,24 @@ package inet.util;
 // can be inserted into compound modules non-intrusively (it receives
 // packet data via signals, so existing modules don't need to be reconnected.)
 //
+// How to use it: Olyan helyre kell bekötni, ahol IPDatagram forgalom van.
+// A "kimenő irányú" forgalmat az hlIn gate-ekre kell kötni, a frame az ifOut azonos sorszámú
+// gate-jén fog továbbmenni.
+// A "bejövő irányú" forgalmat az ifIn gate-ekre kell kötni, a frame az hlOut azonos sorszámú
+// gate-jén fog továbbmenni.
+// Például a NodeBase-ben a NetworkLayer és az interfészek közé lehet bekötni:
+// az ifIn/ifOut gate-eket az interfészekhez, hlIn/hlOut gate-eket a NetworkLayerhez kell kötni.
+//
 simple TCPDump {
     parameters:
         string dumpFile = default("");
         int snaplen = default(65535);
         bool verbose = default(false);
         bool dumpBadFrames = default(true); // write bad frames to pcap file
-        bool dropBadFrames = default(false);
+        bool dropBadFrames = default(false); // drop frame when frame has bit error.
     gates:
-        input ifIn[];
-        input in2[];
-        output ifOut[];
-        output out2[];
+        input ifIn[];   // input from lower layer
+        input hlIn[];   // input from higher layer
+        output ifOut[];   // output to lower layer
+        output hlOut[];   // output to higher layer
 }

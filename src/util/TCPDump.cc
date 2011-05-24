@@ -56,7 +56,7 @@ void TCPDump::handleMessage(cMessage *msg)
 {
     if (!ev.isDisabled() && msg->isPacket())
     {
-        bool l2r = msg->arrivedOn("in1");
+        bool l2r = msg->arrivedOn("hlIn");
         tcpdump.dumpPacket(l2r, PK(msg));
     }
 
@@ -81,7 +81,7 @@ void TCPDump::handleMessage(cMessage *msg)
     int32 id;
 
     if (msg->getArrivalGate()->isName("ifIn"))
-        id = findGate("out2",index);
+        id = findGate("hlOut",index);
     else
         id = findGate("ifOut",index);
 
