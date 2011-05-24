@@ -33,17 +33,20 @@ package inet.util;
 // module. To record elements of a module vector, add "[*]" to the name
 // (example: "eth[*]").
 //
-// <b>Which frames to record to pcap file:</b> This module records IPDatagram packets to pcap file.
-// When received packet is not an IPDatagram packet, the recorder search an IPDatagram
-// in encapsulated packets.
-// The tcpdump-like print accepts IPDatagram, SCTPMessage, TCPSegment, ICMPMessage
-// or any packets with encapsulated IPDatagram/IPv6Datagram.
-//
 // <b>Operation:</b> PcapRecorder adds signal listeners to the recorded
 // modules. The signals subscribed to are "packetSentToLower" and
 // "packetReceivedFromLower", but these names can be overridden with the
 // sendingSignalNames and receivingSignalNames parameters. The packets
 // themselves are expected as cPacket* signal values.
+//
+// <b>Supported packets:</b> The module handles IPv4/IPv6 packets (IPDatagram/
+// IPv6Datagram classes), possibly encapsulated into other (L2, PHY, etc)
+// frames at any depth. Packets not containing IP packets are discarded.
+// The following higher layer protocol messages (inside IP packets) are
+// recognized and dumped/recorded: IPDatagram, SCTPMessage, TCPSegment,
+// ICMPMessage.
+//
+// <b>Bugs:</b> IPv6 datagrams cannot be recorded into PCAP. (To be implemented).
 //
 simple PcapRecorder {
     parameters:

@@ -2,6 +2,7 @@
 // Copyright (C) 2005 Michael Tuexen
 //               2008 Irene Ruengeler
 //               2009 Thomas Dreibholz
+//               2011 Zoltan Bojthe
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public License
@@ -28,13 +29,10 @@ package inet.util;
 // can be inserted into compound modules non-intrusively (it receives
 // packet data via signals, so existing modules don't need to be reconnected.)
 //
-// How to use it: Olyan helyre kell bekötni, ahol IPDatagram forgalom van.
-// A "kimenő irányú" forgalmat az hlIn gate-ekre kell kötni, a frame az ifOut azonos sorszámú
-// gate-jén fog továbbmenni.
-// A "bejövő irányú" forgalmat az ifIn gate-ekre kell kötni, a frame az hlOut azonos sorszámú
-// gate-jén fog továbbmenni.
-// Például a NodeBase-ben a NetworkLayer és az interfészek közé lehet bekötni:
-// az ifIn/ifOut gate-eket az interfészekhez, hlIn/hlOut gate-eket a NetworkLayerhez kell kötni.
+// <b>How to use it:</b> The module handles IPv4 packets (IPDatagram class),
+// so it should be placed between the IP module and network interfaces (NICs);
+// see description of gates in comments. Other packets are ignored and let
+// through.
 //
 simple TCPDump {
     parameters:
