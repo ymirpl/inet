@@ -1,7 +1,7 @@
 //
 // Copyright (C) 2005 Michael Tuexen
-//                    2008 Irene Ruengeler
-//                    2009 Thomas Dreibholz
+//               2008 Irene Ruengeler
+//               2009 Thomas Dreibholz
 //
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Lesser General Public License
@@ -19,7 +19,14 @@
 package inet.util;
 
 //
-// Provides tcpdump-like functionality
+// Provides tcpdump-like functionality: dumps packet contents on the
+// module output, and optionally records them into a PCAP file.
+// This module has to be placed into the packet's path, and connected
+// both sides.
+//
+// This module is deprecated: consider using PcapRecorder, which
+// can be inserted into compound modules non-intrusively (it receives
+// packet data via signals, so existing modules don't need to be reconnected.)
 //
 simple TCPDump {
     parameters:

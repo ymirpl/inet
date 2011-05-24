@@ -29,25 +29,50 @@ class IPDatagram;
 
 
 /**
- * Dumps packets in PCAP format.
+ * Dumps packets into a PCAP file; see the "pcap-savefile" man page or
+ * http://www.tcpdump.org/ for details on the file format.
+ * Note: The file is currently recorded in the "classic" format,
+ * not in the "Next Generation" file format also on tcpdump.org.
  */
 class PcapDump
 {
     protected:
         FILE *dumpfile;         // pcap file
         unsigned int snaplen;   // max. length of packets in pcap file
+
     public:
+        /**
+         * Constructor. It does not open the output file.
+         */
         PcapDump();
 
+        /**
+         * Destructor. It closes the output file if it is open.
+         */
         ~PcapDump();
 
-        void openPcap(const char* filename, unsigned int snaplen);
+        /**
+         * Opens a PCAP file with the given file name. The snaplen parameter
+         * is the length that packets will be truncated to. Throws an exception
+         * if the file cannot be opened.
+         */
+        void openPcap(const char *filename, unsigned int snaplen);
 
-        bool isOpened() { return (dumpfile != NULL); }
+        /**
+         * Returns true if the pcap file is currently open.
+         */
+        bool isOpen() const { return dumpfile != NULL; }
 
-        void closePcap();
-
+        /**
+         * Records the given packet into the output file if it is open,
+         * and throws an exception otherwise.
+         */
         void writeFrame(simtime_t time, const IPDatagram *ipPacket);
+
+        /**
+         * Closes the output file if it is open.
+         */
+        void closePcap();
 };
 
 

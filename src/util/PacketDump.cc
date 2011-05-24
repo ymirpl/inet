@@ -49,7 +49,7 @@
 
 PacketDump::PacketDump()
 {
-     outp = NULL;
+     outp = &std::cout;
      verbose = false;
 }
 

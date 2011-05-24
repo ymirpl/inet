@@ -130,7 +130,7 @@ void PcapRecorder::recordPacket(cPacket *msg, bool l2r)
     }
 
 #ifdef WITH_IPv4
-    if (!pcapDumper.isOpened())
+    if (!pcapDumper.isOpen())
         return;
 
     bool hasBitError = false;

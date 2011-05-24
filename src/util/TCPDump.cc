@@ -61,7 +61,7 @@ void TCPDump::handleMessage(cMessage *msg)
     }
 
 #ifdef WITH_IPv4
-    if (pcapDump.isOpened() && dynamic_cast<IPDatagram *>(msg)
+    if (pcapDump.isOpen() && dynamic_cast<IPDatagram *>(msg)
             && (dumpBadFrames || !PK(msg)->hasBitError()))
     {
         const simtime_t stime = simulation.getSimTime();

@@ -33,37 +33,86 @@ class UDPPacket;
 
 
 /**
- * Dumps packet infos to output stream.
+ * Utility class that provides tcpdump-like functionality. It prints
+ * information about each packet on the given output stream.
  */
 class PacketDump
 {
     protected:
         bool verbose;
         std::ostream *outp;
+
     public:
+        /**
+         * Constructor. The output stream initially points to the C++ standard
+         * output (std::cout); you probably want to call
+         * <code>setOutStream(ev.getOStream())</code> to redirect it to EV.
+         */
         PacketDump();
 
+        /**
+         * Destructor. It does not close the output stream.
+         */
         ~PacketDump();
 
+        /**
+         * Sets the output stream.
+         */
         void setOutStream(std::ostream& o) { outp = &o; }
 
+        /**
+         * Returns the output stream.
+         */
+        std::ostream& getOutStream() const { return *outp; }
+
+        /**
+         * Enable/disable verbose output.
+         */
         void setVerbose(bool verb) { verbose = verb; }
 
-        // dumps arbitary text
+        /**
+         * Returns the verbosity flag.
+         */
+        bool isVerbose() const { return verbose; }
+
+        /**
+         * Writes the given text on the output stream.
+         */
         void dump(const char *label, const char *msg);
 
+        /**
+         * Dumps info about the given packet. It dispatches to the more specific
+         * dump functions. The l2r parameter denotes the direction of the packet.
+         */
         void dumpPacket(bool l2r, cPacket *packet);
 
+        /**
+         * Dumps info about the given IPv4 datagram. The l2r parameter denotes the
+         * direction of the packet.
+         */
         void dumpIPv4(bool l2r, const char *label, IPDatagram *dgram, const char *comment = NULL);
 
+        /**
+         * Dumps info about the given IPv6 datagram. The l2r parameter denotes
+         * the direction of the packet.
+         */
         void dumpIPv6(bool l2r, const char *label, IPv6Datagram *dgram, const char *comment = NULL);
 
+        /**
+         * Dumps info about the given SCTP message.
+         */
         void sctpDump(const char *label, SCTPMessage *sctpmsg, const std::string& srcAddr,
                 const std::string& destAddr, const char *comment=NULL);
 
+        /**
+         * Dumps info about the given TCP segment.
+         */
         void tcpDump(bool l2r, const char *label, TCPSegment *tcpseg, const std::string& srcAddr,
                 const std::string& destAddr, const char *comment=NULL);
 
+        /**
+         * Dumps info about the given UDP packet.
+         */
         void udpDump(bool l2r, const char *label, UDPPacket* udppkt, const std::string& srcAddr,
                 const std::string& destAddr, const char *comment);
 };

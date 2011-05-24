@@ -75,13 +75,13 @@ void PcapDump::openPcap(const char* filename, unsigned int snaplen_par)
 {
     struct pcap_hdr fh;
 
-    if (NULL == filename || '\0' == *filename)
-        throw cRuntimeError("Missing pcap filename for writing\n");
+    if (!filename || !filename[0])
+        throw cRuntimeError("Cannot open pcap file: file name is empty");
 
     dumpfile = fopen(filename, "wb");
 
     if (!dumpfile)
-        throw cRuntimeError("Cannot open pcap file [%s] for writing: %s\n", filename, strerror(errno));
+        throw cRuntimeError("Cannot open pcap file [%s] for writing: %s", filename, strerror(errno));
 
     snaplen = snaplen_par;
 
@@ -97,8 +97,8 @@ void PcapDump::openPcap(const char* filename, unsigned int snaplen_par)
 
 void PcapDump::writeFrame(simtime_t stime, const IPDatagram *ipPacket)
 {
-    if (NULL == dumpfile)
-        return;
+    if (!dumpfile)
+        throw cRuntimeError("Cannot write frame: pcap output file is not open");
 
     uint8 buf[MAXBUFLENGTH];
     memset((void*)&buf, 0, sizeof(buf));
