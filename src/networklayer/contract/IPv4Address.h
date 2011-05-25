@@ -48,7 +48,7 @@ class INET_API IPv4Address
     uint32 addr;
 
   protected:
-    // Parses IP address into the given bytes, and returns true if syntax was OK.
+    // Parses IPv4 address into the given bytes, and returns true if syntax was OK.
     static bool parseIPAddress(const char *text, unsigned char tobytes[]);
 
   public:
@@ -75,17 +75,17 @@ class INET_API IPv4Address
     IPv4Address() {addr = 0;}
 
     /**
-     * IP address as int
+     * IPv4 address as int
      */
     IPv4Address(uint32 ip) {addr = ip;}
 
     /**
-     * IP address bytes: "i0.i1.i2.i3" format
+     * IPv4 address bytes: "i0.i1.i2.i3" format
      */
     IPv4Address(int i0, int i1, int i2, int i3) {set(i0, i1, i2, i3);}
 
     /**
-     * IP address given as text: "192.66.86.1"
+     * IPv4 address given as text: "192.66.86.1"
      */
     IPv4Address(const char *text) {set(text);}
 
@@ -100,17 +100,17 @@ class INET_API IPv4Address
     /** name Setting the address */
     //@{
     /**
-     * IP address as int
+     * IPv4 address as int
      */
     void set(uint32 ip) {addr = ip;}
 
     /**
-     * IP address bytes: "i0.i1.i2.i3" format
+     * IPv4 address bytes: "i0.i1.i2.i3" format
      */
     void set(int i0, int i1, int i2, int i3);
 
     /**
-     * IP address given as text: "192.66.86.1"
+     * IPv4 address given as text: "192.66.86.1"
      */
     void set(const char *t);
     //@}
@@ -202,7 +202,7 @@ class INET_API IPv4Address
      * E.g. if the address is 130.206.72.237, and to_cmp 130.206.72.0,
      * 24 will be returned.
      *
-     * Typical usage for comparing IP prefixes.
+     * Typical usage for comparing IPv4 prefixes.
      */
     int getNumMatchingPrefixBits(const IPv4Address& to_cmp) const;
 
@@ -235,7 +235,7 @@ class INET_API IPv4Address
     bool operator!=(const IPv4Address& addr1) const {return !equals(addr1);}
 
     /**
-     * Compares two IP addresses.
+     * Compares two IPv4 addresses.
      */
     bool operator<(const IPv4Address& addr1) const {return getInt() < addr1.getInt();}
     bool operator<=(const IPv4Address& addr1) const {return getInt() <= addr1.getInt();}
@@ -243,10 +243,10 @@ class INET_API IPv4Address
     bool operator>=(const IPv4Address& addr1) const {return getInt() >= addr1.getInt();}
 
     /**
-     * Returns true if the format of the string corresponds to an IP address
+     * Returns true if the format of the string corresponds to an IPv4 address
      * with the dotted notation ("192.66.86.1"), and false otherwise.
      *
-     * This function can be used to verify an IP address string before assigning
+     * This function can be used to verify an IPv4 address string before assigning
      * it to an IPv4Address object (both its ctor and set() function raises an
      * error if the string has invalid format.)
      */
@@ -254,7 +254,7 @@ class INET_API IPv4Address
 
     /**
      * Only keeps the n first bits of the address, completing it with zeros.
-     * Typical usage is when the length of an IP prefix is done and to check
+     * Typical usage is when the length of an IPv4 prefix is done and to check
      * the address ends with the right number of 0.
      */
     void keepFirstBits (unsigned int n);

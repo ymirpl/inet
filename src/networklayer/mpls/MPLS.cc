@@ -88,7 +88,7 @@ void MPLS::processPacketFromL3(cMessage * msg)
     IPv4Datagram *ipdatagram = check_and_cast<IPv4Datagram *>(msg);
     //int gateIndex = msg->getArrivalGate()->getIndex();
 
-    // XXX temporary solution, until TCPSocket and IP are extended to support nam tracing
+    // XXX temporary solution, until TCPSocket and IPv4 are extended to support nam tracing
     if (ipdatagram->getTransportProtocol() == IP_PROT_TCP)
     {
         TCPSegment *seg = check_and_cast<TCPSegment*>(ipdatagram->getEncapsulatedPacket());
@@ -151,7 +151,7 @@ void MPLS::labelAndForwardIPv4Datagram(IPv4Datagram *ipdatagram)
     if (tryLabelAndForwardIPv4Datagram(ipdatagram))
         return;
 
-    // handling our outgoing IP traffic that didn't match any FEC/LSP
+    // handling our outgoing IPv4 traffic that didn't match any FEC/LSP
     // do not use labelAndForwardIPv4Datagram for packets arriving to ingress!
 
     EV << "FEC not resolved, doing regular L3 routing" << endl;
@@ -204,7 +204,7 @@ void MPLS::processPacketFromL2(cMessage *msg)
     }
     else if (ipdatagram)
     {
-        // IP datagram arrives at Ingress router. We'll try to classify it
+        // IPv4 datagram arrives at Ingress router. We'll try to classify it
         // and add an MPLS header
 
         if (!tryLabelAndForwardIPv4Datagram(ipdatagram))
@@ -231,7 +231,7 @@ void MPLS::processMPLSPacketFromL2(MPLSPacket *mplsPacket)
 
     if (oldLabel==-1)
     {
-        // This is a IP native packet (RSVP/TED traffic)
+        // This is a IPv4 native packet (RSVP/TED traffic)
         // Decapsulate the message and pass up to L3
         EV << ": decapsulating and sending up\n";
 
@@ -279,9 +279,9 @@ void MPLS::processMPLSPacketFromL2(MPLSPacket *mplsPacket)
     }
     else
     {
-        // last label popped, decapsulate and send out IP datagram
+        // last label popped, decapsulate and send out IPv4 datagram
 
-        EV << "decapsulating IP datagram" << endl;
+        EV << "decapsulating IPv4 datagram" << endl;
 
         IPv4Datagram *nativeIP = check_and_cast<IPv4Datagram *>(mplsPacket->decapsulate());
         delete mplsPacket;

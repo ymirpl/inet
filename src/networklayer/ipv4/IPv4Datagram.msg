@@ -25,10 +25,10 @@ cplusplus {{
 #include "IPv4Address.h"
 #include "IPProtocolId_m.h"
 
-// default IP header length: 20 bytes
+// default IPv4 header length: 20 bytes
 const int IP_HEADER_BYTES = 20;
 
-// maximum IP header length (base+options): 60 = 4 * 15 bytes
+// maximum IPv4 header length (base+options): 60 = 4 * 15 bytes
 const int IP_MAX_HEADER_BYTES = 60;
 
 // option entry number
@@ -38,7 +38,7 @@ const unsigned int MAX_TIMESTAMP_OPTION_ENTRIES = 4;
 
 
 //
-// IP options class
+// IPv4 options class
 //
 enum IPOptionClass
 {
@@ -49,7 +49,7 @@ enum IPOptionClass
 };
 
 //
-// IP option numbers
+// IPv4 option numbers
 //
 enum IPOption
 {
@@ -66,7 +66,7 @@ enum IPOption
 
 
 //
-// The timestamp flag uses the same numeric values as the IP Protocol
+// The timestamp flag uses the same numeric values as the IPv4 Protocol
 //
 enum TimestampFlag
 {
@@ -112,7 +112,7 @@ class IPv4SourceRoutingOption
 
 
 //
-// Represents an IP datagram.
+// Represents an IPv4 datagram.
 //
 // Uses the following cPacket fields:
 //    - getByteLength() / setByteLength() to represent total datagram length
@@ -140,7 +140,7 @@ packet IPv4Datagram
     unsigned char diffServCodePoint;
 
     int optionCode enum(IPOption) = IPOPTION_NO_OPTION;  //#FIXME modify header length when options are present
-                                                         //#FIXME also: the RFC says that more than one IP-Option is allowed
+                                                         //#FIXME also: the RFC says that more than one IPv4-Option is allowed
     IPv4RecordRouteOption recordRoute;
     IPv4TimestampOption timestampOption;
     IPv4SourceRoutingOption sourceRoutingOption; // optionCode determines if strict or loose source routing

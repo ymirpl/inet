@@ -29,7 +29,7 @@
 #include "IPv4Address.h"
 
 /**
- * Buffer length needed to hold an IP address in string form (dotted decimal notation)
+ * Buffer length needed to hold an IPv4 address in string form (dotted decimal notation)
  */
 static const int IPADDRESS_STRING_SIZE = 20;
 
@@ -94,11 +94,11 @@ void IPv4Address::set(const char *text)
 {
     unsigned char buf[4];
     if (!text)
-        throw cRuntimeError("IP address string is NULL");
+        throw cRuntimeError("IPv4 address string is NULL");
 
     bool ok = parseIPAddress(text, buf);
     if (!ok)
-        throw cRuntimeError("Invalid IP address string `%s'", text);
+        throw cRuntimeError("Invalid IPv4 address string `%s'", text);
 
     set(buf[0], buf[1], buf[2], buf[3]);
 }

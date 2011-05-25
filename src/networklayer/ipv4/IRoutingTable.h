@@ -64,7 +64,7 @@ class INET_API IRoutingTable
     //@}
 
     /**
-     * IP forwarding on/off
+     * IPv4 forwarding on/off
      */
     virtual bool isIPForwardingEnabled() = 0;
 

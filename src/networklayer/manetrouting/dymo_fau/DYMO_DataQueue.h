@@ -31,7 +31,7 @@
 #include "InterfaceTableAccess.h"
 #include "RoutingTable.h"
 #include "RoutingTableAccess.h"
-#include "IP.h"
+#include "IPv4.h"
 
 class DYMO;
 enum Result {DROP, ACCEPT};

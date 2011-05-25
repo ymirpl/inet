@@ -29,7 +29,7 @@ class ICMP;
 
 
 /**
- * Reassembly buffer for fragmented IP datagrams.
+ * Reassembly buffer for fragmented IPv4 datagrams.
  */
 class INET_API IPv4FragBuf
 {

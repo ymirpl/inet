@@ -83,7 +83,7 @@ int IPv4Serializer::serialize(const IPv4Datagram *dgram, unsigned char *buf, uns
     ip->ip_sum        = 0;
 
     if (dgram->getHeaderLength() > IP_HEADER_BYTES)
-        EV << "Serializing an IP packet with options. Dropping the options.\n";
+        EV << "Serializing an IPv4 packet with options. Dropping the options.\n";
 
     packetLength = IP_HEADER_BYTES;
 
@@ -152,10 +152,10 @@ void IPv4Serializer::parse(const unsigned char *buf, unsigned int bufsize, IPv4D
     headerLength = ip->ip_hl << 2;
 
     if (headerLength > (unsigned int)IP_HEADER_BYTES)
-        EV << "Handling an captured IP packet with options. Dropping the options.\n";
+        EV << "Handling an captured IPv4 packet with options. Dropping the options.\n";
 
     if (totalLength > bufsize)
-        EV << "Can not handle IP packet of total length " << totalLength << "(captured only " << bufsize << " bytes).\n";
+        EV << "Can not handle IPv4 packet of total length " << totalLength << "(captured only " << bufsize << " bytes).\n";
 
     dest->setByteLength(IP_HEADER_BYTES);
 

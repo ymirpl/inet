@@ -21,7 +21,7 @@
 #include "IPv4InterfaceData.h"
 #include "Ieee802Ctrl_m.h"
 #include "IPv4ControlInfo.h"
-#include "IP.h"
+#include "IPv4.h"
 
 std::ostream& operator<<(std::ostream& os, const DYMO_QueuedData& o)
 {
@@ -92,7 +92,7 @@ void DYMO_DataQueue::queuePacket(const IPv4Datagram* datagram)
         IPv4Address destAddr = qd.destAddr;
         delete qd.datagram;
         ev << "Forced dropping of data packet to " << destAddr << endl;
-        //  ipLayer->reinjectDatagram(qd.datagram, IP::Hook::DROP);
+        //  ipLayer->reinjectDatagram(qd.datagram, IPv4::Hook::DROP);
     }
 }
 

@@ -194,7 +194,7 @@ void ARP::processOutboundPacket(cMessage *msg)
         EV << "no next-hop address, using destination address " << nextHopAddr << " (proxy ARP)\n";
     }
 
-    // Handle multicast IP addresses
+    // Handle multicast IPv4 addresses
     if (nextHopAddr.isMulticast() || nextHopAddr == IPv4Address::ALLONES_ADDRESS ||
             nextHopAddr == ie->ipv4Data()->getIPAddress().getBroadcastAddress(ie->ipv4Data()->getNetmask())) // also include the network broadcast
     {
@@ -306,7 +306,7 @@ void ARP::sendPacketToNIC(cMessage *msg, InterfaceEntry *ie, const MACAddress& m
 
 void ARP::sendARPRequest(InterfaceEntry *ie, IPv4Address ipAddress)
 {
-    // find our own IP address and MAC address on the given interface
+    // find our own IPv4 address and MAC address on the given interface
     MACAddress myMACAddress = ie->getMacAddress();
     IPv4Address myIPAddress = ie->ipv4Data()->getIPAddress();
 
@@ -429,7 +429,7 @@ void ARP::processARPPacket(ARPPacket *arp)
     if (srcMACAddress.isUnspecified())
         error("wrong ARP packet: source MAC address is empty");
     if (srcIPAddress.isUnspecified())
-        error("wrong ARP packet: source IP address is empty");
+        error("wrong ARP packet: source IPv4 address is empty");
 
     bool mergeFlag = false;
     // "If ... sender protocol address is already in my translation table"
@@ -443,7 +443,7 @@ void ARP::processARPPacket(ARPPacket *arp)
     }
 
     // "?Am I the target protocol address?"
-    // if Proxy ARP is enabled, we also have to reply if we're a router to the dest IP address
+    // if Proxy ARP is enabled, we also have to reply if we're a router to the dest IPv4 address
     if (addressRecognized(arp->getDestIPAddress(), ie))
     {
         // "If Merge_flag is false, add the triplet protocol type, sender
@@ -476,7 +476,7 @@ void ARP::processARPPacket(ARPPacket *arp)
             {
                 EV << "Packet was ARP REQUEST, sending REPLY\n";
 
-                // find our own IP address and MAC address on the given interface
+                // find our own IPv4 address and MAC address on the given interface
                 MACAddress myMACAddress = ie->getMacAddress();
                 IPv4Address myIPAddress = ie->ipv4Data()->getIPAddress();
 
@@ -508,7 +508,7 @@ void ARP::processARPPacket(ARPPacket *arp)
     else
     {
         // address not recognized
-        EV << "IP address " << arp->getDestIPAddress() << " not recognized, dropping ARP packet\n";
+        EV << "IPv4 address " << arp->getDestIPAddress() << " not recognized, dropping ARP packet\n";
         delete arp;
     }
 }

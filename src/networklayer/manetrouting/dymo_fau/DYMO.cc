@@ -26,7 +26,7 @@
 #include "IPv4ControlInfo.h"
 #include "UDPPacket.h"
 #include "ModuleAccess.h"
-#include "IP.h"
+#include "IPv4.h"
 
 Define_Module( DYMO );
 
@@ -161,7 +161,7 @@ void DYMO::finish()
     delete rateLimiterRREQ;
     rateLimiterRREQ = NULL;
 
-    // IP* ipLayer = queuedDataPackets->getIpLayer();
+    // IPv4* ipLayer = queuedDataPackets->getIpLayer();
     delete queuedDataPackets;
     queuedDataPackets = NULL;
     // ipLayer->unregisterHook(0, this);
@@ -184,7 +184,7 @@ DYMO::~DYMO()
     if (rateLimiterRREQ)
         delete rateLimiterRREQ;
 
-    // IP* ipLayer = queuedDataPackets->getIpLayer();
+    // IPv4* ipLayer = queuedDataPackets->getIpLayer();
     if (queuedDataPackets)
         delete queuedDataPackets;
 }
@@ -553,7 +553,7 @@ void DYMO::handleLowerRERR(DYMO_RERR *my_rerr)
     /** message is a RERR. **/
     statsDYMORcvd++;
 
-    // get RERR's IP.SourceAddress
+    // get RERR's IPv4.SourceAddress
     IPv4ControlInfo* controlInfo = check_and_cast<IPv4ControlInfo*>(my_rerr->getControlInfo());
     IPv4Address sourceAddr = controlInfo->getSrcAddr();
 
@@ -1158,14 +1158,14 @@ void DYMO::setMyAddr(unsigned int myAddr)
     if (statsRREQSent || statsRREPSent || statsRERRSent)
     {
         // TODO: Send RERRs, cold-start DYMO, lose sequence number instead?
-        ev << "Ignoring IP Address change request. This node has already participated in DYMO." << endl;
+        ev << "Ignoring IPv4 Address change request. This node has already participated in DYMO." << endl;
         return;
     }
 
     ev << "Now assuming this node is reachable at address " << myAddr << " (was " << this->myAddr << ")" << endl;
     this->myAddr = myAddr;
 
-    // TODO: if IInterfaceTable was autoconfigured, change IP Address there?
+    // TODO: if IInterfaceTable was autoconfigured, change IPv4 Address there?
 }
 
 DYMO_RoutingTable* DYMO::getDYMORoutingTable()

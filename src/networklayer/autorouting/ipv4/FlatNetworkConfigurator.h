@@ -27,7 +27,7 @@ class IRoutingTable;
 
 
 /**
- * Configures IP addresses and routing tables for a "flat" network,
+ * Configures IPv4 addresses and routing tables for a "flat" network,
  * "flat" meaning that all hosts and routers will have the same
  * network address.
  *

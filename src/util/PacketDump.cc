@@ -411,7 +411,7 @@ void PacketDump::dumpPacket(bool l2r, cPacket *msg)
     else
 #endif
     {
-        // search for encapsulated IP[v6]Datagram in it
+        // search for encapsulated IPv4[v6]Datagram in it
         while (msg)
         {
 #ifdef WITH_IPv4
@@ -437,7 +437,7 @@ void PacketDump::dumpPacket(bool l2r, cPacket *msg)
         {
             //We do not want this to end in an error if EtherAutoconf messages
             //are passed, so just print a warning. -WEI
-            out << "CANNOT DECODE, packet doesn't contain either IP or IPv6 Datagram\n";
+            out << "CANNOT DECODE, packet doesn't contain either IPv4 or IPv6 Datagram\n";
         }
     }
 }

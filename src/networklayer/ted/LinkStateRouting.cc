@@ -78,7 +78,7 @@ void LinkStateRouting::handleMessage(cMessage * msg)
     }
     else if (!strcmp(msg->getArrivalGate()->getName(), "ipIn"))
     {
-        EV << "Processing message from IP: " << msg << endl;
+        EV << "Processing message from IPv4: " << msg << endl;
         IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo *>(msg->getControlInfo());
         IPv4Address sender = controlInfo->getSrcAddr();
         processLINK_STATE_MESSAGE(check_and_cast<LinkStateMsg*>(msg), sender);

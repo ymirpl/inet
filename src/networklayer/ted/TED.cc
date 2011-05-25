@@ -38,7 +38,7 @@ TED::~TED()
 void TED::initialize(int stage)
 {
     // we have to wait for stage 2 until interfaces get registered (stage 0)
-    // and get their auto-assigned IP addresses (stage 2); routerId gets
+    // and get their auto-assigned IPv4 addresses (stage 2); routerId gets
     // assigned in stage 3
     if (stage!=4)
         return;
@@ -154,7 +154,7 @@ std::ostream & operator<<(std::ostream & os, const TELinkStateInfo& info)
 // FIXME should this be called findOrCreateVertex() or something like that?
 int TED::assignIndex(std::vector<vertex_t>& vertices, IPv4Address nodeAddr)
 {
-    // find node in vertices[] whose IP address is nodeAddr
+    // find node in vertices[] whose IPv4 address is nodeAddr
     for (unsigned int i = 0 ; i < vertices.size(); i++)
         if (vertices[i].node == nodeAddr)
             return i;

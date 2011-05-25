@@ -105,7 +105,7 @@ void ICMP::sendErrorMessage(IPv4Datagram *origDatagram, ICMPType type, ICMPCode 
     // process the ICMP message locally, right away
     if (origDatagram->getSrcAddress().isUnspecified())
     {
-        // pretend it came from the IP layer
+        // pretend it came from the IPv4 layer
         IPv4ControlInfo *controlInfo = new IPv4ControlInfo();
         controlInfo->setSrcAddr(IPv4Address::LOOPBACK_ADDRESS); // FIXME maybe use configured loopback address
         controlInfo->setProtocol(IP_PROT_ICMP);
@@ -181,7 +181,7 @@ void ICMP::processEchoRequest(ICMPMessage *request)
     IPv4ControlInfo *ctrl = check_and_cast<IPv4ControlInfo *>(reply->getControlInfo());
     IPv4Address src = ctrl->getSrcAddr();
     IPv4Address dest = ctrl->getDestAddr();
-    // A. Ariza Modification 5/1/2011 clean the interface id, this forces the use of routing table in the IP layer
+    // A. Ariza Modification 5/1/2011 clean the interface id, this forces the use of routing table in the IPv4 layer
     ctrl->setInterfaceId(-1);
     ctrl->setSrcAddr(dest);
     ctrl->setDestAddr(src);

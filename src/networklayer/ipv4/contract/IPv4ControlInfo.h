@@ -23,7 +23,7 @@
 class IPv4Datagram;
 
 /**
- * Control information for sending/receiving packets over IP.
+ * Control information for sending/receiving packets over IPv4.
  *
  * See the IPv4ControlInfo.msg file for more info.
  */

@@ -23,7 +23,7 @@
 #include <omnetpp.h>
 
 #include "IPv4Address.h"
-#include "IP.h"
+#include "IPv4.h"
 #include "IInterfaceTable.h"
 #include "InterfaceTableAccess.h"
 #include "IRoutingTable.h"

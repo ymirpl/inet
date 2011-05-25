@@ -22,7 +22,7 @@
 
 
 /**
- * Converts between IPv4Datagram and binary (network byte order) IP header.
+ * Converts between IPv4Datagram and binary (network byte order) IPv4 header.
  */
 class IPv4Serializer
 {

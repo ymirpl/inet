@@ -86,7 +86,7 @@ class INET_API LDP: public cSimpleModule, public TCPSocket::CallbackInterface, p
 
     struct peer_info
     {
-        IPv4Address peerIP;   // IP address of LDP peer
+        IPv4Address peerIP;   // IPv4 address of LDP peer
         bool activeRole;    // we're in active or passive role in this session
         TCPSocket *socket;  // TCP socket
         std::string linkInterface;

@@ -115,13 +115,13 @@ void ExtInterface::handleMessage(cMessage *msg)
 
         IPv4Datagram *ipPacket = new IPv4Datagram("ip-from-wire");
         IPv4Serializer().parse(buffer, packetLength, (IPv4Datagram *)ipPacket);
-        EV << "Delivering an IP packet from "
+        EV << "Delivering an IPv4 packet from "
            << ipPacket->getSrcAddress()
            << " to "
            << ipPacket->getDestAddress()
            << " and length of"
            << ipPacket->getByteLength()
-           << " bytes to IP layer.\n";
+           << " bytes to IPv4 layer.\n";
         send(ipPacket, "netwOut");
         numRcvd++;
     }
@@ -151,7 +151,7 @@ void ExtInterface::handleMessage(cMessage *msg)
             addr.sin_port        = 0;
             addr.sin_addr.s_addr = htonl(ipPacket->getDestAddress().getInt());
             int32 packetLength = IPv4Serializer().serialize(ipPacket,buffer, sizeof(buffer));
-            EV << "Delivering an IP packet from "
+            EV << "Delivering an IPv4 packet from "
                << ipPacket->getSrcAddress()
                << " to "
                << ipPacket->getDestAddress()

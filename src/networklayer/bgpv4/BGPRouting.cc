@@ -313,7 +313,7 @@ unsigned char BGPRouting::decisionProcess(const BGPUpdateMessage& msg, BGP::Rout
         }
     }
 
-    //Don't add the route if it exists in IP routing table except if the msg come from IGP session
+    //Don't add the route if it exists in IPv4 routing table except if the msg come from IGP session
     int indexIP = isInIPTable(_rt, entry->getHost());
     if (indexIP != -1 && _rt->getRoute(indexIP)->getSource() != IPv4Route::BGP )
     {
@@ -482,7 +482,7 @@ void BGPRouting::loadTimerConfig(cXMLElementList& timerConfig, simtime_t* delayT
 
 BGP::ASID BGPRouting::findMyAS(cXMLElementList& asList, int& outRouterPosition)
 {
-    // find my own IP address in the configuration file and return the AS id under which it is configured
+    // find my own IPv4 address in the configuration file and return the AS id under which it is configured
     // and also the 1 based position of the entry inside the AS config element
     for (cXMLElementList::iterator asListIt = asList.begin(); asListIt != asList.end(); asListIt++)
     {
@@ -746,7 +746,7 @@ bool BGPRouting::deleteBGPRoutingEntry(BGP::RoutingTableEntry* entry){
     return false;
 }
 
-/*return index of the IP table if the route is found, -1 else*/
+/*return index of the IPv4 table if the route is found, -1 else*/
 int BGPRouting::isInIPTable(IRoutingTable* rtTable, IPv4Address addr)
 {
     for (int i = 0; i < rtTable->getNumRoutes(); i++)

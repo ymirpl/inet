@@ -20,17 +20,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "IP.h"
+#include "IPv4.h"
 #include "IPv4Datagram.h"
 #include "IPv4ControlInfo.h"
 #include "ICMPMessage_m.h"
 #include "IPv4InterfaceData.h"
 #include "ARPPacket_m.h"
 
-Define_Module(IP);
+Define_Module(IPv4);
 
 
-void IP::initialize()
+void IPv4::initialize()
 {
     QueueBase::initialize();
 
@@ -77,13 +77,13 @@ void IP::initialize()
 
     // manet routing will be turned on ONLY for routing protocols which has the @reactive property set
     // this prevents performance loss with other protocols that use pro active routing and do not need
-    // assistance from the IP component
+    // assistance from the IPv4 component
     cProperties *props = destmod->getProperties();
     manetRouting = props && props->getAsBool("reactive");
 #endif
 }
 
-void IP::updateDisplayString()
+void IPv4::updateDisplayString()
 {
     char buf[80] = "";
     if (numForwarded>0) sprintf(buf+strlen(buf), "fwd:%d ", numForwarded);
@@ -94,7 +94,7 @@ void IP::updateDisplayString()
     getDisplayString().setTagArg("t",0,buf);
 }
 
-void IP::endService(cPacket *msg)
+void IPv4::endService(cPacket *msg)
 {
     if (msg->getArrivalGate()->isName("transportIn"))
     {
@@ -115,13 +115,13 @@ void IP::endService(cPacket *msg)
         updateDisplayString();
 }
 
-InterfaceEntry *IP::getSourceInterfaceFrom(cPacket *msg)
+InterfaceEntry *IPv4::getSourceInterfaceFrom(cPacket *msg)
 {
     cGate *g = msg->getArrivalGate();
     return g ? ift->getInterfaceByNetworkLayerGateIndex(g->getIndex()) : NULL;
 }
 
-void IP::handlePacketFromNetwork(IPv4Datagram *datagram)
+void IPv4::handlePacketFromNetwork(IPv4Datagram *datagram)
 {
     //
     // "Prerouting"
@@ -159,7 +159,7 @@ void IP::handlePacketFromNetwork(IPv4Datagram *datagram)
         routeMulticastPacket(datagram, NULL, getSourceInterfaceFrom(datagram));
 }
 
-void IP::handleARP(ARPPacket *msg)
+void IPv4::handleARP(ARPPacket *msg)
 {
     // FIXME hasBitError() check  missing!
 
@@ -177,7 +177,7 @@ void IP::handleARP(ARPPacket *msg)
     send(msg, queueOutGate);
 }
 
-void IP::handleReceivedICMP(ICMPMessage *msg)
+void IPv4::handleReceivedICMP(ICMPMessage *msg)
 {
     switch (msg->getType())
     {
@@ -201,7 +201,7 @@ void IP::handleReceivedICMP(ICMPMessage *msg)
     }
 }
 
-void IP::handleMessageFromHL(cPacket *msg)
+void IPv4::handleMessageFromHL(cPacket *msg)
 {
     // if no interface exists, do not send datagram
     if (ift->getNumInterfaces() == 0)
@@ -248,7 +248,7 @@ void IP::handleMessageFromHL(cPacket *msg)
         routeMulticastPacket(datagram, destIE, NULL);
 }
 
-void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL, IPv4Address* nextHopAddrPtr)
+void IPv4::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL, IPv4Address* nextHopAddrPtr)
 {
     // TBD add option handling code here
 
@@ -336,7 +336,7 @@ void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL
     }
 
     IPv4Address nextHopAddr;
-    // if output port was explicitly requested, use that, otherwise use IP routing
+    // if output port was explicitly requested, use that, otherwise use IPv4 routing
     if (destIE)
     {
         EV << "using manually specified output interface " << destIE->getName() << "\n";
@@ -356,7 +356,7 @@ void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL
     }
     else
     {
-        // use IP routing (lookup in routing table)
+        // use IPv4 routing (lookup in routing table)
         const IPv4Route *re = rt->findBestMatchingRoute(destAddr);
 
         if (re!=NULL && re->getSource()== IPv4Route::MANET)
@@ -413,7 +413,7 @@ void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL
     fragmentAndSend(datagram, destIE, nextHopAddr);
 }
 
-void IP::routeMulticastPacket(IPv4Datagram *datagram, InterfaceEntry *destIE, InterfaceEntry *fromIE)
+void IPv4::routeMulticastPacket(IPv4Datagram *datagram, InterfaceEntry *destIE, InterfaceEntry *fromIE)
 {
     IPv4Address destAddr = datagram->getDestAddress();
     EV << "Routing multicast datagram `" << datagram->getName() << "' with dest=" << destAddr << "\n";
@@ -513,7 +513,7 @@ void IP::routeMulticastPacket(IPv4Datagram *datagram, InterfaceEntry *destIE, In
     }
 }
 #ifndef NEWFRAGMENT
-void IP::reassembleAndDeliver(IPv4Datagram *datagram)
+void IPv4::reassembleAndDeliver(IPv4Datagram *datagram)
 {
     // reassemble the packet (if fragmented)
     if (datagram->getFragmentOffset()!=0 || datagram->getMoreFragments())
@@ -579,7 +579,7 @@ void IP::reassembleAndDeliver(IPv4Datagram *datagram)
 }
 }
 #endif
-cPacket *IP::decapsulateIP(IPv4Datagram *datagram)
+cPacket *IPv4::decapsulateIP(IPv4Datagram *datagram)
 {
     // decapsulate transport packet
     InterfaceEntry *fromIE = getSourceInterfaceFrom(datagram);
@@ -594,7 +594,7 @@ cPacket *IP::decapsulateIP(IPv4Datagram *datagram)
     controlInfo->setInterfaceId(fromIE ? fromIE->getInterfaceId() : -1);
     controlInfo->setTimeToLive(datagram->getTimeToLive());
 
-    // original IP datagram might be needed in upper layers to send back ICMP error message
+    // original IPv4 datagram might be needed in upper layers to send back ICMP error message
     controlInfo->setOrigDatagram(datagram);
 
     // attach control info
@@ -604,7 +604,7 @@ cPacket *IP::decapsulateIP(IPv4Datagram *datagram)
 }
 
 #ifndef NEWFRAGMENT
-void IP::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
+void IPv4::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     int mtu = ie->getMTU();
 
@@ -666,7 +666,7 @@ void IP::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address
 }
 #endif
 
-IPv4Datagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
+IPv4Datagram *IPv4::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
 {
     IPv4ControlInfo *controlInfo = check_and_cast<IPv4ControlInfo*>(transportPacket->removeControlInfo());
     IPv4Datagram *datagram = encapsulate(transportPacket, destIE, controlInfo);
@@ -674,7 +674,7 @@ IPv4Datagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
     return datagram;
 }
 
-IPv4Datagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPv4ControlInfo *controlInfo)
+IPv4Datagram *IPv4::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPv4ControlInfo *controlInfo)
 {
     IPv4Datagram *datagram = createIPv4Datagram(transportPacket->getName());
     datagram->setByteLength(IP_HEADER_BYTES);
@@ -722,17 +722,17 @@ IPv4Datagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE,
     datagram->setTimeToLive(ttl);
     datagram->setTransportProtocol(controlInfo->getProtocol());
 
-    // setting IP options is currently not supported
+    // setting IPv4 options is currently not supported
 
     return datagram;
 }
 
-IPv4Datagram *IP::createIPv4Datagram(const char *name)
+IPv4Datagram *IPv4::createIPv4Datagram(const char *name)
 {
     return new IPv4Datagram(name);
 }
 
-void IP::sendDatagramToOutput(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
+void IPv4::sendDatagramToOutput(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     // hop counter check
     if (datagram->getTimeToLive() <= 0)
@@ -753,7 +753,7 @@ void IP::sendDatagramToOutput(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Ad
 
 }
 
-void IP::dsrFillDestIE(IPv4Datagram *datagram, InterfaceEntry *&destIE,IPv4Address &nextHopAddress)
+void IPv4::dsrFillDestIE(IPv4Datagram *datagram, InterfaceEntry *&destIE,IPv4Address &nextHopAddress)
 {
 
     nextHopAddress= IPv4Address::UNSPECIFIED_ADDRESS;
@@ -773,7 +773,7 @@ void IP::dsrFillDestIE(IPv4Datagram *datagram, InterfaceEntry *&destIE,IPv4Addre
 }
 
 #ifdef WITH_MANET
-void IP::controlMessageToManetRouting(int code,IPv4Datagram *datagram)
+void IPv4::controlMessageToManetRouting(int code,IPv4Datagram *datagram)
 {
     ControlManetRouting *control;
     if (!manetRouting)
@@ -814,7 +814,7 @@ void IP::controlMessageToManetRouting(int code,IPv4Datagram *datagram)
 #endif
 
 #ifdef NEWFRAGMENT
-void IP::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
+void IPv4::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address nextHopAddr)
 {
     int mtu = ie->getMTU();
 
@@ -882,7 +882,7 @@ void IP::fragmentAndSend(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Address
 }
 
 
-void IP::reassembleAndDeliver(IPv4Datagram *datagram)
+void IPv4::reassembleAndDeliver(IPv4Datagram *datagram)
 {
 
     // reassemble the packet (if fragmented)

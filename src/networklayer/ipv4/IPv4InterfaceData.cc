@@ -43,7 +43,7 @@ IPv4InterfaceData::IPv4InterfaceData()
 std::string IPv4InterfaceData::info() const
 {
     std::stringstream out;
-    out << "IP:{inet_addr:" << getIPAddress() << "/" << getNetmask().getNetmaskLength();
+    out << "IPv4:{inet_addr:" << getIPAddress() << "/" << getNetmask().getNetmaskLength();
     if (!getMulticastGroups().empty())
     {
         out << " mcastgrps:";

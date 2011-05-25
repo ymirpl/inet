@@ -31,11 +31,11 @@ cplusplus {{
 
 
 //
-// Control information for sending/receiving packets over IP.
+// Control information for sending/receiving packets over IPv4.
 //
-// To send a packet over IP, fill in an ~IPv4ControlInfo object,
+// To send a packet over IPv4, fill in an ~IPv4ControlInfo object,
 // attach it to the packet with the C++ method setControlInfo(),
-// the send it to the ~IP module.
+// the send it to the ~IPv4 module.
 //
 // When sending, the following fields are required:
 // - protocol: a value from ~IPProtocolId
@@ -48,23 +48,23 @@ cplusplus {{
 // - dontFragment: default: false
 //
 // Not supported:
-// - options: IP Options currently not used
-// - Identifier is currently always chosen by the IP layer
+// - options: IPv4 Options currently not used
+// - Identifier is currently always chosen by the IPv4 layer
 //
-// When ~IP delivers a packet to higher layers, it also attaches an ~IPv4ControlInfo
+// When ~IPv4 delivers a packet to higher layers, it also attaches an ~IPv4ControlInfo
 // to it. It fills in the following fields:
 //  - srcAddr, destAddr, protocol, diffServCodePoint: values from the original datagram
 //  - interfaceId: the interface on which the datagram arrived, or -1 if it was
 //    created locally
 //
-// ~IP also puts the original datagram object into the control info, because
+// ~IPv4 also puts the original datagram object into the control info, because
 // it may be needed by higher layers (for example, by ~ICMP for error reporting).
 //
 class IPv4ControlInfo
 {
     @customize(true);
-    IPv4Address destAddr;   // destination IP address
-    IPv4Address srcAddr;    // source IP address
+    IPv4Address destAddr;   // destination IPv4 address
+    IPv4Address srcAddr;    // source IPv4 address
     int interfaceId = -1; // interface on which the datagram was received, or
                           // should be sent (see ~InterfaceTable)
     short protocol enum(IPProtocolId);  // encapsulated protocol
@@ -81,7 +81,7 @@ class IPv4ControlInfo
 
 
 //
-// Control info attached to packets sent from ~IP to ~ARP.
+// Control info attached to packets sent from ~IPv4 to ~ARP.
 //
 // Next hop address is used on a LAN to determine the MAC destination
 // address (and it may be used on other multicast networks for similar

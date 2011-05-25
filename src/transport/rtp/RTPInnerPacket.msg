@@ -74,7 +74,7 @@ packet RTPInnerPacket
     // The RTCP percentage
     int rtcpPercentage;
 
-    // The IP address
+    // The IPv4 address
     IPv4Address address = IPv4Address::UNSPECIFIED_ADDRESS;
 
     // The port number

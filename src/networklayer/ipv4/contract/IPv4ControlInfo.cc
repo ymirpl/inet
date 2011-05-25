@@ -41,7 +41,7 @@ IPv4Datagram *IPv4ControlInfo::removeOrigDatagram()
     if (!dgram)
         throw cRuntimeError(this, "IPv4ControlInfo::removeOrigDatagram(): no datagram attached "
                   "(already removed, or maybe this IPv4ControlInfo does not come "
-                  "from the IP module?)");
+                  "from the IPv4 module?)");
 
     IPv4Datagram *ret = dgram;
     drop(dgram);

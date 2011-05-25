@@ -103,7 +103,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     mutable AddressSet localBroadcastAddresses;
 
   protected:
-    // set IP address etc on local loopback
+    // set IPv4 address etc on local loopback
     virtual void configureLoopbackForIPv4();
 
     // check if a route table entry corresponds to the following parameters
@@ -162,7 +162,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     //@}
 
     /**
-     * IP forwarding on/off
+     * IPv4 forwarding on/off
      */
     virtual bool isIPForwardingEnabled()  {return IPForward;}
 
@@ -278,7 +278,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     virtual void dsdvTestAndDelete();
     virtual const bool testValidity(const IPv4Route *entry) const;
 
-    // IP tables rules
+    // IPv4 tables rules
     virtual void addRule(bool output, IPv4RouteRule *entry);
     virtual void delRule(IPv4RouteRule *entry);
     virtual const IPv4RouteRule * getRule(bool output,int index) const;

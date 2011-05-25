@@ -41,9 +41,9 @@ const int ICMP_FRAGMENTATION_ERROR_CODE = 4;
 
 
 /**
- * Implements the IP protocol.
+ * Implements the IPv4 protocol.
  */
-class INET_API IP : public QueueBase
+class INET_API IPv4 : public QueueBase
 {
   protected:
     IRoutingTable *rt;
@@ -93,7 +93,7 @@ class INET_API IP : public QueueBase
     virtual IPv4Datagram *encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, IPv4ControlInfo *controlInfo);
 
     /**
-     * Creates a blank IP datagram. Override when subclassing IPv4Datagram is needed
+     * Creates a blank IPv4 datagram. Override when subclassing IPv4Datagram is needed
      */
     virtual IPv4Datagram *createIPv4Datagram(const char *name);
 
@@ -104,7 +104,7 @@ class INET_API IP : public QueueBase
     virtual void handlePacketFromNetwork(IPv4Datagram *datagram);
 
     /**
-     * Handle messages (typically packets to be send in IP) from transport or ICMP.
+     * Handle messages (typically packets to be send in IPv4) from transport or ICMP.
      * Invokes encapsulate(), then routePacket().
      */
     virtual void handleMessageFromHL(cPacket *msg);
@@ -164,7 +164,7 @@ class INET_API IP : public QueueBase
     const IPv4RouteRule * checkOutputRuleMulticast(const IPv4Datagram*);
 
   public:
-    IP() {}
+    IPv4() {}
 
   protected:
     /**
@@ -173,7 +173,7 @@ class INET_API IP : public QueueBase
     virtual void initialize();
 
     /**
-     * Processing of IP datagrams. Called when a datagram reaches the front
+     * Processing of IPv4 datagrams. Called when a datagram reaches the front
      * of the queue.
      */
     virtual void endService(cPacket *msg);

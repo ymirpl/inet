@@ -37,7 +37,7 @@ void NetworkConfigurator::initialize(int stage)
         // isIPNode, rt and ift members of nodeInfo[]
         extractTopology(topo, nodeInfo);
 
-        // assign addresses to IP nodes, and also store result in nodeInfo[].address
+        // assign addresses to IPv4 nodes, and also store result in nodeInfo[].address
         assignAddresses(topo, nodeInfo);
 
         // add routes for point-to-point peers
@@ -138,14 +138,14 @@ void NetworkConfigurator::addPointToPointPeerRoutes(cTopology& topo, NodeInfoVec
                     break;
             ASSERT(k<=topo.getNumNodes());
 
-            // if it's not an IP getNode(e.g. an Ethernet switch), then we're not interested
+            // if it's not an IPv4 getNode(e.g. an Ethernet switch), then we're not interested
             if (!nodeInfo[k].isIPNode)
                 continue;
 
             // find out neighbor's routerId
             IPv4Address neighborRouterId = nodeInfo[k].rt->getRouterId();
 
-            // find out neighbor's interface IP address
+            // find out neighbor's interface IPv4 address
             int neighborGateId = node->getLinkOut(j)->getRemoteGate()->getId();
             InterfaceEntry *neighborIe = nodeInfo[k].ift->getInterfaceByNodeInputGateId(neighborGateId);
             ASSERT(neighborIe);
@@ -328,7 +328,7 @@ void NetworkConfigurator::setDisplayString(cTopology& topo, NodeInfoVector& node
 
     // update display string
     char buf[80];
-    sprintf(buf, "%d IP nodes\n%d non-IP nodes", numIPNodes, topo.getNumNodes()-numIPNodes);
+    sprintf(buf, "%d IPv4 nodes\n%d non-IPv4 nodes", numIPNodes, topo.getNumNodes()-numIPNodes);
     getDisplayString().setTagArg("t",0,buf);
 }
 

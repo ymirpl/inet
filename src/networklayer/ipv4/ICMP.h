@@ -55,8 +55,8 @@ class INET_API ICMP : public cSimpleModule
     /**
      * This method can be called from other modules to send an ICMP error packet
      * in response to a received bogus packet from the transport layer (like UDP).
-     * The ICMP error packet needs to include (part of) the original IP datagram,
-     * so this function will wrap back the transport packet into the IP datagram
+     * The ICMP error packet needs to include (part of) the original IPv4 datagram,
+     * so this function will wrap back the transport packet into the IPv4 datagram
      * based on its IPv4ControlInfo.
      */
     virtual void sendErrorMessage(cPacket *transportPacket, IPv4ControlInfo *ctrl, ICMPType type, ICMPCode code);

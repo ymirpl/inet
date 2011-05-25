@@ -102,9 +102,9 @@ OSPF::Area* OSPF::Router::getArea(OSPF::AreaID areaID)
 
 
 /**
- * Returns the Area pointer from the Area list which contains the input IP address,
+ * Returns the Area pointer from the Area list which contains the input IPv4 address,
  * NULL if there's no such area connected to the Router.
- * @param address [in] The IP address whose containing Area we're looking for.
+ * @param address [in] The IPv4 address whose containing Area we're looking for.
  */
 OSPF::Area* OSPF::Router::getArea(IPv4Address address)
 {
@@ -213,7 +213,7 @@ bool OSPF::Router::installASExternalLSA(OSPFASExternalLSA* lsa)
      * 0. We can assume that if this LSA reached this router, then this router is reachable
      *    from the other router. But what about the other direction?
      * 1. The update packet is most likely not sent by the router originating the functionally
-     *    equivalent AS-External-LSA, so we cannot use the IP packet source address.
+     *    equivalent AS-External-LSA, so we cannot use the IPv4 packet source address.
      * 2. The AS-External-LSA contains only the Router ID of the advertising router, so we
      *    can only look up "router" type routing entries in the routing table(these contain
      *    the Router ID as their Destination ID). However these entries are only inserted into
@@ -552,9 +552,9 @@ bool OSPF::Router::floodLSA(OSPFLSA* lsa, OSPF::AreaID areaID /*= BACKBONE_AREAI
 
 
 /**
- * Returns true if the input IP address falls into any of the Router's Areas' configured
- * IP address ranges, false otherwise.
- * @param address [in] The IP address to look for.
+ * Returns true if the input IPv4 address falls into any of the Router's Areas' configured
+ * IPv4 address ranges, false otherwise.
+ * @param address [in] The IPv4 address to look for.
  */
 bool OSPF::Router::isLocalAddress(IPv4Address address) const
 {
@@ -569,9 +569,9 @@ bool OSPF::Router::isLocalAddress(IPv4Address address) const
 
 
 /**
- * Returns true if one of the Router's Areas the same IP address range configured as the
- * input IP address range, false otherwise.
- * @param addressRange [in] The IP address range to look for.
+ * Returns true if one of the Router's Areas the same IPv4 address range configured as the
+ * input IPv4 address range, false otherwise.
+ * @param addressRange [in] The IPv4 address range to look for.
  */
 bool OSPF::Router::hasAddressRange(OSPF::IPv4AddressRange addressRange) const
 {
@@ -868,7 +868,7 @@ void OSPF::Router::rebuildRoutingTable()
     std::vector<const IPv4Route*> eraseEntries;
     IRoutingTable* simRoutingTable = routingTableAccess.get();
     unsigned long routingEntryNumber = simRoutingTable->getNumRoutes();
-    // remove entries from the IP routing table inserted by the OSPF module
+    // remove entries from the IPv4 routing table inserted by the OSPF module
     for (i = 0; i < routingEntryNumber; i++) {
         const IPv4Route *entry = simRoutingTable->getRoute(i);
         const OSPF::RoutingTableEntry* ospfEntry = dynamic_cast<const OSPF::RoutingTableEntry*>(entry);
@@ -1606,7 +1606,7 @@ void OSPF::Router::addExternalRouteInIPTable(IPv4Address networkAddress, const O
     int routingEntryNumber = simRoutingTable->getNumRoutes();
     bool inRoutingTable = false;
 
-    // add the external route to the IP routing table if it was not added by another module
+    // add the external route to the IPv4 routing table if it was not added by another module
     for (int i = 1; i < routingEntryNumber; i++) {
         if (simRoutingTable->getRoute(i)->getHost().getInt() == ulongFromIPv4Address(networkAddress))
         {

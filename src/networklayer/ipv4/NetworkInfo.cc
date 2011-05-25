@@ -60,7 +60,7 @@ void NetworkInfo::dumpRoutingInfo(cModule *target, const char *filename, bool ap
     if (s.fail())
         error("cannot open `%s' for write", filename);
 
-    if (compat) s << "Kernel IP routing table" << endl;
+    if (compat) s << "Kernel IPv4 routing table" << endl;
     s << "Destination     Gateway         Genmask         ";
     if (compat) s << "Flags ";
     s << "Metric ";
