@@ -52,7 +52,7 @@ void IPRouting::endService(cMessage *msg)
 {
     // FIXME may we get ICMP here? what to do with it then?
     IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(msg);
-    IPRoutingDecision *routingDecision = check_and_cast<IPRoutingDecision *>(datagram->controlInfo());
+    IPv4RoutingDecision *routingDecision = check_and_cast<IPv4RoutingDecision *>(datagram->controlInfo());
 
     // TBD add option handling code here!
 

@@ -75,7 +75,7 @@ cMessage *IPLocalDeliver::decapsulateIP(IPv4Datagram *datagram)
 {
     cMessage *packet = datagram->decapsulate();
 
-    IPRoutingDecision *routingDecision = check_and_cast<IPRoutingDecision *>(datagram->controlInfo());
+    IPv4RoutingDecision *routingDecision = check_and_cast<IPv4RoutingDecision *>(datagram->controlInfo());
     int inputPort = routingDecision->inputPort();
 
     IPv4ControlInfo *controlInfo = new IPv4ControlInfo();

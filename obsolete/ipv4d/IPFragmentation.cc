@@ -39,7 +39,7 @@ void IPFragmentation::initialize()
 void IPFragmentation::handleMessage(cMessage *msg)
 {
     IPv4Datagram *datagram  = check_and_cast<IPv4Datagram *>(msg);
-    IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision *>(msg->controlInfo());
+    IPv4RoutingDecision *controlInfo = check_and_cast<IPv4RoutingDecision *>(msg->controlInfo());
     int outputPort = controlInfo->outputPort();
     IPv4Address nextHopAddr = controlInfo->nextHopAddr();
 
@@ -102,7 +102,7 @@ void IPFragmentation::handleMessage(cMessage *msg)
 void IPFragmentation::sendDatagramToOutput(IPv4Datagram *datagram, int outputPort, IPv4Address nextHopAddr)
 {
     // attach next hop address if needed
-    IPRoutingDecision *routingDecision = new IPRoutingDecision();
+    IPv4RoutingDecision *routingDecision = new IPv4RoutingDecision();
     routingDecision->setNextHopAddr(nextHopAddr);
     routingDecision->setOutputPort(outputPort);
     datagram->setControlInfo(routingDecision);

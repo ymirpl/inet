@@ -42,7 +42,7 @@ void IPMulticast::initialize()
 void IPMulticast::handleMessage(cMessage *msg)
 {
     IPv4Datagram *datagram = check_and_cast<IPv4Datagram *>(msg);
-    IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision *>(msg->controlInfo());
+    IPv4RoutingDecision *controlInfo = check_and_cast<IPv4RoutingDecision *>(msg->controlInfo());
     int inputPort = controlInfo->inputPort();
 
     IPv4Address destAddress = datagram->destAddress();
@@ -100,7 +100,7 @@ void IPMulticast::handleMessage(cMessage *msg)
                 IPv4Address nextHopAddr = routes[i].gateway;
 
                 // add a copy of the control info (OMNeT++ doesn't copy it) --FIXME needed?
-                IPRoutingDecision *newControlInfo = new IPRoutingDecision();
+                IPv4RoutingDecision *newControlInfo = new IPv4RoutingDecision();
                 newControlInfo->setOutputPort(outputPort);
                 newControlInfo->setNextHopAddr(nextHopAddr);
                 datagramCopy->setControlInfo(newControlInfo);

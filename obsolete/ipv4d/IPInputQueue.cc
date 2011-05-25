@@ -28,7 +28,7 @@ Define_Module(IPInputQueue);
 void IPInputQueue::endService(cMessage *msg)
 {
     // remember on which port the packet came in
-    IPRoutingDecision *routingDecision = new IPRoutingDecision();
+    IPv4RoutingDecision *routingDecision = new IPv4RoutingDecision();
     routingDecision->setInputPort(msg->arrivalGate()->index());
 
     delete msg->removeControlInfo();

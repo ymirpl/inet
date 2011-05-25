@@ -102,7 +102,7 @@ IPv4Datagram *IPSend::encapsulate(cMessage *transportPacket)
     delete controlInfo;
 
     // add blank RoutingDecision info
-    IPRoutingDecision *routingDecision = new IPRoutingDecision();
+    IPv4RoutingDecision *routingDecision = new IPv4RoutingDecision();
     datagram->setControlInfo(routingDecision);
 
     // setting IP options is currently not supported

@@ -20,7 +20,7 @@
 
 //
 // Examines the packet's destination address and decides where it should
-// be sent. The decision is stored in the IPRoutingDecision control info
+// be sent. The decision is stored in the IPv4RoutingDecision control info
 // attached to the packet. The actual routing decision is done by
 // invoking functions in the RoutingTable module.
 //
