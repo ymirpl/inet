@@ -23,7 +23,7 @@ package inet.applications.generic;
 // Consumes and prints packets received from the ~IP module.
 // Compatible with both IPv4 and IPv6.
 //
-simple IPTrafSink like IPTrafficGenerator
+simple IPvXTrafSink like IIPvXTrafficGenerator
 {
     parameters:
         @display("i=block/sink");
@@ -47,10 +47,10 @@ simple IPTrafSink like IPTrafficGenerator
 // or with the module name. (The IPvXAddressResolver class is used to resolve
 // the address.) To disable the model, set destAddresses to "".
 //
-// The peer can be ~IPTrafSink or another ~IPTrafGen (it handles received packets
-// exactly like ~IPTrafSink).
+// The peer can be ~IPvXTrafSink or another ~IPvXTrafGen (it handles received packets
+// exactly like ~IPvXTrafSink).
 //
-simple IPTrafGen like IPTrafficGenerator
+simple IPvXTrafGen like IIPvXTrafficGenerator
 {
     parameters:
         double startTime @unit("s") = default(1s); // the time application generates first packet
