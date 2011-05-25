@@ -15,14 +15,14 @@
 #include "LDPInterface.h"
 #include "ConstType.h"
 #include "LDPproc.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 
 Define_Module(LDPInterface);
 
 void LDPInterface::initialize()
 {
     local_addr = IPv4Address(par("local_addr").stringValue()).getInt();
-    //local_addr = IPAddressResolver().getAddressFrom(RoutingTableAccess().get()).getInt();
+    //local_addr = IPvXAddressResolver().getAddressFrom(RoutingTableAccess().get()).getInt();
 
     local_port = ConstType::ldp_port;
     rem_port = ConstType::ldp_port;

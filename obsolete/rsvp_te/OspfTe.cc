@@ -14,7 +14,7 @@
 *********************************************************************/
 #include "OspfTe.h"
 #include "IPv4Address.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "RoutingTableAccess.h"
 
 

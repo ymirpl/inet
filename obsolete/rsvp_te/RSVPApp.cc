@@ -18,7 +18,7 @@
 #include "RoutingTable.h"
 #include "RSVPTesterCommands.h"
 #include "MPLSModule.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"
 #include "RoutingTableAccess.h"

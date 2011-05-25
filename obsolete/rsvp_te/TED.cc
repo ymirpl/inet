@@ -14,7 +14,7 @@
 *********************************************************************/
 
 #include "TED.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"
 #include "RoutingTableAccess.h"
@@ -102,21 +102,21 @@ void TED::buildDatabase()
         sTopoNode *node = topo.node(i);
         cModule *module = node->module();
 
-        InterfaceTable *myIFT = IPAddressResolver().interfaceTableOf(module);
-        RoutingTable *myRT = IPAddressResolver().routingTableOf(module);
+        InterfaceTable *myIFT = IPvXAddressResolver().interfaceTableOf(module);
+        RoutingTable *myRT = IPvXAddressResolver().routingTableOf(module);
         IPv4Address modAddr = myRT->getRouterId();
         if (modAddr.isUnspecified())
-            modAddr = IPAddressResolver().getAddressFrom(myIFT).get4();
+            modAddr = IPvXAddressResolver().getAddressFrom(myIFT).get4();
 
         for (int j = 0; j < node->outLinks(); j++)
         {
             cModule *neighbour = node->out(j)->remoteNode()->module();
 
-            InterfaceTable *neighbourIFT = IPAddressResolver().interfaceTableOf(neighbour);
-            RoutingTable *neighbourRT = IPAddressResolver().routingTableOf(neighbour);
+            InterfaceTable *neighbourIFT = IPvXAddressResolver().interfaceTableOf(neighbour);
+            RoutingTable *neighbourRT = IPvXAddressResolver().routingTableOf(neighbour);
             IPv4Address neighbourAddr = neighbourRT->getRouterId();
             if (neighbourAddr.isUnspecified())
-                neighbourAddr = IPAddressResolver().getAddressFrom(neighbourIFT).get4();
+                neighbourAddr = IPvXAddressResolver().getAddressFrom(neighbourIFT).get4();
 
             // For each link
             // Get linkId

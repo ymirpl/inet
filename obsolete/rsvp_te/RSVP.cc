@@ -16,7 +16,7 @@
 #include "RSVP.h"
 #include "IPv4Address.h"
 #include "MPLSModule.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "IPv4ControlInfo_m.h"
 #include "InterfaceTableAccess.h"
 #include "IPv4InterfaceData.h"

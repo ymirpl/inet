@@ -17,7 +17,7 @@
 #include "UDPControlInfo_m.h"
 #include "IPv4ControlInfo_m.h"
 #include "IPv4Address.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "RoutingTableAccess.h"
 
 
@@ -37,7 +37,7 @@ Define_Module(UDPAppInterface);
 void UDPAppInterface::initialize()
 {
     local_addr = par("local_addr").stringValue();
-    //local_addr = IPAddressResolver().getAddressFrom(RoutingTableAccess().get());
+    //local_addr = IPvXAddressResolver().getAddressFrom(RoutingTableAccess().get());
 }
 
 void UDPAppInterface::activity()
