@@ -85,7 +85,7 @@ protected:
      *
      * \return true if it is, false else
      */
-    bool checkExternalRoute(const IPRoute* ospfRoute);
+    bool checkExternalRoute(const IPv4Route* ospfRoute);
 
 private:
     void handleTimer(cMessage *timer);

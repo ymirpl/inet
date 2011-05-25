@@ -315,7 +315,7 @@ unsigned char BGPRouting::decisionProcess(const BGPUpdateMessage& msg, BGP::Rout
 
     //Don't add the route if it exists in IP routing table except if the msg come from IGP session
     int indexIP = isInIPTable(_rt, entry->getHost());
-    if (indexIP != -1 && _rt->getRoute(indexIP)->getSource() != IPRoute::BGP )
+    if (indexIP != -1 && _rt->getRoute(indexIP)->getSource() != IPv4Route::BGP )
     {
         if (_BGPSessions[sessionIndex]->getType() != BGP::IGP )
         {
@@ -323,12 +323,12 @@ unsigned char BGPRouting::decisionProcess(const BGPUpdateMessage& msg, BGP::Rout
         }
         else
         {
-            IPRoute* newEntry = new IPRoute;
+            IPv4Route* newEntry = new IPv4Route;
             newEntry->setHost(_rt->getRoute(indexIP)->getHost());
             newEntry->setNetmask(_rt->getRoute(indexIP)->getNetmask());
             newEntry->setGateway(_rt->getRoute(indexIP)->getGateway());
             newEntry->setInterface(_rt->getRoute(indexIP)->getInterface());
-            newEntry->setSource(IPRoute::BGP);
+            newEntry->setSource(IPv4Route::BGP);
             newEntry->setType(_rt->getRoute(indexIP)->getType());
             _rt->deleteRoute(_rt->getRoute(indexIP));
             _rt->addRoute(newEntry);
@@ -446,7 +446,7 @@ void BGPRouting::updateSendProcess(const unsigned char type, BGP::SessionID sess
     }
 }
 
-bool BGPRouting::checkExternalRoute(const IPRoute* route)
+bool BGPRouting::checkExternalRoute(const IPv4Route* route)
 {
     IPv4Address OSPFRoute;
     OSPFRoute = ipv4AddressFromULong(route->getHost().getInt());
@@ -751,7 +751,7 @@ int BGPRouting::isInIPTable(IRoutingTable* rtTable, IPv4Address addr)
 {
     for (int i = 0; i < rtTable->getNumRoutes(); i++)
     {
-        const IPRoute* entry = rtTable->getRoute(i);
+        const IPv4Route* entry = rtTable->getRoute(i);
         if (entry->getHost().getInt () == addr.getInt())
         {
             return i;
@@ -810,7 +810,7 @@ bool BGPRouting::ospfExist(IRoutingTable* rtTable)
 {
     for (int i=0; i<rtTable->getNumRoutes(); i++)
     {
-        if (rtTable->getRoute(i)->getSource() == IPRoute::OSPF)
+        if (rtTable->getRoute(i)->getSource() == IPv4Route::OSPF)
         {
             return true;
         }

@@ -347,8 +347,8 @@ void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL
         else if (destIE->isBroadcast())
         {
             // if the interface is broadcast we must search the next hop
-            const IPRoute *re = rt->findBestMatchingRoute(destAddr);
-            if (re!=NULL && re->getSource()== IPRoute::MANET  && re->getHost()!=destAddr)
+            const IPv4Route *re = rt->findBestMatchingRoute(destAddr);
+            if (re!=NULL && re->getSource()== IPv4Route::MANET  && re->getHost()!=destAddr)
                 re=NULL;
             if (re && destIE == re->getInterface())
                 nextHopAddr = re->getGateway();
@@ -357,9 +357,9 @@ void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL
     else
     {
         // use IP routing (lookup in routing table)
-        const IPRoute *re = rt->findBestMatchingRoute(destAddr);
+        const IPv4Route *re = rt->findBestMatchingRoute(destAddr);
 
-        if (re!=NULL && re->getSource()== IPRoute::MANET)
+        if (re!=NULL && re->getSource()== IPv4Route::MANET)
         {
            // special case the address must agree
            if (re->getHost()!=destAddr)

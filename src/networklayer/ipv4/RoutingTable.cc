@@ -28,7 +28,7 @@
 
 #include "RoutingTable.h"
 #include "RoutingTableParser.h"
-#include "IPRoute.h"
+#include "IPv4Route.h"
 #include "IPv4InterfaceData.h"
 #include "IInterfaceTable.h"
 #include "InterfaceTableAccess.h"
@@ -38,7 +38,7 @@
 Define_Module(RoutingTable);
 
 
-std::ostream& operator<<(std::ostream& os, const IPRoute& e)
+std::ostream& operator<<(std::ostream& os, const IPv4Route& e)
 {
     os << e.info();
     return os;
@@ -215,7 +215,7 @@ void RoutingTable::deleteInterfaceRoutes(InterfaceEntry *entry)
     RouteVector::iterator it = routes.begin();
     while (it != routes.end())
     {
-        IPRoute *route = *it;
+        IPv4Route *route = *it;
         if (route->getInterface() == entry)
         {
             deleteRoute(route);
@@ -357,7 +357,7 @@ void RoutingTable::dsdvTestAndDelete()
      for (RouteVector::iterator i=routes.begin(); i!=routes.end(); ++i)
      {
 
-           IPRoute *e = *i;
+           IPv4Route *e = *i;
            if (this->isLocalAddress(e->getHost()))
                      continue;
            if (((e->getHost()).str() != "*") && ((e->getHost()).str() != "<unspec>") && ((e->getHost()).str() != "127.0.0.1") && (simTime()-(e->getInstallTime()))>timetolive_routing_entry){
@@ -371,7 +371,7 @@ void RoutingTable::dsdvTestAndDelete()
 
 }
 
-const bool RoutingTable::testValidity(const IPRoute *entry) const
+const bool RoutingTable::testValidity(const IPv4Route *entry) const
 {
      if (timetolive_routing_entry==timetolive_routing_entry.getMaxTime())
            return true;
@@ -384,7 +384,7 @@ const bool RoutingTable::testValidity(const IPRoute *entry) const
 
 }
 
-const IPRoute *RoutingTable::findBestMatchingRoute(const IPv4Address& dest) const
+const IPv4Route *RoutingTable::findBestMatchingRoute(const IPv4Address& dest) const
 {
     Enter_Method("findBestMatchingRoute(%u.%u.%u.%u)", dest.getDByte(0), dest.getDByte(1), dest.getDByte(2), dest.getDByte(3)); // note: str().c_str() too slow here
 
@@ -398,7 +398,7 @@ const IPRoute *RoutingTable::findBestMatchingRoute(const IPv4Address& dest) cons
         }
         else if (testValidity(it->second))
         {
-            if (it->second->getSource()==IPRoute::MANET)
+            if (it->second->getSource()==IPv4Route::MANET)
             {
                 if (IPv4Address::maskedAddrAreEqual(dest, it->second->getHost(), IPv4Address::ALLONES_ADDRESS))
         return it->second;
@@ -409,11 +409,11 @@ const IPRoute *RoutingTable::findBestMatchingRoute(const IPv4Address& dest) cons
     }
     // find best match (one with longest prefix)
     // default route has zero prefix length, so (if exists) it'll be selected as last resort
-    const IPRoute *bestRoute = NULL;
+    const IPv4Route *bestRoute = NULL;
     uint32 longestNetmask = 0;
     for (RouteVector::const_iterator i=routes.begin(); i!=routes.end(); ++i)
     {
-        IPRoute *e = *i;
+        IPv4Route *e = *i;
         if (testValidity(e))
         {
             if (IPv4Address::maskedAddrAreEqual(dest, e->getHost(), e->getNetmask()) &&  // match
@@ -425,13 +425,13 @@ const IPRoute *RoutingTable::findBestMatchingRoute(const IPv4Address& dest) cons
     }
     }
 
-    if (bestRoute && bestRoute->getSource()==IPRoute::MANET && bestRoute->getHost()!=dest)
+    if (bestRoute && bestRoute->getSource()==IPv4Route::MANET && bestRoute->getHost()!=dest)
     {
         bestRoute=NULL;
         /* in this case we must find the mask must be 255.255.255.255 route */
         for (RouteVector::const_iterator i=routes.begin(); i!=routes.end(); ++i)
         {
-           IPRoute *e = *i;
+           IPv4Route *e = *i;
            if (testValidity(e))
            {
               if (IPv4Address::maskedAddrAreEqual(dest, e->getHost(), IPv4Address::ALLONES_ADDRESS) &&  // match
@@ -452,7 +452,7 @@ InterfaceEntry *RoutingTable::getInterfaceForDestAddr(const IPv4Address& dest) c
 {
     Enter_Method("getInterfaceForDestAddr(%u.%u.%u.%u)", dest.getDByte(0), dest.getDByte(1), dest.getDByte(2), dest.getDByte(3)); // note: str().c_str() too slow here
 
-    const IPRoute *e = findBestMatchingRoute(dest);
+    const IPv4Route *e = findBestMatchingRoute(dest);
     return e ? e->getInterface() : NULL;
 }
 
@@ -460,7 +460,7 @@ IPv4Address RoutingTable::getGatewayForDestAddr(const IPv4Address& dest) const
 {
     Enter_Method("getGatewayForDestAddr(%u.%u.%u.%u)", dest.getDByte(0), dest.getDByte(1), dest.getDByte(2), dest.getDByte(3)); // note: str().c_str() too slow here
 
-    const IPRoute *e = findBestMatchingRoute(dest);
+    const IPv4Route *e = findBestMatchingRoute(dest);
     return e ? e->getGateway() : IPv4Address();
 }
 
@@ -473,7 +473,7 @@ MulticastRoutes RoutingTable::getMulticastRoutesFor(const IPv4Address& dest) con
     res.reserve(16);
     for (RouteVector::const_iterator i=multicastRoutes.begin(); i!=multicastRoutes.end(); ++i)
     {
-        const IPRoute *e = *i;
+        const IPv4Route *e = *i;
         if (IPv4Address::maskedAddrAreEqual(dest, e->getHost(), e->getNetmask()))
         {
             MulticastRoute r;
@@ -491,7 +491,7 @@ int RoutingTable::getNumRoutes() const
     return routes.size()+multicastRoutes.size();
 }
 
-const IPRoute *RoutingTable::getRoute(int k) const
+const IPv4Route *RoutingTable::getRoute(int k) const
 {
     if (k < (int)routes.size())
         return routes[k];
@@ -501,7 +501,7 @@ const IPRoute *RoutingTable::getRoute(int k) const
     return NULL;
 }
 
-const IPRoute *RoutingTable::getDefaultRoute() const
+const IPv4Route *RoutingTable::getDefaultRoute() const
 {
     int n = (int)routes.size();
     for (int i=0; i<n; i++)
@@ -510,7 +510,7 @@ const IPRoute *RoutingTable::getDefaultRoute() const
     return NULL;
 }
 
-const IPRoute *RoutingTable::findRoute(const IPv4Address& target, const IPv4Address& netmask,
+const IPv4Route *RoutingTable::findRoute(const IPv4Address& target, const IPv4Address& netmask,
     const IPv4Address& gw, int metric, const char *dev) const
 {
     int n = getNumRoutes();
@@ -520,7 +520,7 @@ const IPRoute *RoutingTable::findRoute(const IPv4Address& target, const IPv4Addr
     return NULL;
 }
 
-void RoutingTable::addRoute(const IPRoute *entry)
+void RoutingTable::addRoute(const IPv4Route *entry)
 {
     Enter_Method("addRoute(...)");
 
@@ -542,9 +542,9 @@ void RoutingTable::addRoute(const IPRoute *entry)
 
     // add to tables
     if (!entry->getHost().isMulticast())
-        routes.push_back(const_cast<IPRoute*>(entry));
+        routes.push_back(const_cast<IPv4Route*>(entry));
     else
-        multicastRoutes.push_back(const_cast<IPRoute*>(entry));
+        multicastRoutes.push_back(const_cast<IPv4Route*>(entry));
 
     invalidateCache();
     updateDisplayString();
@@ -553,7 +553,7 @@ void RoutingTable::addRoute(const IPRoute *entry)
 }
 
 
-bool RoutingTable::deleteRoute(const IPRoute *entry)
+bool RoutingTable::deleteRoute(const IPv4Route *entry)
 {
     Enter_Method("deleteRoute(...)");
 
@@ -581,7 +581,7 @@ bool RoutingTable::deleteRoute(const IPRoute *entry)
 }
 
 
-bool RoutingTable::routeMatches(const IPRoute *entry,
+bool RoutingTable::routeMatches(const IPv4Route *entry,
     const IPv4Address& target, const IPv4Address& nmask,
     const IPv4Address& gw, int metric, const char *dev) const
 {
@@ -603,7 +603,7 @@ void RoutingTable::updateNetmaskRoutes()
 {
     // first, delete all routes with src=IFACENETMASK
     for (unsigned int k=0; k<routes.size(); k++)
-        if (routes[k]->getSource()==IPRoute::IFACENETMASK)
+        if (routes[k]->getSource()==IPv4Route::IFACENETMASK)
             routes.erase(routes.begin()+(k--));  // '--' is necessary because indices shift down
 
     // then re-add them, according to actual interface configuration
@@ -612,9 +612,9 @@ void RoutingTable::updateNetmaskRoutes()
         InterfaceEntry *ie = ift->getInterface(i);
         if (ie->ipv4Data()->getNetmask()!=IPv4Address::ALLONES_ADDRESS)
         {
-            IPRoute *route = new IPRoute();
-            route->setType(IPRoute::DIRECT);
-            route->setSource(IPRoute::IFACENETMASK);
+            IPv4Route *route = new IPv4Route();
+            route->setType(IPv4Route::DIRECT);
+            route->setSource(IPv4Route::IFACENETMASK);
             route->setHost(ie->ipv4Data()->getIPAddress().doAnd(ie->ipv4Data()->getNetmask()));
             route->setNetmask(ie->ipv4Data()->getNetmask());
             route->setGateway(IPv4Address());

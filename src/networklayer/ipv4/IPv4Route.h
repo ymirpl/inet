@@ -31,7 +31,7 @@ class InterfaceEntry;
  *
  * @see IRoutingTable, IRoutingTable
  */
-class INET_API IPRoute : public cPolymorphic
+class INET_API IPv4Route : public cPolymorphic
 {
   public:
     /** Route type */
@@ -71,12 +71,12 @@ class INET_API IPRoute : public cPolymorphic
 
   private:
     // copying not supported: following are private and also left undefined
-    IPRoute(const IPRoute& obj);
-    IPRoute& operator=(const IPRoute& obj);
+    IPv4Route(const IPv4Route& obj);
+    IPv4Route& operator=(const IPv4Route& obj);
 
   public:
-    IPRoute();
-    virtual ~IPRoute() {}
+    IPv4Route();
+    virtual ~IPv4Route() {}
     virtual std::string info() const;
     virtual std::string detailedInfo() const;
 

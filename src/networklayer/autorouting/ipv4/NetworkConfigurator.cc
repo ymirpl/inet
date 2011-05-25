@@ -157,7 +157,7 @@ void NetworkConfigurator::addPointToPointPeerRoutes(cTopology& topo, NodeInfoVec
             ASSERT(ie);
 
             // add route
-            IPRoute *e = new IPRoute();
+            IPv4Route *e = new IPv4Route();
             if (useRouterIdForRoutes)
             {
                 e->setHost(neighborRouterId);
@@ -169,8 +169,8 @@ void NetworkConfigurator::addPointToPointPeerRoutes(cTopology& topo, NodeInfoVec
             }
             e->setNetmask(IPv4Address(255,255,255,255)); // full match needed
             e->setInterface(ie);
-            e->setType(IPRoute::DIRECT);
-            e->setSource(IPRoute::MANUAL);
+            e->setType(IPv4Route::DIRECT);
+            e->setSource(IPv4Route::MANUAL);
             //e->getMetric() = 1;
             rt->addRoute(e);
         }
@@ -205,12 +205,12 @@ void NetworkConfigurator::addDefaultRoutes(cTopology& topo, NodeInfoVector& node
            "interface, adding default route\n";
 
         // add route
-        IPRoute *e = new IPRoute();
+        IPv4Route *e = new IPv4Route();
         e->setHost(IPv4Address());
         e->setNetmask(IPv4Address());
         e->setInterface(ie);
-        e->setType(IPRoute::REMOTE);
-        e->setSource(IPRoute::MANUAL);
+        e->setType(IPv4Route::REMOTE);
+        e->setSource(IPv4Route::MANUAL);
         //e->setMetric(1);
         rt->addRoute(e);
     }
@@ -300,13 +300,13 @@ void NetworkConfigurator::fillRoutingTables(cTopology& topo, NodeInfoVector& nod
 
             // add route
             IRoutingTable *rt = nodeInfo[j].rt;
-            IPRoute *e = new IPRoute();
+            IPv4Route *e = new IPv4Route();
             e->setHost(destAddr);
             e->gateway = ???
             e->setNetmask(IPv4Address(255,255,255,255)); // full match needed
             e->setInterface(ie);
-            e->setType(IPRoute::REMOTE);
-            e->setSource(IPRoute::MANUAL);
+            e->setType(IPv4Route::REMOTE);
+            e->setSource(IPv4Route::MANUAL);
             //e->getMetric() = 1;
             rt->addRoute(e);
         }

@@ -320,7 +320,7 @@ void RoutingTableParser::parseRouting(char *routeFile)
         // 1st entry: Host
         pos += strcpyword(str, routeFile + pos);
         skipBlanks(routeFile, pos);
-        IPRoute *e = new IPRoute();
+        IPv4Route *e = new IPv4Route();
         if (strcmp(str, "default:"))
         {
             // if entry is not the default entry
@@ -360,9 +360,9 @@ void RoutingTableParser::parseRouting(char *routeFile)
         for (int i = 0; str[i]; i++)
         {
             if (str[i] == 'H') {
-                e->setType(IPRoute::DIRECT);
+                e->setType(IPv4Route::DIRECT);
             } else if (str[i] == 'G') {
-                e->setType(IPRoute::REMOTE);
+                e->setType(IPv4Route::REMOTE);
             } else {
                 throw cRuntimeError("Syntax error in routing file: 4th column should be `G' or `H' not `%s'", str);
             }

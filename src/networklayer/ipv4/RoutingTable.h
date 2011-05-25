@@ -59,15 +59,15 @@ class RoutingTableParser;
  * be read and modified during simulation, typically by routing protocol
  * implementations (e.g. OSPF).
  *
- * Entries in the route table are represented by IPRoute objects.
- * IPRoute objects can be polymorphic: if a routing protocol needs
- * to store additional data, it can simply subclass from IPRoute,
+ * Entries in the route table are represented by IPv4Route objects.
+ * IPv4Route objects can be polymorphic: if a routing protocol needs
+ * to store additional data, it can simply subclass from IPv4Route,
  * and add the derived object to the table.
  *
  * Uses RoutingTableParser to read routing files (.irt, .mrt).
  *
  *
- * @see InterfaceEntry, IPv4InterfaceData, IPRoute
+ * @see InterfaceEntry, IPv4InterfaceData, IPv4Route
  */
 class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protected INotifiable
 {
@@ -83,12 +83,12 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     //
     // Routes:
     //
-    typedef std::vector<IPRoute *> RouteVector;
+    typedef std::vector<IPv4Route *> RouteVector;
     RouteVector routes;          // Unicast route array
     RouteVector multicastRoutes; // Multicast route array
 
     // routing cache: maps destination address to the route
-    typedef std::map<IPv4Address, const IPRoute *> RoutingCache;
+    typedef std::map<IPv4Address, const IPv4Route *> RoutingCache;
     mutable RoutingCache routingCache;
 
     typedef std::vector<IPv4RouteRule *> RoutingRule;
@@ -107,7 +107,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     virtual void configureLoopbackForIPv4();
 
     // check if a route table entry corresponds to the following parameters
-    virtual bool routeMatches(const IPRoute *entry,
+    virtual bool routeMatches(const IPv4Route *entry,
         const IPv4Address& target, const IPv4Address& nmask, const IPv4Address& gw,
         int metric, const char *dev) const;
 
@@ -192,7 +192,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     /**
      * The routing function.
      */
-    virtual const IPRoute *findBestMatchingRoute(const IPv4Address& dest) const;
+    virtual const IPv4Route *findBestMatchingRoute(const IPv4Address& dest) const;
 
     /**
      * Convenience function based on findBestMatchingRoute().
@@ -241,31 +241,31 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
      * you must delete and re-add it instead. This rule is emphasized
      * by returning a const pointer.
      */
-    virtual const IPRoute *getRoute(int k) const;
+    virtual const IPv4Route *getRoute(int k) const;
 
     /**
      * Finds the first route with the given parameters.
      */
-    virtual const IPRoute *findRoute(const IPv4Address& target, const IPv4Address& netmask,
+    virtual const IPv4Route *findRoute(const IPv4Address& target, const IPv4Address& netmask,
         const IPv4Address& gw, int metric = 0, const char *dev = NULL) const;
 
     /**
      * Finds and returns the default route, or NULL if it doesn't exist
      */
-    virtual const IPRoute *getDefaultRoute() const;
+    virtual const IPv4Route *getDefaultRoute() const;
 
     /**
      * Adds a route to the routing table. Note that once added, routes
      * cannot be modified; you must delete and re-add them instead.
      */
-    virtual void addRoute(const IPRoute *entry);
+    virtual void addRoute(const IPv4Route *entry);
 
     /**
      * Deletes the given route from the routing table.
      * Returns true if the route was deleted correctly, false if it was
      * not in the routing table.
      */
-    virtual bool deleteRoute(const IPRoute *entry);
+    virtual bool deleteRoute(const IPv4Route *entry);
 
     /**
      * Utility function: Returns a vector of all addresses of the node.
@@ -276,7 +276,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     virtual simtime_t getTimeToLiveRoutingEntry(){return timetolive_routing_entry;}
     // Dsdv time to live test entry
     virtual void dsdvTestAndDelete();
-    virtual const bool testValidity(const IPRoute *entry) const;
+    virtual const bool testValidity(const IPv4Route *entry) const;
 
     // IP tables rules
     virtual void addRule(bool output, IPv4RouteRule *entry);

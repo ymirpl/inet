@@ -22,7 +22,7 @@
 
 #include "INETDefs.h"
 #include "IPv4Address.h"
-#include "IPRoute.h"  // not strictly required, but most clients will need it anyway
+#include "IPv4Route.h"  // not strictly required, but most clients will need it anyway
 #include "IPv4RouteRule.h"
 
 
@@ -41,7 +41,7 @@ typedef std::vector<MulticastRoute> MulticastRoutes;
  * transparently replace IRoutingTable with a different implementation,
  * without any change to the base INET.
  *
- * @see IRoutingTable, IPRoute
+ * @see IRoutingTable, IPv4Route
  */
 class INET_API IRoutingTable
 {
@@ -95,7 +95,7 @@ class INET_API IRoutingTable
     /**
      * The routing function.
      */
-    virtual const IPRoute *findBestMatchingRoute(const IPv4Address& dest) const = 0;
+    virtual const IPv4Route *findBestMatchingRoute(const IPv4Address& dest) const = 0;
 
     /**
      * Convenience function based on findBestMatchingRoute().
@@ -144,31 +144,31 @@ class INET_API IRoutingTable
      * you must delete and re-add it instead. This rule is emphasized
      * by returning a const pointer.
      */
-    virtual const IPRoute *getRoute(int k) const = 0;
+    virtual const IPv4Route *getRoute(int k) const = 0;
 
     /**
      * Finds and returns the default route, or NULL if it doesn't exist
      */
-    virtual const IPRoute *findRoute(const IPv4Address& target, const IPv4Address& netmask,
+    virtual const IPv4Route *findRoute(const IPv4Address& target, const IPv4Address& netmask,
         const IPv4Address& gw, int metric = 0, const char *dev = NULL) const = 0;
 
     /**
      * Finds and returns the default route, or NULL if it doesn't exist
      */
-    virtual const IPRoute *getDefaultRoute() const = 0;
+    virtual const IPv4Route *getDefaultRoute() const = 0;
 
     /**
      * Adds a route to the routing table. Note that once added, routes
      * cannot be modified; you must delete and re-add them instead.
      */
-    virtual void addRoute(const IPRoute *entry) = 0;
+    virtual void addRoute(const IPv4Route *entry) = 0;
 
     /**
      * Deletes the given route from the routing table.
      * Returns true if the route was deleted correctly, false if it was
      * not in the routing table.
      */
-    virtual bool deleteRoute(const IPRoute *entry) = 0;
+    virtual bool deleteRoute(const IPv4Route *entry) = 0;
 
     /**
      * Utility function: Returns a vector of all addresses of the node.
@@ -179,7 +179,7 @@ class INET_API IRoutingTable
     virtual void setTimeToLiveRoutingEntry(simtime_t a) = 0;
     virtual simtime_t getTimeToLiveRoutingEntry()=0;
     virtual void dsdvTestAndDelete() = 0;
-    virtual const bool testValidity(const IPRoute *entry) const = 0;
+    virtual const bool testValidity(const IPv4Route *entry) const = 0;
     // Rules (similar to linux iptables)
     virtual void addRule(bool output,IPv4RouteRule *entry) = 0;
     virtual void delRule(IPv4RouteRule *entry) = 0;

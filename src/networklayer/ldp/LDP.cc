@@ -273,14 +273,14 @@ void LDP::rebuildFecList()
     {
         // every entry in the routing table
 
-        const IPRoute *re = rt->getRoute(i);
+        const IPv4Route *re = rt->getRoute(i);
 
         // ignore multicast routes
         if (re->getHost().isMulticast())
             continue;
 
         // find out current next hop according to routing table
-        IPv4Address nextHop = (re->getType() == IPRoute::DIRECT) ? re->getHost() : re->getGateway();
+        IPv4Address nextHop = (re->getType() == IPv4Route::DIRECT) ? re->getHost() : re->getGateway();
         ASSERT(!nextHop.isUnspecified());
 
         EV << "nextHop <-- " << nextHop << endl;
@@ -731,7 +731,7 @@ IPv4Address LDP::findPeerAddrFromInterface(std::string interfaceName)
     int k = 0;
     InterfaceEntry *ie = ift->getInterfaceByName(interfaceName.c_str());
 
-    const IPRoute *anEntry;
+    const IPv4Route *anEntry;
 
     for (i = 0; i < rt->getNumRoutes(); i++)
     {

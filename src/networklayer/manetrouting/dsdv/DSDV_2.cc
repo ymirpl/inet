@@ -318,7 +318,7 @@ void DSDV_2::handleMessage(cMessage *msg)
 
 
 
-            IPRoute *entrada_routing =const_cast<IPRoute *> (rt->findBestMatchingRoute(src));
+            IPv4Route *entrada_routing =const_cast<IPv4Route *> (rt->findBestMatchingRoute(src));
 
             //Tests if the DSDV hello message that arrived is useful
             if (entrada_routing == NULL || (entrada_routing != NULL && (msgsequencenumber>(entrada_routing->getSequencenumber()) || (msgsequencenumber == (entrada_routing->getSequencenumber()) && numHops < (entrada_routing->getMetric())))))
@@ -332,8 +332,8 @@ void DSDV_2::handleMessage(cMessage *msg)
                     entrada_routing->setNetmask(netmask);
                     entrada_routing->setGateway(next);
                     entrada_routing->setInterface(interface80211ptr);
-                    entrada_routing->setType(IPRoute::REMOTE);
-                    entrada_routing->setSource(IPRoute::MANET);
+                    entrada_routing->setType(IPv4Route::REMOTE);
+                    entrada_routing->setSource(IPv4Route::MANET);
                     entrada_routing->setMetric(numHops);
                     entrada_routing->setSequencenumber(msgsequencenumber);
                     entrada_routing->setInstallTime(simTime());
@@ -343,13 +343,13 @@ void DSDV_2::handleMessage(cMessage *msg)
                 else
                 {
                     IPv4Address netmask = IPv4Address(par("netmask").stringValue());
-                    IPRoute *e = new IPRoute();
+                    IPv4Route *e = new IPv4Route();
                     e->setHost (src);
                     e->setNetmask (netmask);
                     e->setGateway (next);
                     e->setInterface(interface80211ptr);
-                    e->setType (IPRoute::REMOTE);
-                    e->setSource(IPRoute::MANET);
+                    e->setType (IPv4Route::REMOTE);
+                    e->setSource(IPv4Route::MANET);
                     e->setMetric (numHops);
                     e->setSequencenumber(msgsequencenumber);
                     e->setInstallTime (simTime());
