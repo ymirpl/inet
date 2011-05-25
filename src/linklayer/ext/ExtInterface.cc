@@ -30,7 +30,7 @@
 #include "InterfaceEntry.h"
 #include "InterfaceTable.h"
 #include "InterfaceTableAccess.h"
-#include "IPSerializer.h"
+#include "IPv4Serializer.h"
 #include "opp_utils.h"
 
 
@@ -114,7 +114,7 @@ void ExtInterface::handleMessage(cMessage *msg)
             buffer[i] = rawPacket->getData(i);
 
         IPv4Datagram *ipPacket = new IPv4Datagram("ip-from-wire");
-        IPSerializer().parse(buffer, packetLength, (IPv4Datagram *)ipPacket);
+        IPv4Serializer().parse(buffer, packetLength, (IPv4Datagram *)ipPacket);
         EV << "Delivering an IP packet from "
            << ipPacket->getSrcAddress()
            << " to "
@@ -150,7 +150,7 @@ void ExtInterface::handleMessage(cMessage *msg)
 #endif
             addr.sin_port        = 0;
             addr.sin_addr.s_addr = htonl(ipPacket->getDestAddress().getInt());
-            int32 packetLength = IPSerializer().serialize(ipPacket,buffer, sizeof(buffer));
+            int32 packetLength = IPv4Serializer().serialize(ipPacket,buffer, sizeof(buffer));
             EV << "Delivering an IP packet from "
                << ipPacket->getSrcAddress()
                << " to "

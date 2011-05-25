@@ -24,10 +24,10 @@
 /**
  * Converts between IPv4Datagram and binary (network byte order) IP header.
  */
-class IPSerializer
+class IPv4Serializer
 {
     public:
-        IPSerializer() {}
+        IPv4Serializer() {}
 
         /**
          * Serializes an IPv4Datagram for transmission on the wire.

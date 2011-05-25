@@ -30,7 +30,7 @@ namespace INETFw // load headers into a namespace, to avoid conflicts with platf
 #include "headers/ip.h"
 };
 
-#include "IPSerializer.h"
+#include "IPv4Serializer.h"
 
 #include "ICMPSerializer.h"
 #include "IPProtocolId_m.h"
@@ -66,7 +66,7 @@ using namespace INETFw;
 
 
 
-int IPSerializer::serialize(const IPv4Datagram *dgram, unsigned char *buf, unsigned int bufsize, bool hasCalcChkSum)
+int IPv4Serializer::serialize(const IPv4Datagram *dgram, unsigned char *buf, unsigned int bufsize, bool hasCalcChkSum)
 {
     int packetLength;
     struct ip *ip = (struct ip *) buf;
@@ -119,7 +119,7 @@ int IPSerializer::serialize(const IPv4Datagram *dgram, unsigned char *buf, unsig
 #endif
 
       default:
-        throw cRuntimeError(dgram, "IPSerializer: cannot serialize protocol %d", dgram->getTransportProtocol());
+        throw cRuntimeError(dgram, "IPv4Serializer: cannot serialize protocol %d", dgram->getTransportProtocol());
     }
 
     ip->ip_len = htons(packetLength);
@@ -132,7 +132,7 @@ int IPSerializer::serialize(const IPv4Datagram *dgram, unsigned char *buf, unsig
     return packetLength;
 }
 
-void IPSerializer::parse(const unsigned char *buf, unsigned int bufsize, IPv4Datagram *dest)
+void IPv4Serializer::parse(const unsigned char *buf, unsigned int bufsize, IPv4Datagram *dest)
 {
     const struct ip *ip = (const struct ip *) buf;
     unsigned int totalLength, headerLength;
@@ -191,7 +191,7 @@ void IPSerializer::parse(const unsigned char *buf, unsigned int bufsize, IPv4Dat
 #endif
 
       default:
-        throw cRuntimeError("IPSerializer: cannot parse protocol %d", dest->getTransportProtocol());
+        throw cRuntimeError("IPv4Serializer: cannot parse protocol %d", dest->getTransportProtocol());
     }
 
     ASSERT(encapPacket);

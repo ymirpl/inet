@@ -32,7 +32,7 @@
 
 #ifdef WITH_IPv4
 #include "IPv4Datagram.h"
-#include "IPSerializer.h"
+#include "IPv4Serializer.h"
 #endif
 
 
@@ -109,7 +109,7 @@ void PcapDump::writeFrame(simtime_t stime, const IPv4Datagram *ipPacket)
      // Write Ethernet header
     uint32 hdr = 2; //AF_INET
 
-    int32 serialized_ip = IPSerializer().serialize(ipPacket, buf, sizeof(buf), true);
+    int32 serialized_ip = IPv4Serializer().serialize(ipPacket, buf, sizeof(buf), true);
     ph.orig_len = serialized_ip + sizeof(uint32);
 
     ph.incl_len = ph.orig_len > snaplen ? snaplen : ph.orig_len;
