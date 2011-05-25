@@ -168,6 +168,11 @@ inline bool operator!= (OSPF::DesignatedRouterID leftID, OSPF::DesignatedRouterI
     return (!(leftID == rightID));
 }
 
+inline bool OSPF::IPv4Address_Less::operator() (IPv4Address leftAddress, IPv4Address rightAddress) const
+{
+    return (leftAddress < rightAddress);
+}
+
 inline bool OSPF::IPv4AddressRange_Less::operator() (OSPF::IPv4AddressRange leftAddressRange, OSPF::IPv4AddressRange rightAddressRange) const
 {
     return ((leftAddressRange.address < rightAddressRange.address) ||
