@@ -25,7 +25,7 @@
 #include "ICMPAccess.h"
 #include "IPv4ControlInfo.h"
 #include "IPv4Datagram.h"
-#include "IPFragBuf.h"
+#include "IPv4FragBuf.h"
 #include "ProtocolMap.h"
 
 #ifdef WITH_MANET
@@ -60,7 +60,7 @@ class INET_API IP : public QueueBase
 
     // working vars
     long curFragmentId; // counter, used to assign unique fragmentIds to datagrams
-    IPFragBuf fragbuf;  // fragmentation reassembly buffer
+    IPv4FragBuf fragbuf;  // fragmentation reassembly buffer
     simtime_t lastCheckTime; // when fragbuf was last checked for state fragments
     ProtocolMapping mapping; // where to send packets after decapsulation
 

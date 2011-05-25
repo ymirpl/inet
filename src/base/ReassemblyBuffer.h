@@ -26,7 +26,7 @@
 /**
  * Generic reassembly buffer for a fragmented datagram (or a fragmented anything).
  *
- * Currently used in IPFragBuf and IPv6FragBuf.
+ * Currently used in IPv4FragBuf and IPv6FragBuf.
  */
 class INET_API ReassemblyBuffer
 {

@@ -31,7 +31,7 @@ class ICMP;
 /**
  * Reassembly buffer for fragmented IP datagrams.
  */
-class INET_API IPFragBuf
+class INET_API IPv4FragBuf
 {
   protected:
     //
@@ -71,12 +71,12 @@ class INET_API IPFragBuf
     /**
      * Ctor.
      */
-    IPFragBuf();
+    IPv4FragBuf();
 
     /**
      * Dtor.
      */
-    ~IPFragBuf();
+    ~IPv4FragBuf();
 
     /**
      * Initialize fragmentation buffer. ICMP module is needed for sending
