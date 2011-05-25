@@ -14,7 +14,7 @@
 
 #include "RSVP.h"
 #include "IPv4ControlInfo.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "common.h"
 #include "Utils.h"
 #include "XMLUtils.h"
@@ -166,12 +166,12 @@ EroVector RSVP::readTrafficRouteFromXML(const cXMLElement *route)
         if (!strcmp(hop->getTagName(), "node"))
         {
             h.L = false;
-            h.node = IPAddressResolver().resolve(hop->getNodeValue()).get4();
+            h.node = IPvXAddressResolver().resolve(hop->getNodeValue()).get4();
         }
         else if (!strcmp(hop->getTagName(), "lnode"))
         {
             h.L = true;
-            h.node = IPAddressResolver().resolve(hop->getNodeValue()).get4();
+            h.node = IPvXAddressResolver().resolve(hop->getNodeValue()).get4();
         }
         else
         {

@@ -32,11 +32,11 @@ DYMO_RoutingTable::DYMO_RoutingTable(cObject* host, const IPv4Address& myAddr)
     dymoProcess = host;
 
     // get our routing table
-    // routingTable = IPAddressResolver().routingTableOf(host);
+    // routingTable = IPvXAddressResolver().routingTableOf(host);
     // if (!routingTable) throw std::runtime_error("No routing table found");
 
     // get our interface table
-    // IInterfaceTable *ift = IPAddressResolver().interfaceTableOf(host);
+    // IInterfaceTable *ift = IPvXAddressResolver().interfaceTableOf(host);
     // look at all interface table entries
 }
 

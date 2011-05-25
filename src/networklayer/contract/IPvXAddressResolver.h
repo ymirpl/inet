@@ -46,7 +46,7 @@ class NotificationBoard;
  *      "server/eth0(ipv4)", "subnet.server[3]/eth0(ipv6)"
  *    - routerId: "router1/routerId", "R1/routerId"
  */
-class INET_API IPAddressResolver
+class INET_API IPvXAddressResolver
 {
   protected:
     // internal
@@ -67,8 +67,8 @@ class INET_API IPAddressResolver
     };
 
   public:
-    IPAddressResolver() {}
-    virtual ~IPAddressResolver() {}
+    IPvXAddressResolver() {}
+    virtual ~IPvXAddressResolver() {}
 
     /**
      * Accepts dotted decimal notation ("127.0.0.1"), module name of the host

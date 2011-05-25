@@ -18,7 +18,7 @@
 #include <algorithm>
 #include "IRoutingTable.h"
 #include "IInterfaceTable.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "NetworkConfigurator.h"
 #include "IPv4InterfaceData.h"
 
@@ -70,8 +70,8 @@ void NetworkConfigurator::extractTopology(cTopology& topo, NodeInfoVector& nodeI
     for (int i=0; i<topo.getNumNodes(); i++)
     {
         cModule *mod = topo.getNode(i)->getModule();
-        nodeInfo[i].ift = IPAddressResolver().findInterfaceTableOf(mod);
-        nodeInfo[i].rt = IPAddressResolver().findRoutingTableOf(mod);
+        nodeInfo[i].ift = IPvXAddressResolver().findInterfaceTableOf(mod);
+        nodeInfo[i].rt = IPvXAddressResolver().findRoutingTableOf(mod);
         nodeInfo[i].isIPNode = nodeInfo[i].rt!=NULL;
     }
 }

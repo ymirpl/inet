@@ -20,7 +20,7 @@
 
 #include "NetworkInfo.h"
 #include "IRoutingTable.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "InterfaceEntry.h"
 
 

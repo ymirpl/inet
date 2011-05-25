@@ -20,7 +20,7 @@
 
 #include "PingApp.h"
 
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "PingPayload_m.h"
 
 #ifdef WITH_IPv4
@@ -88,9 +88,9 @@ void PingApp::handleMessage(cMessage *msg)
         // on first call we need to initialize
         if (destAddr.isUnspecified())
         {
-            destAddr = IPAddressResolver().resolve(par("destAddr"));
+            destAddr = IPvXAddressResolver().resolve(par("destAddr"));
             ASSERT(!destAddr.isUnspecified());
-            srcAddr = IPAddressResolver().resolve(par("srcAddr"));
+            srcAddr = IPvXAddressResolver().resolve(par("srcAddr"));
             EV << "Starting up: dest=" << destAddr << "  src=" << srcAddr << "\n";
         }
 

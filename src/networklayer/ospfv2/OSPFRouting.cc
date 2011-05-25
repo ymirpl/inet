@@ -17,7 +17,7 @@
 
 #include "OSPFRouting.h"
 #include "IPv4Address.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "IPv4ControlInfo.h"
 #include "OSPFcommon.h"
 #include "OSPFArea.h"

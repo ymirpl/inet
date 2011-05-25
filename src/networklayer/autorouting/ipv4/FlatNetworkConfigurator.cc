@@ -18,7 +18,7 @@
 #include <algorithm>
 #include "IRoutingTable.h"
 #include "IInterfaceTable.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 #include "FlatNetworkConfigurator.h"
 #include "InterfaceEntry.h"
 #include "IPv4InterfaceData.h"
@@ -64,11 +64,11 @@ void FlatNetworkConfigurator::extractTopology(cTopology& topo, NodeInfoVector& n
     for (int i=0; i<topo.getNumNodes(); i++)
     {
         cModule *mod = topo.getNode(i)->getModule();
-        nodeInfo[i].isIPNode = IPAddressResolver().findInterfaceTableOf(mod)!=NULL;
+        nodeInfo[i].isIPNode = IPvXAddressResolver().findInterfaceTableOf(mod)!=NULL;
         if (nodeInfo[i].isIPNode)
         {
-            nodeInfo[i].ift = IPAddressResolver().interfaceTableOf(mod);
-            nodeInfo[i].rt = IPAddressResolver().routingTableOf(mod);
+            nodeInfo[i].ift = IPvXAddressResolver().interfaceTableOf(mod);
+            nodeInfo[i].rt = IPvXAddressResolver().routingTableOf(mod);
         }
     }
 }

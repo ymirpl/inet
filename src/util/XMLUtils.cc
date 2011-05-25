@@ -1,6 +1,6 @@
 
 #include "XMLUtils.h"
-#include "IPAddressResolver.h"
+#include "IPvXAddressResolver.h"
 
 const cXMLElement* getUniqueChild(const cXMLElement *node, const char *name)
 {
@@ -126,7 +126,7 @@ IPv4Address getParameterIPAddressValue(const cXMLElement *ptr, const char *name,
 IPv4Address getParameterIPAddressValue(const cXMLElement *ptr, const char *name)
 {
     const cXMLElement *xvalue = getUniqueChild(ptr, name);
-    return IPAddressResolver().resolve(xvalue->getNodeValue()).get4();
+    return IPvXAddressResolver().resolve(xvalue->getNodeValue()).get4();
 }
 
 double getParameterDoubleValue(const cXMLElement *ptr, const char *name, double def)

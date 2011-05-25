@@ -46,8 +46,8 @@ void TCPSpoof::sendSpoofPacket()
 {
     TCPSegment *tcpseg = new TCPSegment("spoof");
 
-    IPvXAddress srcAddr = IPAddressResolver().resolve(par("srcAddress"));
-    IPvXAddress destAddr = IPAddressResolver().resolve(par("destAddress"));
+    IPvXAddress srcAddr = IPvXAddressResolver().resolve(par("srcAddress"));
+    IPvXAddress destAddr = IPvXAddressResolver().resolve(par("destAddress"));
     int srcPort = par("srcPort");
     int destPort = par("destPort");
     bool isSYN = par("isSYN");
