@@ -24,7 +24,7 @@
 // Rewrite: Andras Varga, 2004
 
 
-#include "IPFragBuf.h"
+#include "IPv4FragBuf.h"
 #include "ProtocolMap.h"
 #include "IPv4Datagram.h"
 
@@ -39,7 +39,7 @@ class INET_API IPLocalDeliver : public cSimpleModule
 {
   private:
     // fragmentation reassembly
-    IPFragBuf fragbuf;
+    IPv4FragBuf fragbuf;
     simtime_t fragmentTimeoutTime;
     simtime_t lastCheckTime;
 
