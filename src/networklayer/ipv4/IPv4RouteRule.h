@@ -21,8 +21,9 @@
 
 #include <vector>
 #include <map>
-#include <omnetpp.h>
+
 #include "INETDefs.h"
+
 #include "IPProtocolId_m.h"
 #include "IPv4Address.h"
 
@@ -44,7 +45,7 @@ private:
     NatElement& operator=(const NatElement& obj);
 };
 
-class INET_API IPRouteRule : public cPolymorphic
+class INET_API IPv4RouteRule : public cPolymorphic
 {
   public:
     /** Specifies where the route comes from */
@@ -55,23 +56,20 @@ class INET_API IPRouteRule : public cPolymorphic
         NAT,
         NONE
     };
+
   protected:
     class Nat
     {
-    private:
+      private:
         std::map<int,NatElement*> natAddress;
-    public:
+
+      public:
         void addNatAddres(){}
         void delNatAddress(){}
         const NatElement* getNat() const;
-        ~Nat() {
-             while (!natAddress.empty())
-             {
-                delete natAddress.begin()->second;
-                natAddress.erase(natAddress.begin());
-             }
-        };
+        ~Nat();
     };
+
     IPv4Address srcAddress;     ///< Destination
     IPv4Address srcNetmask;  ///< Route mask
     IPv4Address destAddress;     ///< Destination
@@ -86,12 +84,12 @@ class INET_API IPRouteRule : public cPolymorphic
 
   private:
     // copying not supported: following are private and also left undefined
-    IPRouteRule(const IPRouteRule& obj);
-    IPRouteRule& operator=(const IPRouteRule& obj);
+    IPv4RouteRule(const IPv4RouteRule& obj);
+    IPv4RouteRule& operator=(const IPv4RouteRule& obj);
 
   public:
-    IPRouteRule();
-    ~IPRouteRule();
+    IPv4RouteRule();
+    ~IPv4RouteRule();
     virtual std::string info() const;
     virtual std::string detailedInfo() const;
 
@@ -124,7 +122,6 @@ class INET_API IPRouteRule : public cPolymorphic
 
     /** Route type: Direct or Remote */
     Rule getRule() const {return rule;}
-
 };
 
 #endif

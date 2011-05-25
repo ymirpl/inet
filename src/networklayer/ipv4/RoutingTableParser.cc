@@ -412,7 +412,7 @@ void RoutingTableParser::parseRules(char *rulesFile)
              opp_error("Syntax error in routing file: `%s' on 1st column should be `DROP' now is the only rule accepted", str);
         }
         int position=-1;
-        IPRouteRule *e = new IPRouteRule();
+        IPv4RouteRule *e = new IPv4RouteRule();
         while (rulesFile[pos] != '\0')
         {
               pos += strcpyword(str, rulesFile + pos);
@@ -502,7 +502,7 @@ void RoutingTableParser::parseRules(char *rulesFile)
                    if (strcmp(str, "DROP"))
                        opp_error("Only DROP supported");
                    else
-                       e->setRoule(IPRouteRule::DROP);
+                       e->setRoule(IPv4RouteRule::DROP);
                    continue;
               }
               if (!strcmp(str, "-sport"))
@@ -540,11 +540,11 @@ void RoutingTableParser::parseRules(char *rulesFile)
                       rt->addRule(false,e);
                   else
                      opp_error("table rule not valid, must indicate input or output");
-                  if (e->getRule()!=IPRouteRule::DROP)
+                  if (e->getRule()!=IPv4RouteRule::DROP)
                      opp_error("table rule not valid, must indicate input or output");
 
                   position = -1;
-                  e = new IPRouteRule();
+                  e = new IPv4RouteRule();
                   continue;
               }
          }
@@ -554,7 +554,7 @@ void RoutingTableParser::parseRules(char *rulesFile)
              rt->addRule(false,e);
          else
             opp_error("table rule not valid, must indicate input or output");
-         if (e->getRule()!=IPRouteRule::DROP)
+         if (e->getRule()!=IPv4RouteRule::DROP)
             opp_error("table rule not valid, must indicate input or output");
     }
 }

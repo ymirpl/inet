@@ -630,7 +630,7 @@ void RoutingTable::updateNetmaskRoutes()
 
 
 
-void RoutingTable::addRule(bool output,IPRouteRule *entry)
+void RoutingTable::addRule(bool output,IPv4RouteRule *entry)
 {
 // first, find the rule if exist
     delRule(entry);
@@ -644,7 +644,7 @@ void RoutingTable::addRule(bool output,IPRouteRule *entry)
     }
 }
 
-void RoutingTable::delRule(IPRouteRule *entry)
+void RoutingTable::delRule(IPv4RouteRule *entry)
 {
     for (unsigned int i;i<outputRules.size();i++)
     {
@@ -660,7 +660,7 @@ void RoutingTable::delRule(IPRouteRule *entry)
     }
 }
 
-const IPRouteRule * RoutingTable::getRule(bool output,int index) const
+const IPv4RouteRule * RoutingTable::getRule(bool output,int index) const
 {
     if (output)
     {
@@ -686,10 +686,10 @@ int RoutingTable::getNumRules(bool output)
         return inputRules.size();
 }
 
-const IPRouteRule * RoutingTable::findRule(bool output,int prot,int sPort,const IPv4Address &srcAddr,int dPort,const IPv4Address &destAddr,const InterfaceEntry *iface) const
+const IPv4RouteRule * RoutingTable::findRule(bool output,int prot,int sPort,const IPv4Address &srcAddr,int dPort,const IPv4Address &destAddr,const InterfaceEntry *iface) const
 {
-	std::vector<IPRouteRule *>::const_iterator it;
-	std::vector<IPRouteRule *>::const_iterator endIt;
+	std::vector<IPv4RouteRule *>::const_iterator it;
+	std::vector<IPv4RouteRule *>::const_iterator endIt;
     if (output)
     {
     	it = outputRules.begin();
@@ -703,7 +703,7 @@ const IPRouteRule * RoutingTable::findRule(bool output,int prot,int sPort,const 
 
     while (it!=endIt)
     {
-       IPRouteRule *e = (*it);
+       IPv4RouteRule *e = (*it);
        if (!srcAddr.isUnspecified() && !e->getSrcAddress().isUnspecified())
        {
            if (!IPv4Address::maskedAddrAreEqual(srcAddr,e->getSrcAddress(),e->getSrcNetmask()))

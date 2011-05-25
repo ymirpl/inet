@@ -91,7 +91,7 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     typedef std::map<IPv4Address, const IPRoute *> RoutingCache;
     mutable RoutingCache routingCache;
 
-    typedef std::vector<IPRouteRule *> RoutingRule;
+    typedef std::vector<IPv4RouteRule *> RoutingRule;
     RoutingRule outputRules;
     RoutingRule inputRules;
 
@@ -279,11 +279,11 @@ class INET_API RoutingTable: public cSimpleModule, public IRoutingTable, protect
     virtual const bool testValidity(const IPRoute *entry) const;
 
     // IP tables rules
-    virtual void addRule(bool output, IPRouteRule *entry);
-    virtual void delRule(IPRouteRule *entry);
-    virtual const IPRouteRule * getRule(bool output,int index) const;
+    virtual void addRule(bool output, IPv4RouteRule *entry);
+    virtual void delRule(IPv4RouteRule *entry);
+    virtual const IPv4RouteRule * getRule(bool output,int index) const;
     virtual int getNumRules(bool output);
-    virtual const IPRouteRule * findRule(bool output,int prot,int sPort,const IPv4Address &srcAddr,int dPort,const IPv4Address &destAddr,const InterfaceEntry *) const;
+    virtual const IPv4RouteRule * findRule(bool output,int prot,int sPort,const IPv4Address &srcAddr,int dPort,const IPv4Address &destAddr,const InterfaceEntry *) const;
 
 };
 

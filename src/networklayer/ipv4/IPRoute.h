@@ -19,8 +19,9 @@
 #define __INET_IPROUTE_H
 
 #include <vector>
-#include <omnetpp.h>
+
 #include "INETDefs.h"
+
 #include "IPv4Address.h"
 
 class InterfaceEntry;
@@ -115,7 +116,6 @@ class INET_API IPRoute : public cPolymorphic
     void setInstallTime(simtime_t time) {installtime = time;}
     void setSequencenumber(int i){sequencenumber =i;}
     unsigned int getSequencenumber() const {return sequencenumber;}
-
 };
 
 #endif

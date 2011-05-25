@@ -159,9 +159,9 @@ class INET_API IP : public QueueBase
 #endif
     virtual void dsrFillDestIE(IPv4Datagram *, InterfaceEntry *&destIE,IPv4Address &nextHopAddress);
 
-    const IPRouteRule * checkInputRule(const IPv4Datagram*);
-    const IPRouteRule * checkOutputRule(const IPv4Datagram*,const InterfaceEntry*);
-    const IPRouteRule * checkOutputRuleMulticast(const IPv4Datagram*);
+    const IPv4RouteRule * checkInputRule(const IPv4Datagram*);
+    const IPv4RouteRule * checkOutputRule(const IPv4Datagram*,const InterfaceEntry*);
+    const IPv4RouteRule * checkOutputRuleMulticast(const IPv4Datagram*);
 
   public:
     IP() {}
