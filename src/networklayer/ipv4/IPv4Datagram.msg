@@ -79,7 +79,7 @@ enum TimestampFlag
 //
 // Option structure: Record Route
 //
-class IPRecordRouteOption
+class IPv4RecordRouteOption
 {
     IPv4Address recordAddress[MAX_IPADDR_OPTION_ENTRIES];
     short nextAddressPtr;
@@ -141,7 +141,7 @@ packet IPv4Datagram
 
     int optionCode enum(IPOption) = IPOPTION_NO_OPTION;  //#FIXME modify header length when options are present
                                                          //#FIXME also: the RFC says that more than one IP-Option is allowed
-    IPRecordRouteOption recordRoute;
+    IPv4RecordRouteOption recordRoute;
     IPv4TimestampOption timestampOption;
     IPSourceRoutingOption sourceRoutingOption; // optionCode determines if strict or loose source routing
     
