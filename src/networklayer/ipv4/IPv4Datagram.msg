@@ -103,7 +103,7 @@ class IPv4TimestampOption
 //
 // Option Structure: Source Routing
 //
-class IPSourceRoutingOption
+class IPv4SourceRoutingOption
 {
     IPv4Address recordAddress[MAX_IPADDR_OPTION_ENTRIES];
     short nextAddressPtr;
@@ -143,7 +143,7 @@ packet IPv4Datagram
                                                          //#FIXME also: the RFC says that more than one IP-Option is allowed
     IPv4RecordRouteOption recordRoute;
     IPv4TimestampOption timestampOption;
-    IPSourceRoutingOption sourceRoutingOption; // optionCode determines if strict or loose source routing
+    IPv4SourceRoutingOption sourceRoutingOption; // optionCode determines if strict or loose source routing
     
     // Virtual value, used by the new fragment mechanism
     unsigned int totalPayloadLength;

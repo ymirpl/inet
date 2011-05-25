@@ -254,7 +254,7 @@ void IP::routePacket(IPv4Datagram *datagram, InterfaceEntry *destIE, bool fromHL
 
     if (datagram->getOptionCode()==IPOPTION_STRICT_SOURCE_ROUTING || datagram->getOptionCode()==IPOPTION_LOOSE_SOURCE_ROUTING)
     {
-        IPSourceRoutingOption rtOpt = datagram->getSourceRoutingOption();
+        IPv4SourceRoutingOption rtOpt = datagram->getSourceRoutingOption();
         if (rtOpt.getNextAddressPtr()<rtOpt.getLastAddressPtr())
         {
             IPv4Address nextRouteAddress = rtOpt.getRecordAddress(rtOpt.getNextAddressPtr()/4);
