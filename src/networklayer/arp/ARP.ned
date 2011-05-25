@@ -21,7 +21,7 @@ package inet.networklayer.arp;
 // Implements the Address Resolution Protocol for IPv4 and IEEE 802 6-byte
 // MAC addresses.
 //
-// Expects ~IPRoutingDecision control info objects to be attached to packets
+// Expects ~IPv4RoutingDecision control info objects to be attached to packets
 // coming from higher layers. ARP packets are represented by the ~ARPPacket
 // class. Datagrams to be sent and incoming ARP packets are expected to
 // on gate ipIn.

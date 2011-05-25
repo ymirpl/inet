@@ -58,7 +58,7 @@ package inet.networklayer.ipv4;
 // No message exchange with ~RoutingTable takes place.
 //
 // A routed datagram will be sent to the queueOut gate, with an
-// ~IPRoutingDecision control info object attached which contains
+// ~IPv4RoutingDecision control info object attached which contains
 // next hop address and interface number. queueOut is expected to be
 // connected to ~ARP.
 //
@@ -77,7 +77,7 @@ package inet.networklayer.ipv4;
 // method which determines processing time for a packet, or (2) use a
 // different base class.
 //
-// @see ~RoutingTable, ~IPv4ControlInfo, ~IPRoutingDecision, ~ARP
+// @see ~RoutingTable, ~IPv4ControlInfo, ~IPv4RoutingDecision, ~ARP
 //
 // @author Andras Varga
 //

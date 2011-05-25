@@ -170,7 +170,7 @@ void IP::handleARP(ARPPacket *msg)
     InterfaceEntry *fromIE = getSourceInterfaceFrom(msg);
     ASSERT(fromIE);
 
-    IPRoutingDecision *routingDecision = new IPRoutingDecision();
+    IPv4RoutingDecision *routingDecision = new IPv4RoutingDecision();
     routingDecision->setInterfaceId(fromIE->getInterfaceId());
     msg->setControlInfo(routingDecision);
 
@@ -744,7 +744,7 @@ void IP::sendDatagramToOutput(IPv4Datagram *datagram, InterfaceEntry *ie, IPv4Ad
     }
 
     // send out datagram to ARP, with control info attached
-    IPRoutingDecision *routingDecision = new IPRoutingDecision();
+    IPv4RoutingDecision *routingDecision = new IPv4RoutingDecision();
     routingDecision->setInterfaceId(ie->getInterfaceId());
     routingDecision->setNextHopAddr(nextHopAddr);
     datagram->setControlInfo(routingDecision);

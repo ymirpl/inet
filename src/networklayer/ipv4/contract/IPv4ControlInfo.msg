@@ -87,7 +87,7 @@ class IPv4ControlInfo
 // address (and it may be used on other multicast networks for similar
 // addressing purpose).
 //
-class IPRoutingDecision
+class IPv4RoutingDecision
 {
     int interfaceId = -1; // interface on which dgram should be sent (see ~InterfaceTable)
     IPv4Address nextHopAddr;

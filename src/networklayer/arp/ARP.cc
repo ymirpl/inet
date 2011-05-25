@@ -168,7 +168,7 @@ void ARP::processOutboundPacket(cMessage *msg)
     EV << "Packet " << msg << " arrived from higher layer, ";
 
     // get next hop address from control info in packet
-    IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision*>(msg->removeControlInfo());
+    IPv4RoutingDecision *controlInfo = check_and_cast<IPv4RoutingDecision*>(msg->removeControlInfo());
     IPv4Address nextHopAddr = controlInfo->getNextHopAddr();
     InterfaceEntry *ie = ift->getInterfaceById(controlInfo->getInterfaceId());
     delete controlInfo;
@@ -391,7 +391,7 @@ void ARP::processARPPacket(ARPPacket *arp)
     dumpARPPacket(arp);
 
     // extract input port
-    IPRoutingDecision *controlInfo = check_and_cast<IPRoutingDecision*>(arp->removeControlInfo());
+    IPv4RoutingDecision *controlInfo = check_and_cast<IPv4RoutingDecision*>(arp->removeControlInfo());
     InterfaceEntry *ie = ift->getInterfaceById(controlInfo->getInterfaceId());
     delete controlInfo;
 
