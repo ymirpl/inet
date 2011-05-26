@@ -9,17 +9,19 @@ Define_Module(Ieee802154TestApp);
 void Ieee802154TestApp::initialize(int aStage)
 {
     TrafGenPar::initialize(aStage);
-    EV << getParentModule()->getFullName() << ": initializing Ieee802154TestApp, stage=" << aStage << endl;
+    EV << getParentModule()->getFullName() << ": initializing Ieee802154TestApp, stage=" << aStage
+       << endl;
+
     if (0 == aStage)
     {
-        m_debug             = par("debug");
-        mLowergateIn        = findGate("lowergateIn");
-        mLowergateOut       = findGate("lowergateOut");
-        m_moduleName        = getParentModule()->getFullName();
-        sumE2EDelay         = 0;
-        numReceived         = 0;
-        mNumTrafficMsgs     = 0;
-        totalByteRecv           = 0;
+        m_debug = par("debug");
+        mLowergateIn = findGate("lowergateIn");
+        mLowergateOut = findGate("lowergateOut");
+        m_moduleName = getParentModule()->getFullName();
+        sumE2EDelay = 0;
+        numReceived = 0;
+        mNumTrafficMsgs = 0;
+        totalByteRecv = 0;
         e2eDelayVec.setName("End-to-end delay");
         meanE2EDelayVec.setName("Mean end-to-end delay");
     }
@@ -35,15 +37,15 @@ void Ieee802154TestApp::finish()
 
 void Ieee802154TestApp::handleLowerMsg(cMessage* apMsg)
 {
-    simtime_t e2eDelay;
     Ieee802154AppPkt* tmpPkt = check_and_cast<Ieee802154AppPkt *>(apMsg);
-    e2eDelay = simTime() - tmpPkt->getCreationTime();
+    simtime_t e2eDelay = simTime() - tmpPkt->getCreationTime();
     totalByteRecv += tmpPkt->getByteLength();
     e2eDelayVec.record(SIMTIME_DBL(e2eDelay));
     numReceived++;
     sumE2EDelay += e2eDelay;
     meanE2EDelayVec.record(sumE2EDelay/numReceived);
-    EV << "[APP]: a message sent by " << tmpPkt->getSourceName() << " arrived at application with delay " << e2eDelay << " s" << endl;
+    EV << "[APP]: a message sent by " << tmpPkt->getSourceName()
+       << " arrived at application with delay " << e2eDelay << " s" << endl;
     delete apMsg;
 }
 
@@ -82,5 +84,5 @@ void Ieee802154TestApp::SendTraf(cPacket* apMsg, const char* apDest)
 
     mNumTrafficMsgs++;
     send(appPkt, mLowergateOut);
-
 }
+

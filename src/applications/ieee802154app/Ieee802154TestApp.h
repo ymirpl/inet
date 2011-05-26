@@ -7,12 +7,11 @@
 
 #include "TrafGenPar.h"
 #include "Ieee802154AppPkt_m.h"
-//#include "Ieee802154UpperCtrlInfo_m.h"
 
-class Ieee802154TestApp : public TrafGenPar
+
+class INET_API Ieee802154TestApp : public TrafGenPar
 {
   public:
-
     // LIFECYCLE
     // this takes care of constructors and destructors
 
@@ -20,7 +19,6 @@ class Ieee802154TestApp : public TrafGenPar
     virtual void finish();
 
   protected:
-
     // OPERATIONS
     virtual void handleSelfMsg(cMessage*);
     virtual void handleLowerMsg(cMessage*);
@@ -44,8 +42,7 @@ class Ieee802154TestApp : public TrafGenPar
     double  totalByteRecv;
     cOutVector e2eDelayVec;
     cOutVector meanE2EDelayVec;
-
-
 };
 
 #endif
+

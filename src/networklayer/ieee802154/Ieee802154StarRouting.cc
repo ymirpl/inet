@@ -7,6 +7,9 @@
 
 #include "Ieee802154StarRouting.h"
 
+#include "Ieee802154AppPkt_m.h"
+#include "Ieee802154NetworkCtrlInfo_m.h"
+
 //#undef EV
 //#define EV (ev.isDisabled()||!m_debug) ? std::cout : ev ==> EV is now part of <omnetpp.h>
 
@@ -21,6 +24,7 @@ Define_Module( Ieee802154StarRouting );
 void Ieee802154StarRouting::initialize(int aStage)
 {
     cSimpleModule::initialize(aStage); //DO NOT DELETE!!
+
     if (0 == aStage)
     {
         // WirelessMacBase stuff...
@@ -29,12 +33,12 @@ void Ieee802154StarRouting::initialize(int aStage)
         mLowergateIn  = findGate("lowergateIn");
         mLowergateOut = findGate("lowergateOut");
 
-        m_moduleName    = getParentModule()->getFullName();
+        m_moduleName = getParentModule()->getFullName();
 
-        m_debug         = par("debug");
-        isPANCoor       = par("isPANCoor");
+        m_debug = par("debug");
+        isPANCoor = par("isPANCoor");
 
-        numForward      = 0;
+        numForward = 0;
     }
 }
 
@@ -82,7 +86,8 @@ void Ieee802154StarRouting::handleMessage(cMessage* msg)
             control_info->setToParent(false);
             control_info->setDestName(appPkt->getDestName());
             appPkt->setControlInfo(control_info);
-            EV << "[NETWORK]: received a pkt from " << appPkt->getSourceName() << " and forward it to " << appPkt->getDestName() << endl;
+            EV << "[NETWORK]: received a pkt from " << appPkt->getSourceName()
+               << " and forward it to " << appPkt->getDestName() << endl;
             numForward++;
             send(appPkt, mLowergateOut);
         }
@@ -98,7 +103,4 @@ void Ieee802154StarRouting::handleMessage(cMessage* msg)
         // not defined
     }
 }
-
-
-
 

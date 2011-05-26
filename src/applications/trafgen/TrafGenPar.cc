@@ -20,6 +20,7 @@
 //
 
 #include "TrafGenPar.h"
+
 #include <string>
 
 //Define_Module(TrafGen);
@@ -30,6 +31,18 @@
 /**
  * Initialization routine
  */
+
+TrafGenPar::TrafGenPar()
+{
+    mpSendMessage = NULL;
+    mpOnOffSwitch = NULL;
+}
+
+TrafGenPar::~TrafGenPar()
+{
+    cancelAndDelete(mpSendMessage);
+    cancelAndDelete(mpOnOffSwitch);
+}
 
 void TrafGenPar::initialize(int aStage)
 {
@@ -110,10 +123,10 @@ void TrafGenPar::initialize(int aStage)
  */
 void TrafGenPar::finish()
 {
-    cancelEvent(mpSendMessage);
-    delete mpSendMessage;
-    cancelEvent(mpOnOffSwitch);
-    delete mpOnOffSwitch;
+    cancelAndDelete(mpSendMessage);
+    mpSendMessage = NULL;
+    cancelAndDelete(mpOnOffSwitch);
+    mpOnOffSwitch = NULL;
 }
 
 //============================= OPERATIONS ===================================
@@ -207,6 +220,7 @@ void TrafGenPar::handleSelfMsg(cMessage * apMsg)
             mOnOff = TRAFFIC_OFF;
             scheduleAt(simTime() + OffIntv(), mpOnOffSwitch);
             cancelEvent(mpSendMessage);
+
             if (mOffTraffic)
             {
                 scheduleAt(simTime() + OffInterDepartureTime(), mpSendMessage);
@@ -288,3 +302,4 @@ std::string TrafGenPar::calculateDestination()
         return dest;
     }
 }
+

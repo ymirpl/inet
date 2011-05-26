@@ -21,7 +21,7 @@
 //***************************************************************************
 //* part of:    Modifications to the MF-2 framework by CSEM
 //**************************************************************************/
-package inet.underTest.wpan.linklayer.ieee802154.mac;
+package inet.linklayer.ieee802154.mac;
 
 //
 // IEEE 802.15.4-2006 non-beacon enabled CSMA protocol
@@ -33,8 +33,8 @@ simple CSMA802154
         bool debug = default(false);
         bool stats = default(true);
         bool trace = default(false);
-        
-        string address=default ("auto");
+
+        string address = default("auto");
         string queueModule;				// name of optional external queue module
         bool useMACAcks = default(true);
         int queueLength = default(100);
@@ -45,7 +45,7 @@ simple CSMA802154
 
         double macMaxCSMABackoffs = default(5);
         // maximum number of frame retransmission
-        double macMaxFrameRetries = default(3);        
+        double macMaxFrameRetries = default(3);
         // time to wait for an acknowledgement after transmitting a unicast frame.
         double macAckWaitDuration @unit(s) = default(0.00056 s);  // 1+12+10+12 symbols
         // Clear Channel Assessment detection time		
@@ -57,7 +57,7 @@ simple CSMA802154
         double aUnitBackoffPeriod @unit(s) = default(0.00032 s);
         // complete MAC ack message length (in bits) 
         // (! headerLength is not added to this)
-        double ackLength @unit(bit) = default(40 bit);        
+        double ackLength @unit(bit) = default(40 bit);
 
         //backoff method to use. constant, linear or exponential
         string backoffMethod = default("exponential");
@@ -69,10 +69,10 @@ simple CSMA802154
         double macMinBE = default(3);
         // maximum backoff exponent (for exponential backoff method only)
         double macMaxBE = default(8);
-     gates:
+    gates:
         input uppergateIn; 			// from the upper layer
         output uppergateOut; 		// to the upper layer
         input lowergateIn; 			// from the physical layer
         output lowergateOut; 			// to the physical layer
-        
+
 }
