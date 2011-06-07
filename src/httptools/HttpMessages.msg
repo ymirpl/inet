@@ -6,7 +6,7 @@
 // This file is a part of the HttpTools project. The project was created at
 // Reykjavik University, the Laboratory for Dependable Secure Systems (LDSS).
 // Its purpose is to create a set of OMNeT++ components to simulate browsing
-// behaviour in a high-fidelity manner along with a highly configurable 
+// behaviour in a high-fidelity manner along with a highly configurable
 // Web server component.
 //
 // Maintainer: Kristjan V. Jonsson (LDSS) kristjanvj@gmail.com
@@ -37,7 +37,7 @@
 //
 // NEW: The module has been migrated to OMNeT++ 4.0 and the latest INET version.
 //
-// @version 1.0 
+// @version 1.0
 // @author  Kristjan V. Jonsson
 //
 // ----------------------------------------------------------------------------
@@ -53,13 +53,13 @@
 packet HttpBaseMessage
 {
     @omitGetVerb(true);
-    string targetUrl; 				// The target URL - request set for browsers, echoed by servers.
-    string originatorUrl = "";		// The originator URL. Only applicable for servers.
-    int protocol = 11; 				// 10 for http/1.0, 11 for http/1.1.
-    bool keepAlive = true;			// The keep-alive header
-    int serial = 0;					// Convenience field which allows resource requests to be serially tagged for ease of analysis.
-    string heading = "";				// The message heading - request string for requests, response for replies
-    string payload = "";				// The payload field
+    string targetUrl;               // The target URL - request set for browsers, echoed by servers.
+    string originatorUrl = "";      // The originator URL. Only applicable for servers.
+    int protocol = 11;              // 10 for http/1.0, 11 for http/1.1.
+    bool keepAlive = true;          // The keep-alive header
+    int serial = 0;                 // Convenience field which allows resource requests to be serially tagged for ease of analysis.
+    string heading = "";                // The message heading - request string for requests, response for replies
+    string payload = "";                // The payload field
 }
 
 //
@@ -72,8 +72,8 @@ packet HttpBaseMessage
 //
 packet HttpRequestMessage extends HttpBaseMessage
 {
-    @omitGetVerb(true);			// Dont append get to generated getter methods.
-    bool badRequest = false;	// Set to true to simulate a bad request. Server answers w. 404.
+    @omitGetVerb(true);         // Dont append get to generated getter methods.
+    bool badRequest = false;    // Set to true to simulate a bad request. Server answers w. 404.
 }
 
 //
@@ -87,8 +87,8 @@ packet HttpRequestMessage extends HttpBaseMessage
 packet HttpReplyMessage extends HttpBaseMessage
 {
     @omitGetVerb(true);
-    int result = 0; 				// e.g. 200 for OK, 404 for NOT FOUND.
-    int contentType = 0;			// The content type: HTML pages, text or image resources.
+    int result = 0;                 // e.g. 200 for OK, 404 for NOT FOUND.
+    int contentType = 0;            // The content type: HTML pages, text or image resources.
 }
 
 

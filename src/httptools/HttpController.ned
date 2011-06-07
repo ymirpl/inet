@@ -6,7 +6,7 @@
 // This file is a part of the HttpTools project. The project was created at
 // Reykjavik University, the Laboratory for Dependable Secure Systems (LDSS).
 // Its purpose is to create a set of OMNeT++ components to simulate browsing
-// behaviour in a high-fidelity manner along with a highly configurable 
+// behaviour in a high-fidelity manner along with a highly configurable
 // Web server component.
 //
 // Maintainer: Kristjan V. Jonsson (LDSS) kristjanvj@gmail.com
@@ -40,7 +40,7 @@ package inet.httptools;
 //
 // NEW: The module has been migrated to OMNeT++ 4.0 and the latest INET version.
 //
-// @version 1.0 
+// @version 1.0
 // @author  Kristjan V. Jonsson
 //
 simple HttpController
@@ -49,6 +49,6 @@ simple HttpController
         int logLevel = default(0);            // The log level: 2: Debug, 1: Info; 0: Errors and warnings only.
         string events = default("");          // Popularity modification events defintion file.
         string eventsSection = default("");   // Section within the popularity modification file, if one is defined.
-        xml config;                           // XML configuration file.        
+        xml config;                           // XML configuration file.
 }
 
