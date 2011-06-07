@@ -38,16 +38,16 @@ HttpBrowserBase::HttpBrowserBase()
     m_bDisplayResponseContent = true;
     eventTimer = NULL;
 
-    htmlRequested=0;
-    htmlReceived=0;
-    htmlErrorsReceived=0;
-    imgResourcesRequested=0;
-    imgResourcesReceived=0;
-    textResourcesRequested=0;
-    textResourcesReceived=0;
-    messagesInCurrentSession=0;
-    sessionCount=0;
-    connectionsCount=0;
+    htmlRequested = 0;
+    htmlReceived = 0;
+    htmlErrorsReceived = 0;
+    imgResourcesRequested = 0;
+    imgResourcesReceived = 0;
+    textResourcesRequested = 0;
+    textResourcesReceived = 0;
+    messagesInCurrentSession = 0;
+    sessionCount = 0;
+    connectionsCount = 0;
 }
 
 HttpBrowserBase::~HttpBrowserBase()
@@ -73,7 +73,7 @@ void HttpBrowserBase::initialize(int stage)
         element = rootelement->getFirstChildWithTag("activityPeriod");
         if ( element==NULL )
         {
-            rdActivityLength=NULL; // Disabled if this parameter is not defined in the file
+            rdActivityLength = NULL; // Disabled if this parameter is not defined in the file
         }
         else
         {
@@ -294,7 +294,7 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
     }
     else
     {
-        switch( (CONTENT_TYPE_ENUM)appmsg->contentType() )
+        switch ( (CONTENT_TYPE_ENUM)appmsg->contentType() )
         {
             case rt_html_page:
                 EV_INFO << "HTML Document received: " << appmsg->getName() << "'. Size is " << appmsg->getByteLength() << " bytes and serial " << serial << endl;
@@ -328,15 +328,15 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
             EV_DEBUG << "Processing HTML document body:\n";
             cStringTokenizer lineTokenizer( (const char*)appmsg->payload(), "\n" );
             std::vector<string> lines = lineTokenizer.asVector();
-            int serial=0;
+            int serial = 0;
             string providerName = "";
             string resourceName = "";
-            double delay=0.0;
-            bool bad=false;
-            int refSize=0;
+            double delay = 0.0;
+            bool bad = false;
+            int refSize = 0;
             MESSAGE_QUEUE_TYPE queue;
             std::map<string,MESSAGE_QUEUE_TYPE> requestQueues;
-            for( vector<string>::iterator iter = lines.begin(); iter != lines.end(); iter++)
+            for ( vector<string>::iterator iter = lines.begin(); iter != lines.end(); iter++)
             {
                 string resourceLine = *iter;
                 cStringTokenizer fieldTokenizer( resourceLine.c_str(), ";" );
@@ -353,11 +353,11 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
                 if ( fields.size()>1 )
                     providerName = fields[1];
 
-                delay=0.0;
+                delay = 0.0;
                 if ( fields.size()>2 )
                     delay = safeatof(fields[2].c_str());
 
-                bad=false;
+                bad = false;
                 if ( fields.size()>3 )
                     bad = safeatobool(fields[3].c_str());
 
@@ -369,7 +369,7 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
                          << ", delay: " << delay << ", bad: " << bad << ", ref.size: " << refSize <<endl;
 
                 // Generate a request message and push on queue for the intended recipient
-                cMessage *reqmsg = generateResourceRequest(providerName,resourceName,serial++,bad,refSize); // TODO: KVJ: CHECK HERE FOR XSITE
+                cMessage *reqmsg = generateResourceRequest(providerName, resourceName, serial++, bad, refSize); // TODO: KVJ: CHECK HERE FOR XSITE
                 if ( delay==0.0 )
                 {
                     requestQueues[providerName].push_front(reqmsg);
@@ -377,15 +377,15 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
                 else
                 {
                     reqmsg->setKind(HTTPT_DELAYED_REQUEST_MESSAGE);
-                    scheduleAt(simTime()+delay,reqmsg);             // Schedule the message as a self message
+                    scheduleAt(simTime()+delay, reqmsg);             // Schedule the message as a self message
                 }
             }
             // Iterate through the list of queues (one for each recipient encountered) and submit each queue.
             // A single socket will thus be opened for each recipient for a rough HTTP/1.1 emulation.
             // This is only done for messages which are not delayed in the simulated page.
-            std::map<string,MESSAGE_QUEUE_TYPE>::iterator i=requestQueues.begin();
-            for( ; i!=requestQueues.end(); i++ )
-                sendRequestsToServer((*i).first,(*i).second);
+            std::map<string,MESSAGE_QUEUE_TYPE>::iterator i = requestQueues.begin();
+            for (; i!=requestQueues.end(); i++ )
+                sendRequestsToServer((*i).first, (*i).second);
         }
     }
 
@@ -404,11 +404,11 @@ cMessage* HttpBrowserBase::generatePageRequest(string www, string pageName, bool
 
     long requestLength = (long)rdRequestSize->get();
 
-    if (pageName.size()==0) pageName="/";
-    else if (pageName[0]!='/') pageName.insert(0,"/");
+    if (pageName.size()==0) pageName = "/";
+    else if (pageName[0]!='/') pageName.insert(0, "/");
 
     char szReq[MAX_URL_LENGTH+24];
-    sprintf(szReq,"GET %s HTTP/1.1", pageName.c_str());
+    sprintf(szReq, "GET %s HTTP/1.1", pageName.c_str());
     HttpRequestMessage *msg = new HttpRequestMessage(szReq);
     msg->setTargetUrl(www.c_str());
     msg->setProtocol(httpProtocol);
@@ -428,7 +428,7 @@ cMessage* HttpBrowserBase::generatePageRequest(string www, string pageName, bool
 cMessage* HttpBrowserBase::generateRandomPageRequest(string www, bool bad, int size)
 {
     EV_DEBUG << "Generating random page request, URL: " << www << endl;
-    return generatePageRequest(www,"random_page.html",bad,size);
+    return generatePageRequest(www, "random_page.html", bad, size);
 }
 
 cMessage* HttpBrowserBase::generateResourceRequest(string www, string resource, int serial, bool bad, int size)
@@ -449,15 +449,15 @@ cMessage* HttpBrowserBase::generateResourceRequest(string www, string resource, 
         return NULL;
     }
     else if (resource[0]!='/')
-        resource.insert(0,"/");
+        resource.insert(0, "/");
 
-    string ext = trimLeft(resource,".");
+    string ext = trimLeft(resource, ".");
     CONTENT_TYPE_ENUM rc = getResourceCategory(ext);
     if ( rc==rt_image ) imgResourcesRequested++;
     else if ( rc==rt_text ) textResourcesRequested++;
 
     char szReq[MAX_URL_LENGTH+24];
-    sprintf(szReq,"GET %s HTTP/1.1",resource.c_str());
+    sprintf(szReq, "GET %s HTTP/1.1", resource.c_str());
 
     HttpRequestMessage *msg = new HttpRequestMessage(szReq);
     msg->setTargetUrl(www.c_str());
@@ -476,7 +476,7 @@ cMessage* HttpBrowserBase::generateResourceRequest(string www, string resource, 
 
 void HttpBrowserBase::scheduleNextBrowseEvent()
 {
-    if( eventTimer->isScheduled() )
+    if ( eventTimer->isScheduled() )
         cancelEvent(eventTimer);
     simtime_t nextEventTime;  // MIGRATE40: kvj
     if ( ++reqInCurSession >= reqNoInCurSession )
@@ -519,15 +519,15 @@ void HttpBrowserBase::readScriptedEvents( const char* filename )
 
     ifstream scriptfilestream;
     scriptfilestream.open(filename);
-    if(!scriptfilestream.is_open())
-        error("Could not open script file %s",filename);
+    if (!scriptfilestream.is_open())
+        error("Could not open script file %s", filename);
 
     string line;
     string timepart;
     string wwwpart;
     int pos;
     simtime_t t;
-    while(!std::getline(scriptfilestream, line).eof())
+    while (!std::getline(scriptfilestream, line).eof())
     {
         line = trim(line);
         if ( line.find("#") == 0 )
@@ -535,14 +535,14 @@ void HttpBrowserBase::readScriptedEvents( const char* filename )
 
         pos = line.find(";");
         if ( pos == -1 ) continue;
-        timepart = line.substr(0,pos);
-        wwwpart = line.substr(pos+1,line.size()-pos-1);
+        timepart = line.substr(0, pos);
+        wwwpart = line.substr(pos+1, line.size()-pos-1);
 
         try
         {
             t = (simtime_t)atof(timepart.c_str());
         }
-        catch(...)
+        catch (...)
         {
             continue;
         }

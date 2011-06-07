@@ -146,7 +146,7 @@ class INET_API HttpBrowserBase : public HttpNodeBase
         virtual void finish();
 
         /** Handle incoming messages */
-        virtual void handleMessage(cMessage *msg)=0;
+        virtual void handleMessage(cMessage *msg) = 0;
 
         /** @brief Returns the number of initialization stages. Two required. */
         int numInitStages() const {return 2;}
@@ -175,23 +175,23 @@ class INET_API HttpBrowserBase : public HttpNodeBase
         /** @name pure virtual methods to communicate with the server. Must be implemented in derived classes */
         //@{
         /** Send a request defined by a browse event (scripted entry) to a server */
-        virtual void sendRequestToServer( BROWSE_EVENT_ENTRY be )=0;
+        virtual void sendRequestToServer( BROWSE_EVENT_ENTRY be ) = 0;
         /** Send a request to server. Uses the recipient stamped in the request. */
-        virtual void sendRequestToServer( HttpRequestMessage *request )=0;
+        virtual void sendRequestToServer( HttpRequestMessage *request ) = 0;
         /** Send a request to a randomly selected server. The derived class utilizes the controller object to retrieve the object */
-        virtual void sendRequestToRandomServer()=0;
+        virtual void sendRequestToRandomServer() = 0;
         /** Send a request to a named server */
-        virtual void sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue )=0;
+        virtual void sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue ) = 0;
         //@}
 
         /** @name Methods for generating HTML page requests and resource requests */
         //@{
         /** Generate a HTTP request to a specific server and for a specific page */
-        cMessage* generatePageRequest(string www, string page, bool bad=false, int size=0);
+        cMessage* generatePageRequest(string www, string page, bool bad = false, int size = 0);
         /** Generate a random HTTP request -- used in case we dont care which page is requested */
-        cMessage* generateRandomPageRequest(string www, bool bad=false, int size=0);
+        cMessage* generateRandomPageRequest(string www, bool bad = false, int size = 0);
         /** Generate a resource request, e.g. for an image or css document */
-        cMessage* generateResourceRequest(string www, string resource="", int serial=0, bool bad=false, int size=0);
+        cMessage* generateResourceRequest(string www, string resource = "", int serial = 0, bool bad = false, int size = 0);
         //@}
 
         //* Read scripted events from file. Triggered if the script file parameter is specified in the initialization file. */

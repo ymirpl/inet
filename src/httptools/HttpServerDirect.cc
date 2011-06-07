@@ -69,7 +69,7 @@ void HttpServerDirect::handleMessage(cMessage *msg)
         cMessage* reply = handleReceivedMessage(msg);
         // Echo back to the requester
         if ( reply!=NULL )
-            sendDirectToModule(senderModule,reply,0.0,rdReplyDelay);
+            sendDirectToModule(senderModule, reply, 0.0, rdReplyDelay);
         delete msg;
     }
     HttpServerBase::handleMessage(msg);

@@ -37,7 +37,7 @@
 #include <omnetpp.h>
 #include "HttpUtils.h"
 
-enum DISTR_TYPE {dt_normal, dt_uniform, dt_exponential, dt_histogram, dt_constant,dt_zipf};
+enum DISTR_TYPE {dt_normal, dt_uniform, dt_exponential, dt_histogram, dt_constant, dt_zipf};
 
 // Defines for the distribution names
 #define DISTR_NORMAL_STR "normal"
@@ -59,13 +59,13 @@ class rdObject
     protected:
         DISTR_TYPE m_type;
     public:
-        virtual double get()=0; //> Pure virtual get a random number. Must be implemented in derived classes.
+        virtual double get() = 0; //> Pure virtual get a random number. Must be implemented in derived classes.
     public:
         DISTR_TYPE getType() {return m_type;}
         string typeStr();
         virtual string toString() {return typeStr();}
     protected:
-        bool _hasKey(cXMLAttributeMap attributes,string key) {return attributes.find(key)!=attributes.end();}
+        bool _hasKey(cXMLAttributeMap attributes, string key) {return attributes.find(key)!=attributes.end();}
 };
 
 /**
@@ -82,13 +82,13 @@ class rdNormal : public rdObject
         bool m_nonNegative;     //> Non-negative only -- uses the truncnormal function.
     public:
         /** Constructor for direct initialization */
-        rdNormal(double mean, double sd, bool nonNegative=false);
+        rdNormal(double mean, double sd, bool nonNegative = false);
         /** Constructor for initialization with an XML element */
         rdNormal(cXMLAttributeMap attributes);
         /** Set the min limit for the random values */
-        void setMinLimit(double min) {m_min=min; m_bMinLimit=true;}
+        void setMinLimit(double min) {m_min = min; m_bMinLimit = true;}
         /** Cancel the min limit when not needed any more */
-        void resetMinLimit() {m_bMinLimit=false;}
+        void resetMinLimit() {m_bMinLimit = false;}
         /** Get a random value */
         virtual double get();
 };
@@ -111,9 +111,9 @@ class rdUniform : public rdObject
         virtual double get();
         // Getters and setters
         double getBeginning() {return m_beginning;}
-        void setBeginning(double beginning) {m_beginning=beginning;}
+        void setBeginning(double beginning) {m_beginning = beginning;}
         double getEnd() {return m_end;}
-        void setEnd(double end) {m_end=end;}
+        void setEnd(double end) {m_end = end;}
 };
 
 /**
@@ -136,10 +136,10 @@ class rdExponential : public rdObject
         /** Get a random value */
         virtual double get();
         // Getters and setters
-        void setMinLimit(double min) {m_min=min; m_bMinLimit=true;}
-        void resetMinLimit() {m_bMinLimit=false;}
-        void setMaxLimit(double max) {m_max=max; m_bMaxLimit=true;}
-        void resetMaxLimit() {m_bMaxLimit=false;}
+        void setMinLimit(double min) {m_min = min; m_bMinLimit = true;}
+        void resetMinLimit() {m_bMinLimit = false;}
+        void setMaxLimit(double max) {m_max = max; m_bMaxLimit = true;}
+        void resetMaxLimit() {m_bMaxLimit = false;}
 };
 
 
@@ -161,7 +161,7 @@ class rdHistogram : public rdObject
         bool m_zeroBased;
     public:
         /** Constructor for direct initialization */
-        rdHistogram(rdHistogramBins bins, bool zeroBased=false);
+        rdHistogram(rdHistogramBins bins, bool zeroBased = false);
         /** Constructor for initialization with an XML element */
         rdHistogram(cXMLAttributeMap attributes);
         /** Get a random value */
@@ -203,7 +203,7 @@ class rdZipf : public rdObject
         bool m_baseZero;    //> True if we want a zero-based return value
     public:
         /** Constructor for direct initialization */
-        rdZipf(int n,double alpha,bool baseZero=false);
+        rdZipf(int n, double alpha, bool baseZero = false);
         /** Constructor for initialization with an XML element */
         rdZipf(cXMLAttributeMap attributes);
     public:
@@ -212,13 +212,13 @@ class rdZipf : public rdObject
         /** Return the object definition as a string */
         virtual string toString();
         // Getters and setters
-        void setn(int n) {m_number=n;__setup_c();}
+        void setn(int n) {m_number = n; __setup_c();}
         int getn() {return m_number;}
-        void setalpha(double alpha) {m_alpha=alpha;__setup_c();}
+        void setalpha(double alpha) {m_alpha = alpha; __setup_c();}
         double getalpha() {return m_alpha;}
     private:
         // Initialization methods.
-        void __initialize(int n,double alpha, bool baseZero);
+        void __initialize(int n, double alpha, bool baseZero);
         void __setup_c();
 };
 

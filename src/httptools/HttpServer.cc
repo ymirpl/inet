@@ -48,8 +48,8 @@ void HttpServer::initialize()
     listensocket.setCallbackObject(this);
     listensocket.listen();
 
-    numBroken=0;
-    socketsOpened=0;
+    numBroken = 0;
+    socketsOpened = 0;
 
     WATCH(numBroken);
     WATCH(socketsOpened);
@@ -86,7 +86,7 @@ void HttpServer::handleMessage(cMessage *msg)
             socket = new TCPSocket(msg);
             socket->setOutputGate(gate("tcpOut"));
             socket->setDataTransferMode(TCP_TRANSFER_OBJECT);
-            socket->setCallbackObject(this,socket);
+            socket->setCallbackObject(this, socket);
             sockCollection.addSocket(socket);
         }
         EV_DEBUG << "Process the message " << msg->getName() << endl;

@@ -115,7 +115,7 @@ class INET_API HttpServerBase : public HttpNodeBase
         virtual void finish();
 
         /** Handle incoming messages */
-        virtual void handleMessage(cMessage *msg)=0;
+        virtual void handleMessage(cMessage *msg) = 0;
     //@}
 
     protected:
@@ -123,7 +123,7 @@ class INET_API HttpServerBase : public HttpNodeBase
 
     protected:
         /** Generate a HTML document in response to a request. */
-        HttpReplyMessage* generateDocument( HttpRequestMessage *request, const char* resource, int size=0 );
+        HttpReplyMessage* generateDocument( HttpRequestMessage *request, const char* resource, int size = 0 );
         /** Generate a resource message in response to a request. */
         HttpReplyMessage* generateResourceMessage( HttpRequestMessage *request, string resource, CONTENT_TYPE_ENUM category );
         /** Handle a received HTTP GET request */

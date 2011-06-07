@@ -33,8 +33,8 @@
 
 HttpNodeBase::HttpNodeBase()
 {
-    m_bDisplayMessage=false;
-    m_bDisplayResponseContent=false;
+    m_bDisplayMessage = false;
+    m_bDisplayResponseContent = false;
 }
 
 const char* HttpNodeBase::getWWW()
@@ -47,10 +47,10 @@ void HttpNodeBase::sendDirectToModule( HttpNodeBase *receiver, cMessage *message
 {
     cPacket *pckt = check_and_cast<cPacket *>(message);  // MIGRATE40: kvj
     if ( message==NULL ) return;
-    simtime_t delay=constdelay+transmissionDelay(message);
-    if ( rdDelay!=NULL ) delay+=rdDelay->get();
+    simtime_t delay = constdelay+transmissionDelay(message);
+    if ( rdDelay!=NULL ) delay += rdDelay->get();
     EV_DEBUG << "Sending " << message->getName() << " direct to " << receiver->getParentModule()->getName() << " with a delay of " << delay << " s\n";
-    sendDirect(message,receiver,"tcpIn");
+    sendDirect(message, receiver, "tcpIn");
 }
 
 double HttpNodeBase::transmissionDelay( cMessage *msg )
@@ -93,11 +93,11 @@ void HttpNodeBase::logEntry( string line )
 
     bool exists = fileExists(logFileName.c_str()); // Check if the file exists. If not, add the field names at top.
 
-    outfile.open(logFileName.c_str(),ios::app);
+    outfile.open(logFileName.c_str(), ios::app);
     if ( !exists )
         outfile << "time;simtime;logging-node;sending-node;type;originator-url;target-url;protocol;keep-alive;serial;heading;bad-req;result-code;content-type" << endl;
     outfile << curtime << ";" << simTime() << ";" << getParentModule()->getName();
-    if( outputFormat == lf_short )
+    if ( outputFormat == lf_short )
         outfile << ";";
     else
         outfile << endl;
@@ -148,7 +148,7 @@ string HttpNodeBase::formatHttpRequestLong( const HttpRequestMessage* httpReques
     str << "Target URL:" << httpRequest->targetUrl() << "  Originator URL:" << httpRequest->originatorUrl() << endl;
 
     str << "PROTOCOL:";
-    switch( httpRequest->protocol() )  // MIGRATE40: kvj
+    switch ( httpRequest->protocol() )  // MIGRATE40: kvj
     {
         case 10: str << "HTTP/1.0"; break;
         case 11: str << "HTTP/1.1"; break;
@@ -174,7 +174,7 @@ string HttpNodeBase::formatHttpResponseLong( const HttpReplyMessage* httpRespons
     str << "Target URL:" << httpResponse->targetUrl() << "  Originator URL:" << httpResponse->originatorUrl() << endl;
 
     str << "PROTOCOL:";
-    switch( httpResponse->protocol() )
+    switch ( httpResponse->protocol() )
     {
         case 10: str << "HTTP/1.0"; break;
         case 11: str << "HTTP/1.1"; break;
@@ -189,7 +189,7 @@ string HttpNodeBase::formatHttpResponseLong( const HttpReplyMessage* httpRespons
     str << "RESPONSE: " << httpResponse->heading() << endl;
 
     str << "CONTENT-TYPE:";
-    switch( httpResponse->contentType() )
+    switch ( httpResponse->contentType() )
     {
         case rt_html_page: str << "HTML DOC"; break;
         case rt_text: str << "Text/HTML RES"; break;

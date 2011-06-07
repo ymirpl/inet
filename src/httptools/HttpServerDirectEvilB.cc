@@ -38,7 +38,7 @@ void HttpServerDirectEvilB::initialize()
 {
     HttpServerDirect::initialize();
 
-    badLow  = par("minBadRequests");
+    badLow = par("minBadRequests");
     badHigh = par("maxBadRequests");
 
     EV_INFO << "Badguy " << wwwName << " was initialized to launch an attack on www.good.com" << endl;
@@ -47,16 +47,16 @@ void HttpServerDirectEvilB::initialize()
 
 std::string HttpServerDirectEvilB::generateBody()
 {
-    int numResources = badLow+(int)uniform(0,badHigh-badLow);
+    int numResources = badLow+(int)uniform(0, badHigh-badLow);
     double rndDelay;
     string result;
 
     char tempBuf[128];
     int refSize;
-    for( int i=0; i<numResources; i++ )
+    for ( int i=0; i<numResources; i++ )
     {
-        rndDelay = 10.0+uniform(0,2.0);
-        refSize = (int)uniform(500,1000); // The random size represents a random reference string length
+        rndDelay = 10.0+uniform(0, 2.0);
+        refSize = (int)uniform(500, 1000); // The random size represents a random reference string length
         sprintf(tempBuf, "TEXT%.4d.txt;%s;%f;%s;%d\n", i, "www.good.com", rndDelay, "TRUE", refSize);
         result.append(tempBuf);
     }

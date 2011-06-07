@@ -77,7 +77,7 @@ void HttpController::initialize(int stage)
         string optionsfile = (const char*)par("events");
         string optionssection = (const char*)par("eventsSection");
         if ( optionsfile.size()!=0 )
-            parseOptionsFile(optionsfile,optionssection);
+            parseOptionsFile(optionsfile, optionssection);
     }
 }
 
@@ -87,14 +87,14 @@ void HttpController::finish()
 
     WEB_SERVER_ENTRY *en;
     map<string,WEB_SERVER_ENTRY*>::const_iterator iter;
-    for(iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
+    for (iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
     {
         en = (*iter).second;
         EV_SUMMARY << "Server " << (*iter).first << ": Access count " << en->accessCount << endl;
     }
 
     // Clean up the server references
-    for(iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
+    for (iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
         delete (*iter).second;
 }
 
@@ -104,7 +104,7 @@ void HttpController::handleMessage(cMessage *msg)
     {
         HttpServerStatusUpdateMsg* statusMsg = check_and_cast<HttpServerStatusUpdateMsg*>(msg);
         EV_DEBUG << "Handling a status change message @T=" << simTime() << " for www " << statusMsg->www() << endl;
-        setSpecialStatus(statusMsg->www(),(ServerStatus)statusMsg->eventKind(),statusMsg->pvalue(),statusMsg->pamortize());
+        setSpecialStatus(statusMsg->www(), (ServerStatus)statusMsg->eventKind(), statusMsg->pvalue(), statusMsg->pamortize());
         delete statusMsg;
     }
     else
@@ -131,12 +131,12 @@ void HttpController::registerWWWserver( const char* objectName, const char* wwwN
     en->host = objectName;
     en->port = port;
     en->module = getTcpApp(objectName);
-    en->activationTime=activationTime;
-    en->statusSetTime=simTime();
-    en->serverStatus=ss_normal;
-    en->pvalue=0.0;
-    en->pamortize=0.0;
-    en->accessCount=0;
+    en->activationTime = activationTime;
+    en->statusSetTime = simTime();
+    en->serverStatus = ss_normal;
+    en->pvalue = 0.0;
+    en->pamortize = 0.0;
+    en->accessCount = 0;
 
     if ( en->module == NULL )
         error("Server %s does not have a WWW module", wwwName);
@@ -153,14 +153,14 @@ void HttpController::registerWWWserver( const char* objectName, const char* wwwN
         }
         else
         {
-            pos = (int)uniform(0,pickList.size()-1);
-            pickList.insert(begin+pos,en);
+            pos = (int)uniform(0, pickList.size()-1);
+            pickList.insert(begin+pos, en);
         }
     }
     else if ( rank==INSERT_MIDDLE )
     {
         pos = pickList.size()/2;
-        pickList.insert(begin+pos,en);
+        pickList.insert(begin+pos, en);
     }
     else if ( rank==INSERT_END or rank>=pickList.size())
     {
@@ -168,7 +168,7 @@ void HttpController::registerWWWserver( const char* objectName, const char* wwwN
     }
     else
     {
-        pickList.insert(begin+rank,en);
+        pickList.insert(begin+rank, en);
     }
 }
 
@@ -240,8 +240,8 @@ int HttpController::getServerInfo( const char* wwwName, char* module, int &port 
     totalLookups++;
     en->accessCount++;
 
-    strcpy(module,en->host.c_str());
-    port=en->port;
+    strcpy(module, en->host.c_str());
+    port = en->port;
 
     return 0;
 }
@@ -270,9 +270,9 @@ int HttpController::getAnyServerInfo( char* wwwName, char* module, int &port )
     totalLookups++;
     en->accessCount++;
 
-    strcpy(wwwName,en->name.c_str());
-    strcpy(module,en->host.c_str());
-    port=en->port;
+    strcpy(wwwName, en->name.c_str());
+    strcpy(module, en->host.c_str());
+    port = en->port;
 
     return 0;
 }
@@ -284,17 +284,17 @@ cModule* HttpController::getTcpApp(string node)
     cModule * receiverModule = NULL;
     if ( pos > -1 && rpos > -1 )
     {
-        string id = node.substr(pos+1,pos-rpos-1);
-        string name = node.substr(0,pos);
+        string id = node.substr(pos+1, pos-rpos-1);
+        string name = node.substr(0, pos);
         int numid = atoi(id.c_str());
-        receiverModule = simulation.getSystemModule()->getSubmodule(name.c_str(),numid);
+        receiverModule = simulation.getSystemModule()->getSubmodule(name.c_str(), numid);
     }
     else
     {
         receiverModule = simulation.getSystemModule()->getSubmodule(node.c_str());
     }
 
-    return receiverModule->getSubmodule("tcpApp",0); // TODO: CHECK INDEX
+    return receiverModule->getSubmodule("tcpApp", 0); // TODO: CHECK INDEX
 }
 
 void HttpController::setSpecialStatus( const char* www, ServerStatus status, double p, double amortize )
@@ -309,14 +309,14 @@ void HttpController::setSpecialStatus( const char* www, ServerStatus status, dou
 
     WEB_SERVER_ENTRY *en = webSiteList[www];
 
-    en->statusSetTime=simTime();
-    en->serverStatus=status;
-    en->pvalue=p;
-    en->pamortize=amortize;
+    en->statusSetTime = simTime();
+    en->serverStatus = status;
+    en->pvalue = p;
+    en->pamortize = amortize;
 
     specialList.push_front(en);
 
-    pspecial+=p;
+    pspecial += p;
 }
 
 void HttpController::cancelSpecialStatus( const char* www )
@@ -324,23 +324,23 @@ void HttpController::cancelSpecialStatus( const char* www )
     if (specialList.size()==0) return;
     WEB_SERVER_ENTRY *en;
     list<WEB_SERVER_ENTRY*>::iterator i;
-    for(i=specialList.begin();i!=specialList.end();i++)
+    for (i=specialList.begin(); i!=specialList.end(); i++)
     {
-        en=(*i);
-        if ( strcmp(en->name.c_str(),www) == 0 )
+        en = (*i);
+        if ( strcmp(en->name.c_str(), www) == 0 )
         {
-            pspecial-=en->pvalue;
-            en->statusSetTime=simTime();
-            en->serverStatus=ss_normal;
-            en->pvalue=0.0;
-            en->pamortize=0.0;
+            pspecial -= en->pvalue;
+            en->statusSetTime = simTime();
+            en->serverStatus = ss_normal;
+            en->pvalue = 0.0;
+            en->pamortize = 0.0;
             specialList.erase(i);
             EV_DEBUG << "Special status for " << www << " cancelled" << endl;
             break;
         }
     }
-    if ( pspecial<0.0 ) pspecial=0.0;
-    if ( specialList.size()==0 ) pspecial=0.0;
+    if ( pspecial<0.0 ) pspecial = 0.0;
+    if ( specialList.size()==0 ) pspecial = 0.0;
     EV_DEBUG << "Size of special list is now " << specialList.size() << endl;
 }
 
@@ -352,7 +352,7 @@ WEB_SERVER_ENTRY* HttpController::selectFromSpecialList()
         return NULL;
     }
 
-    WEB_SERVER_ENTRY *en=NULL;
+    WEB_SERVER_ENTRY *en = NULL;
 
     if ( specialList.size()==1 )
     {
@@ -360,13 +360,13 @@ WEB_SERVER_ENTRY* HttpController::selectFromSpecialList()
     }
     else
     {
-        double p = uniform(0,1);
+        double p = uniform(0, 1);
         double pcumulative = 0.0;
         list<WEB_SERVER_ENTRY*>::iterator i;
-        for(i=specialList.begin();i!=specialList.end();i++)
+        for (i=specialList.begin(); i!=specialList.end(); i++)
         {
-            en=(*i);
-            pcumulative+=en->pvalue;
+            en = (*i);
+            pcumulative += en->pvalue;
             if ( pcumulative/pspecial > p )
                 break;
         }
@@ -377,14 +377,14 @@ WEB_SERVER_ENTRY* HttpController::selectFromSpecialList()
         double newp = en->pvalue-en->pamortize;
         if ( newp > 0.0 )
         {
-            en->pvalue=newp;
-            pspecial-=en->pamortize;
+            en->pvalue = newp;
+            pspecial -= en->pamortize;
             EV_DEBUG << "Amortizing special probability for " << en->name << ". Now at " << en->pvalue << endl;
         }
         else
         {
-            pspecial-=en->pvalue;
-            en->pvalue=0.0;
+            pspecial -= en->pvalue;
+            en->pvalue = 0.0;
             cancelSpecialStatus(en->name.c_str());
             EV_DEBUG << "Cancelling special status for " << en->name << endl;
         }
@@ -398,7 +398,7 @@ string HttpController::listRegisteredServers()
     ostringstream str;
     WEB_SERVER_ENTRY *en;
     map<string,WEB_SERVER_ENTRY*>::const_iterator iter;
-    for(iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
+    for (iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
     {
         en = (*iter).second;
         str << (*iter).first << ";" << en->host << ";" << en->port << endl;
@@ -411,9 +411,9 @@ string HttpController::listSpecials()
     ostringstream str;
     WEB_SERVER_ENTRY *en;
     list<WEB_SERVER_ENTRY*>::iterator i;
-    for(i=specialList.begin();i!=specialList.end();i++)
+    for (i=specialList.begin(); i!=specialList.end(); i++)
     {
-        en=(*i);
+        en = (*i);
         str << en->name << ";" << en->host << ";" << en->port << ";" << en->serverStatus
             << ";" << en->pvalue << ";" << en->pamortize << endl;
     }
@@ -425,9 +425,9 @@ string HttpController::listPickOrder()
     ostringstream str;
     WEB_SERVER_ENTRY *en;
     vector<WEB_SERVER_ENTRY*>::iterator i;
-    for( i=pickList.begin(); i!=pickList.end(); i++ )
+    for ( i=pickList.begin(); i!=pickList.end(); i++ )
     {
-        en=(*i);
+        en = (*i);
         str << en->name << ";" << en->host << ";" << en->port << ";" << en->serverStatus
             << ";" << en->pvalue << ";" << en->pamortize << endl;
     }
@@ -436,13 +436,13 @@ string HttpController::listPickOrder()
 
 void HttpController::parseOptionsFile(string file, string section)
 {
-    bool bSectionFound=false;
+    bool bSectionFound = false;
     ifstream tracefilestream;
     tracefilestream.open(file.c_str());
-    if(!tracefilestream.is_open())
-        error("Could not open events file %s",file.c_str());
+    if (!tracefilestream.is_open())
+        error("Could not open events file %s", file.c_str());
 
-    if (section.size()==0) bSectionFound=true; // Grab first section
+    if (section.size()==0) bSectionFound = true; // Grab first section
 
     double pval;
     double amortizeval;
@@ -450,7 +450,7 @@ void HttpController::parseOptionsFile(string file, string section)
     string line;
     int linecount = 0;
     HttpServerStatusUpdateMsg *statusChange;
-    while(!std::getline(tracefilestream, line).eof())
+    while (!std::getline(tracefilestream, line).eof())
     {
         linecount++;
         if ( line.size()==0 ) continue;
@@ -458,8 +458,8 @@ void HttpController::parseOptionsFile(string file, string section)
         if ( line[0]=='[' )
         {
             // Section
-            bSectionFound=false;
-            string sectionsub=line.substr(1,line.size()-2);
+            bSectionFound = false;
+            string sectionsub = line.substr(1, line.size()-2);
             bSectionFound = sectionsub==section;
         }
         else
@@ -469,19 +469,19 @@ void HttpController::parseOptionsFile(string file, string section)
                 // Format: {time};{www name};{event kind};{p value};{amortization factor}
                 // Event kind is not used at the present
 
-                cStringTokenizer tokenizer = cStringTokenizer(line.c_str(),";");
+                cStringTokenizer tokenizer = cStringTokenizer(line.c_str(), ";");
                 std::vector<string> res = tokenizer.asVector();
                 if ( res.size()!=5 )
-                    error("Invalid format of event config line in '%s' Line: '%s'", file.c_str(),line.c_str());
+                    error("Invalid format of event config line in '%s' Line: '%s'", file.c_str(), line.c_str());
                 try
                 {
                     activationtime = (simtime_t)atof(res[0].c_str());
                     pval = atof(res[3].c_str());
                     amortizeval = atof(res[4].c_str());
                 }
-                catch(...)
+                catch (...)
                 {
-                    error("Invalid format of event config line in '%s' Line: '%s'", file.c_str(),line.c_str());
+                    error("Invalid format of event config line in '%s' Line: '%s'", file.c_str(), line.c_str());
                 }
 
                 EV_DEBUG << "Scheduling a status change for " << res[1] << " @ T=" << activationtime << ". Parameters: " << line << endl;
@@ -490,7 +490,7 @@ void HttpController::parseOptionsFile(string file, string section)
                 statusChange->setEventKind(1);
                 statusChange->setPvalue(pval);
                 statusChange->setPamortize(amortizeval);
-                scheduleAt(activationtime,statusChange);
+                scheduleAt(activationtime, statusChange);
 
             }
         }
@@ -521,6 +521,6 @@ WEB_SERVER_ENTRY* HttpController::__getRandomServerInfo()
         }
         EV_DEBUG << "Activation time of the node is " << en->activationTime << " and the current time is " << simTime() << endl;
     }
-    while(en->activationTime>simTime());
+    while (en->activationTime>simTime());
     return en;
 }

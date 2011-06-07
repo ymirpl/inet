@@ -37,7 +37,7 @@ void HttpServerDirectEvilA::initialize()
 {
     HttpServerDirect::initialize();
 
-    badLow  = par("minBadRequests");
+    badLow = par("minBadRequests");
     badHigh = par("maxBadRequests");
 
     EV_INFO << "Badguy " << wwwName << " was initialized to launch an attack on www.good.com" << endl;
@@ -46,14 +46,14 @@ void HttpServerDirectEvilA::initialize()
 
 std::string HttpServerDirectEvilA::generateBody()
 {
-    int numImages = badLow+(int)uniform(0,badHigh-badLow);
+    int numImages = badLow+(int)uniform(0, badHigh-badLow);
     double rndDelay;
     string result;
 
     char tempBuf[128];
-    for( int i=0; i<numImages; i++ )
+    for ( int i=0; i<numImages; i++ )
     {
-        rndDelay = 10.0+uniform(0,2.0);
+        rndDelay = 10.0+uniform(0, 2.0);
         sprintf(tempBuf, "IMG%.4d.jpg;%s;%f\n", i, "www.good.com", rndDelay);
         result.append(tempBuf);
     }

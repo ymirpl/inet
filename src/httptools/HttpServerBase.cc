@@ -147,17 +147,17 @@ void HttpServerBase::updateDisplay()
     {
         char buf[1024];
         sprintf( buf, "%ld", htmlDocsServed );
-        getParentModule()->getDisplayString().setTagArg("t",0,buf);
+        getParentModule()->getDisplayString().setTagArg("t", 0, buf);
 
         if ( activationTime<=simTime() )
         {
-            getParentModule()->getDisplayString().setTagArg("i2",0,"status/up");
-            getParentModule()->getDisplayString().setTagArg("i2",1,"green");
+            getParentModule()->getDisplayString().setTagArg("i2", 0, "status/up");
+            getParentModule()->getDisplayString().setTagArg("i2", 1, "green");
         }
         else
         {
-            getParentModule()->getDisplayString().setTagArg("i2",0,"status/down");
-            getParentModule()->getDisplayString().setTagArg("i2",1,"red");
+            getParentModule()->getDisplayString().setTagArg("i2", 0, "status/down");
+            getParentModule()->getDisplayString().setTagArg("i2", 1, "red");
         }
     }
 }
@@ -179,7 +179,7 @@ cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
 
     simtime_t processingDelay = 0;
 
-    bool recipientError=false;
+    bool recipientError = false;
     if ( extractServerName(request->targetUrl()) != wwwName )
     {
         // This should never happen but lets check
@@ -190,12 +190,12 @@ cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
     HttpReplyMessage* replymsg;
 
     // Parse the request string on spaces
-    cStringTokenizer tokenizer = cStringTokenizer(request->heading()," ");
+    cStringTokenizer tokenizer = cStringTokenizer(request->heading(), " ");
     std::vector<string> res = tokenizer.asVector();
     if ( res.size() != 3 )
     {
         EV_ERROR << "Invalid request string: " << request->heading() << endl;
-        replymsg = generateErrorReply(request,400);
+        replymsg = generateErrorReply(request, 400);
         logResponse(replymsg);
         return replymsg;
     }
@@ -204,16 +204,16 @@ cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
     {
         // Bad requests get a 404 reply.
         EV_ERROR << "Bad request - bad flag set. Message: " << request->getName() << endl;
-        replymsg = generateErrorReply(request,404);
+        replymsg = generateErrorReply(request, 404);
     }
     else if ( res[0] == "GET" )
     {
-        replymsg = handleGetRequest(request,res[1]); // Pass in the resource string part
+        replymsg = handleGetRequest(request, res[1]); // Pass in the resource string part
     }
     else
     {
         EV_ERROR << "Unsupported request type " << res[0] << " for " << request->heading() << endl;
-        replymsg = generateErrorReply(request,400);
+        replymsg = generateErrorReply(request, 400);
     }
 
     if ( replymsg!=NULL )
@@ -226,12 +226,12 @@ HttpReplyMessage* HttpServerBase::handleGetRequest( HttpRequestMessage *request,
 {
     EV_DEBUG << "Handling GET request " << request->getName() << " resource: " << resource << endl;
 
-    resource = trimLeft(resource,"/");
+    resource = trimLeft(resource, "/");
     vector<string> req = parseResourceName(resource);
     if ( req.size()!=3 )
     {
         EV_ERROR << "Invalid GET request string: " << request->heading() << endl;
-        return generateErrorReply(request,400);
+        return generateErrorReply(request, 400);
     }
 
     CONTENT_TYPE_ENUM cat = getResourceCategory(req);
@@ -243,37 +243,37 @@ HttpReplyMessage* HttpServerBase::handleGetRequest( HttpRequestMessage *request,
             if ( resource.size()==0 && htmlPages.find("root") != htmlPages.end() )
             {
                 EV_DEBUG << "Generating root resource" << endl;
-                return generateDocument(request,"root");
+                return generateDocument(request, "root");
             }
             if ( htmlPages.find(resource) == htmlPages.end() )
             {
                 if ( htmlPages.find("default") != htmlPages.end() )
                 {
                     EV_DEBUG << "Generating default resource" << endl;
-                    return generateDocument(request,"default");
+                    return generateDocument(request, "default");
                 }
                 else
                 {
                     EV_ERROR << "Page not found: " << resource << endl;
-                    return generateErrorReply(request,404);
+                    return generateErrorReply(request, 404);
                 }
             }
         }
-        return generateDocument(request,resource.c_str());
+        return generateDocument(request, resource.c_str());
     }
     else if ( cat==rt_text || cat==rt_image )
     {
         if ( scriptedMode && resources.find(resource)==resources.end() )
         {
             EV_ERROR << "Resource not found: " << resource << endl;
-            return generateErrorReply(request,404);
+            return generateErrorReply(request, 404);
         }
-        return generateResourceMessage(request,resource,cat);
+        return generateResourceMessage(request, resource, cat);
     }
     else
     {
         EV_ERROR << "Unknown or unsupported resource requested in " << request->heading() << endl;
-        return generateErrorReply(request,400);
+        return generateErrorReply(request, 400);
     }
 }
 
@@ -282,7 +282,7 @@ HttpReplyMessage* HttpServerBase::generateDocument( HttpRequestMessage *request,
     EV_DEBUG << "Generating HTML document for request " << request->getName() << " from " << request->getSenderModule()->getName() << endl;
 
     char szReply[512];
-    sprintf(szReply,"HTTP/1.1 200 OK (%s)",resource);
+    sprintf(szReply, "HTTP/1.1 200 OK (%s)", resource);
     HttpReplyMessage* replymsg = new HttpReplyMessage(szReply);
     replymsg->setHeading("HTTP/1.1 200 OK");
     replymsg->setOriginatorUrl(wwwName.c_str());
@@ -327,7 +327,7 @@ HttpReplyMessage* HttpServerBase::generateResourceMessage( HttpRequestMessage *r
         imgResourcesServed++;
 
     char szReply[512];
-    sprintf(szReply,"HTTP/1.1 200 OK (%s)",resource.c_str());
+    sprintf(szReply, "HTTP/1.1 200 OK (%s)", resource.c_str());
     HttpReplyMessage* replymsg = new HttpReplyMessage(szReply);
     replymsg->setHeading("HTTP/1.1 200 OK");
     replymsg->setOriginatorUrl(wwwName.c_str());
@@ -339,14 +339,14 @@ HttpReplyMessage* HttpServerBase::generateResourceMessage( HttpRequestMessage *r
     replymsg->setByteLength( resources[resource] ); // Set the resource size
     replymsg->setKind(HTTPT_RESPONSE_MESSAGE);
 
-    sprintf(szReply,"RESOURCE-BODY:%s",resource.c_str());
+    sprintf(szReply, "RESOURCE-BODY:%s", resource.c_str());
     return replymsg;
 }
 
 HttpReplyMessage* HttpServerBase::generateErrorReply( HttpRequestMessage *request, int code )
 {
     char szErrStr[32];
-    sprintf(szErrStr,"HTTP/1.1 %.3d %s", code, htmlErrFromCode(code).c_str());
+    sprintf(szErrStr, "HTTP/1.1 %.3d %s", code, htmlErrFromCode(code).c_str());
     HttpReplyMessage* replymsg = new HttpReplyMessage(szErrStr);
     replymsg->setHeading(szErrStr);
     replymsg->setOriginatorUrl(wwwName.c_str());
@@ -370,12 +370,12 @@ string HttpServerBase::generateBody()
     string result;
 
     char tempBuf[128];
-    for( int i=0; i<numImages; i++ )
+    for ( int i=0; i<numImages; i++ )
     {
         sprintf(tempBuf, "%s%.4d.%s\n", "IMG", i, "jpg");
         result.append(tempBuf);
     }
-    for( int i=0; i<numText; i++ )
+    for ( int i=0; i<numText; i++ )
     {
         sprintf(tempBuf, "%s%.4d.%s\n", "TEXT", i, "txt");
         result.append(tempBuf);
@@ -390,7 +390,7 @@ void HttpServerBase::registerWithController()
     cModule * controller = simulation.getSystemModule()->getSubmodule("controller");
     if ( controller == NULL )
         error("Controller module not found");
-    ((HttpController*)controller)->registerWWWserver(getParentModule()->getFullName(),wwwName.c_str(),port,INSERT_END,activationTime);
+    ((HttpController*)controller)->registerWWWserver(getParentModule()->getFullName(), wwwName.c_str(), port, INSERT_END, activationTime);
 }
 
 void HttpServerBase::readSiteDefinition(string file)
@@ -399,8 +399,8 @@ void HttpServerBase::readSiteDefinition(string file)
 
     ifstream tracefilestream;
     tracefilestream.open(file.c_str());
-    if(tracefilestream.fail())
-        error("Could not open site definition file %s",file.c_str());
+    if (tracefilestream.fail())
+        error("Could not open site definition file %s", file.c_str());
 
     vector<string> siteFileSplit = splitFile(file);
     string line;
@@ -412,16 +412,16 @@ void HttpServerBase::readSiteDefinition(string file)
     string sectionsub;
     int size;
     int linecount = 0;
-    bool siteSection=false;
-    bool resourceSection=false;
+    bool siteSection = false;
+    bool resourceSection = false;
 
-    while(!std::getline(tracefilestream, line).eof())
+    while (!std::getline(tracefilestream, line).eof())
     {
         linecount++;
-        line=trim(line);
+        line = trim(line);
         if ( line.size()==0 ) continue;
         if ( line[0]=='#' ) continue;
-        sectionsub=getDelimited(line,"[","]");
+        sectionsub = getDelimited(line, "[", "]");
         if ( sectionsub.size()!=0 )
         {
             // Section
@@ -430,7 +430,7 @@ void HttpServerBase::readSiteDefinition(string file)
         }
         else
         {
-            cStringTokenizer tokenizer = cStringTokenizer(line.c_str(),";");
+            cStringTokenizer tokenizer = cStringTokenizer(line.c_str(), ";");
             std::vector<string> res = tokenizer.asVector();
 
             if ( siteSection )
@@ -438,46 +438,46 @@ void HttpServerBase::readSiteDefinition(string file)
                 if ( res.size()<2 || res.size()>3 )
                     error("Invalid format of site configuration file '%s'. Site section, line (%d): %s",
                            file.c_str(), linecount, line.c_str());
-                key=trimLeft(res[0],"/");
+                key = trimLeft(res[0], "/");
                 if ( key.size()==0 )
                 {
                     if ( htmlPages.find("root")==htmlPages.end() )
-                        key="root";
+                        key = "root";
                     else
                         error("Second root page found in site definition file %s, line (%d): %s",
                               file.c_str(), linecount, line.c_str());
                 }
-                htmlfile=res[1];
-                body=readHtmlBodyFile(htmlfile,siteFileSplit[0]); // Pass in the path of the definition file. Page defs are relative to that.
-                size=0;
+                htmlfile = res[1];
+                body = readHtmlBodyFile(htmlfile, siteFileSplit[0]); // Pass in the path of the definition file. Page defs are relative to that.
+                size = 0;
                 if ( res.size()>2 )
                 {
                     try
                     {
                         size = atoi(res[2].c_str());
                     }
-                    catch(...)
+                    catch (...)
                     {
                         error("Invalid format of site configuration file '%s'. Resource section, size, line (%d): %s",
                               file.c_str(), linecount, line.c_str());
                     }
                 }
                 EV_DEBUG << "Adding html page definition " << key << ". The page size is " << size << endl;
-                htmlPages[key].size=size;
-                htmlPages[key].body=body;
+                htmlPages[key].size = size;
+                htmlPages[key].body = body;
             }
             else if ( resourceSection )
             {
                 if ( res.size()<2 || res.size()>3 )
                     error("Invalid format of site configuration file '%s'. Resource section, line (%d): %s",
                           file.c_str(), linecount, line.c_str());
-                key=res[0];
-                value1=res[1];
+                key = res[0];
+                value1 = res[1];
                 try
                 {
                     size = atoi(value1.c_str());
                 }
-                catch(...)
+                catch (...)
                 {
                     error("Invalid format of site configuration file '%s'. Resource section, size, line (%d): %s",
                           file.c_str(), linecount, line.c_str());
@@ -488,7 +488,7 @@ void HttpServerBase::readSiteDefinition(string file)
                     // The type parameter - skip this
                 }
 
-                resources[key]=size;
+                resources[key] = size;
                 EV_DEBUG << "Adding resource " << key << " of size " << size << endl;
             }
             else
@@ -509,18 +509,18 @@ string HttpServerBase::readHtmlBodyFile( string file, string path )
     filePath += file;
 
     string line;
-    string body="";
+    string body = "";
     ifstream htmlfilestream;
     htmlfilestream.open(filePath.c_str());
-    if(htmlfilestream.fail())
-        error("Could not open page definition file '%s'",filePath.c_str());
-    while(!std::getline(htmlfilestream, line).eof())
+    if (htmlfilestream.fail())
+        error("Could not open page definition file '%s'", filePath.c_str());
+    while (!std::getline(htmlfilestream, line).eof())
     {
         line = trim(line);
         if ( line.size()==0 ) continue;
         if ( line[0]=='#' ) continue;
-        body+=line;
-        body+="\n";
+        body += line;
+        body += "\n";
     }
     htmlfilestream.close();
     return body;

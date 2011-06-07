@@ -51,13 +51,13 @@ string trimLeft( string str, string delim )
 {
     int pos = str.find(delim);
     if ( pos==-1 ) return str;
-    else return str.substr(pos+1,str.size()-pos-1);
+    else return str.substr(pos+1, str.size()-pos-1);
 }
 
 string trimRight( string str )
 {
     string::iterator i;
-    for (i = str.end() - 1; ;i--) {
+    for (i = str.end() - 1;; i--) {
           if (!isspace(*i)) {
               str.erase(i + 1, str.end());
               break;
@@ -74,7 +74,7 @@ string trimRight( string str, string delim )
 {
     int pos = str.rfind(delim);
     if ( pos==-1 ) return str;
-    else return str.substr(0,pos-1);
+    else return str.substr(0, pos-1);
 }
 
 string trim( string str )
@@ -104,7 +104,7 @@ string extractServerName( const char* path )
     position = www.find("/");
     if ( position != -1 )
     {
-        www = www.substr(0,position);
+        www = www.substr(0, position);
     }
 
     return www;
@@ -129,29 +129,29 @@ string extractResourceName( const char* path )
 
     position = www.find("/");
     if ( position != -1 )
-        return www.substr(position+1,www.size()-position);
+        return www.substr(position+1, www.size()-position);
     else
         return "";
 }
 
 std::vector<std::string> parseResourceName(string resource)
 {
-    string path="";
-    string resourceName="";
-    string extension="";
+    string path = "";
+    string resourceName = "";
+    string extension = "";
 
     int slashpos = resource.rfind("/");
     if ( slashpos!=-1 )
-        path=resource.substr(0,slashpos);
+        path = resource.substr(0, slashpos);
     int dotpos = resource.rfind(".");
     if ( dotpos!=-1 )
     {
-        resourceName = resource.substr(slashpos+1,dotpos-slashpos-1);
-        extension = resource.substr(dotpos+1,resource.size()-dotpos-1);
+        resourceName = resource.substr(slashpos+1, dotpos-slashpos-1);
+        extension = resource.substr(dotpos+1, resource.size()-dotpos-1);
     }
     else
     {
-        resourceName = resource.substr(slashpos+1,resource.size()-slashpos);
+        resourceName = resource.substr(slashpos+1, resource.size()-slashpos);
     }
 
     std::vector<std::string> res;
@@ -170,7 +170,7 @@ std::string getDelimited(string str, string ldelim, string rdelim)
     else
         rpos = str.rfind(rdelim);
     if ( lpos==-1 || rpos==-1 || lpos==rpos ) return ""; // Not found
-    else return str.substr(lpos+1,rpos-lpos-1);
+    else return str.substr(lpos+1, rpos-lpos-1);
 }
 
 CONTENT_TYPE_ENUM getResourceCategory(vector<std::string> res)
@@ -195,7 +195,7 @@ CONTENT_TYPE_ENUM getResourceCategory(string resourceExt)
 
 string htmlErrFromCode(int code)
 {
-    switch(code)
+    switch (code)
     {
         case 200: return "OK";
         case 400: return "ERROR";
@@ -209,7 +209,7 @@ double safeatof(const char* strval, double defaultVal)
     {
         return atof(strval);
     }
-    catch(...)
+    catch (...)
     {
         return defaultVal;
     }
@@ -221,7 +221,7 @@ int safeatoi(const char* strval, int defaultVal)
     {
         return atoi(strval);
     }
-    catch(...)
+    catch (...)
     {
         return defaultVal;
     }
@@ -231,9 +231,9 @@ int safeatobool(const char* strval, bool defaultVal)
 {
     try
     {
-        return ( strcmp(strval,"TRUE")==0 || strcmp(strval,"true")==0 );
+        return ( strcmp(strval, "TRUE")==0 || strcmp(strval, "true")==0 );
     }
-    catch(...)
+    catch (...)
     {
         return defaultVal;
     }
@@ -241,24 +241,24 @@ int safeatobool(const char* strval, bool defaultVal)
 
 std::vector<std::string> splitFile(string fileName)
 {
-    string path="";
-    string file="";
-    string ext="";
+    string path = "";
+    string file = "";
+    string ext = "";
 
     int slashpos = fileName.rfind("/");
     if ( slashpos==-1 )
         slashpos = fileName.rfind("\\");
     if ( slashpos!=-1 )
     {
-        path = fileName.substr(0,slashpos+1);
-        fileName = fileName.substr(slashpos+1,fileName.size()-slashpos-1);
+        path = fileName.substr(0, slashpos+1);
+        fileName = fileName.substr(slashpos+1, fileName.size()-slashpos-1);
     }
 
     int dotpos = fileName.find(".");
     if ( dotpos!=-1 )
     {
-        ext = fileName.substr(dotpos+1,fileName.size()-dotpos-1);
-        file = fileName.substr(0,dotpos);
+        ext = fileName.substr(dotpos+1, fileName.size()-dotpos-1);
+        file = fileName.substr(0, dotpos);
     }
     else
     {
@@ -281,7 +281,7 @@ bool fileExists( const char *file )
     # define CHECKACCESS access
     # define CHECKRIGHTS F_OK
     #endif
-    return CHECKACCESS(file,CHECKRIGHTS) == 0;
+    return CHECKACCESS(file, CHECKRIGHTS) == 0;
 }
 
 

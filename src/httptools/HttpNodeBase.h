@@ -53,7 +53,7 @@
 
 using namespace std;
 
-enum LOG_FORMAT {lf_short,lf_long};
+enum LOG_FORMAT {lf_short, lf_long};
 
 typedef deque<cMessage*> MESSAGE_QUEUE_TYPE;
 
@@ -111,7 +111,7 @@ class HttpNodeBase : public cSimpleModule
          * a random delay object may be specified. Those delays add to the total used to submit the message to the
          * OMNeT++ direct message passing mechanism.
          */
-        void sendDirectToModule( HttpNodeBase *receiver, cMessage *message, simtime_t constdelay=0.0, rdObject *rd=NULL );
+        void sendDirectToModule( HttpNodeBase *receiver, cMessage *message, simtime_t constdelay = 0.0, rdObject *rd = NULL );
         /** Calculate the transmission delay for the message msg */
         double transmissionDelay( cMessage *msg );
         //@}

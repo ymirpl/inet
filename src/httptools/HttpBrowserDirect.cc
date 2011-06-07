@@ -57,7 +57,7 @@ void HttpBrowserDirect::handleMessage(cMessage *msg)
 
 void HttpBrowserDirect::sendRequestToServer( BROWSE_EVENT_ENTRY be )
 {
-    sendDirectToModule(be.serverModule,generatePageRequest(be.wwwhost,be.resourceName),0.0,rdProcessingDelay);
+    sendDirectToModule(be.serverModule, generatePageRequest(be.wwwhost, be.resourceName), 0.0, rdProcessingDelay);
 }
 
 void HttpBrowserDirect::sendRequestToServer( HttpRequestMessage *request )
@@ -70,7 +70,7 @@ void HttpBrowserDirect::sendRequestToServer( HttpRequestMessage *request )
     else
     {
         EV_DEBUG << "Sending request to " << serverModule->getWWW() << endl;
-        sendDirectToModule(serverModule,request,0.0,rdProcessingDelay);
+        sendDirectToModule(serverModule, request, 0.0, rdProcessingDelay);
     }
 }
 
@@ -84,7 +84,7 @@ void HttpBrowserDirect::sendRequestToRandomServer()
     else
     {
         EV_DEBUG << "Sending request randomly to " << serverModule->getWWW() << endl;
-        sendDirectToModule(serverModule,generateRandomPageRequest(serverModule->getWWW()),0.0,rdProcessingDelay);
+        sendDirectToModule(serverModule, generateRandomPageRequest(serverModule->getWWW()), 0.0, rdProcessingDelay);
     }
 }
 
@@ -96,11 +96,11 @@ void HttpBrowserDirect::sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE que
         EV_ERROR << "Failed to get server module " << www << endl;
     else
     {
-        while( queue.size()!=0 )
+        while ( queue.size()!=0 )
         {
             msg = queue.back();
             queue.pop_back();
-            sendDirectToModule(serverModule,msg,0.0,rdProcessingDelay);
+            sendDirectToModule(serverModule, msg, 0.0, rdProcessingDelay);
         }
     }
 }

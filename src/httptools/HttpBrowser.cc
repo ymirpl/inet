@@ -35,8 +35,8 @@ Define_Module(HttpBrowser);
 
 HttpBrowser::HttpBrowser()
 {
-    numBroken=0;
-    socketsOpened=0;
+    numBroken = 0;
+    socketsOpened = 0;
 }
 
 HttpBrowser::~HttpBrowser()
@@ -107,14 +107,14 @@ void HttpBrowser::sendRequestToServer( BROWSE_EVENT_ENTRY be )
     int connectPort;
     char szModuleName[127];
 
-    if ( controller->getServerInfo(be.wwwhost.c_str(),szModuleName,connectPort) != 0 )
+    if ( controller->getServerInfo(be.wwwhost.c_str(), szModuleName, connectPort) != 0 )
     {
         EV_ERROR << "Unable to get server info for URL " << be.wwwhost << endl;
         return;
     }
 
     EV_DEBUG << "Sending request to server " << be.wwwhost << " (" << szModuleName << ") on port " << connectPort << endl;
-    submitToSocket(szModuleName,connectPort,generatePageRequest(be.wwwhost,be.resourceName));
+    submitToSocket(szModuleName, connectPort, generatePageRequest(be.wwwhost, be.resourceName));
 }
 
 void HttpBrowser::sendRequestToServer( HttpRequestMessage *request )
@@ -122,14 +122,14 @@ void HttpBrowser::sendRequestToServer( HttpRequestMessage *request )
     int connectPort;
     char szModuleName[127];
 
-    if ( controller->getServerInfo(request->targetUrl(),szModuleName,connectPort) != 0 )
+    if ( controller->getServerInfo(request->targetUrl(), szModuleName, connectPort) != 0 )
     {
         EV_ERROR << "Unable to get server info for URL " << request->targetUrl() << endl;
         return;
     }
 
     EV_DEBUG << "Sending request to server " << request->targetUrl() << " (" << szModuleName << ") on port " << connectPort << endl;
-    submitToSocket(szModuleName,connectPort,request);
+    submitToSocket(szModuleName, connectPort, request);
 }
 
 void HttpBrowser::sendRequestToRandomServer()
@@ -145,7 +145,7 @@ void HttpBrowser::sendRequestToRandomServer()
     }
 
     EV_DEBUG << "Sending request to random server " << szWWW << " (" << szModuleName << ") on port " << connectPort << endl;
-    submitToSocket(szModuleName,connectPort,generateRandomPageRequest(szWWW));
+    submitToSocket(szModuleName, connectPort, generateRandomPageRequest(szWWW));
 }
 
 void HttpBrowser::sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue )
@@ -153,7 +153,7 @@ void HttpBrowser::sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue )
     int connectPort;
     char szModuleName[127];
 
-    if ( controller->getServerInfo(www.c_str(),szModuleName,connectPort) != 0 )
+    if ( controller->getServerInfo(www.c_str(), szModuleName, connectPort) != 0 )
     {
         EV_ERROR << "Unable to get server info for URL " << www << endl;
         return;
@@ -161,7 +161,7 @@ void HttpBrowser::sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue )
 
     EV_DEBUG << "Sending requests to server " << www << " (" << szModuleName << ") on port " << connectPort
              << ". Total messages queued are " << queue.size() << endl;
-    submitToSocket(szModuleName,connectPort,queue);
+    submitToSocket(szModuleName, connectPort, queue);
 }
 
 void HttpBrowser::socketEstablished(int connId, void *yourPtr)
@@ -189,7 +189,7 @@ void HttpBrowser::socketEstablished(int connId, void *yourPtr)
     // Send pending messages on the established socket.
     cMessage *msg;
     EV_DEBUG << "Proceeding to send messages on socket " << connId << endl;
-    while( sockdata->messageQueue.size()!=0 )
+    while ( sockdata->messageQueue.size()!=0 )
     {
         msg = sockdata->messageQueue.back();
         cPacket *pckt = check_and_cast<cPacket *>(msg);
@@ -293,7 +293,7 @@ void HttpBrowser::submitToSocket( const char* moduleName, int connectPort, cMess
     MESSAGE_QUEUE_TYPE queue;
     queue.push_back(msg);
     // Call the overloaded version with the queue as parameter
-    submitToSocket(moduleName,connectPort,queue);
+    submitToSocket(moduleName, connectPort, queue);
 }
 
 void HttpBrowser::submitToSocket( const char* moduleName, int connectPort, MESSAGE_QUEUE_TYPE &queue )
@@ -316,9 +316,9 @@ void HttpBrowser::submitToSocket( const char* moduleName, int connectPort, MESSA
     // Initialize the associated datastructure
     SOCK_DATA_STRUCT *sockdata = new SOCK_DATA_STRUCT;
     sockdata->messageQueue = MESSAGE_QUEUE_TYPE(queue);
-    sockdata->socket=socket;
-    sockdata->pending=0;
-    socket->setCallbackObject(this,sockdata);
+    sockdata->socket = socket;
+    sockdata->pending = 0;
+    socket->setCallbackObject(this, sockdata);
 
     // Issue a connect to the socket for the specified module and port.
     socket->connect(IPvXAddressResolver().resolve(moduleName), connectPort);
