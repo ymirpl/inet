@@ -29,18 +29,18 @@
 //
 // ----------------------------------------------------------------------------
 
-package inet.httptools;
+package inet.applications.httptools;
 
 import inet.applications.ITCPApp;
 
 
 //
-// HttpServerEvilA
+// HttpServerEvilB
 //
 // Demonstrates subclassing the server to create a custom site. This site is an attacker -- a puppetmaster --
 // which serves HTML pages containing attack code. In this case, we are simulating JavaScript attack code which prompts
-// the unsuspecting browser to request a number of images from a wictim site. Delays are specified to simulate hiding
-// the attack from the browser user by use of JavaScript timeouts or similar mechanisms.
+// the unsuspecting browser to issue a number of requests for non-existing resources (random URLS) to the victim site.
+// Delays are specified to simulate hiding the attack from the browser user by use of JavaScript timeouts or similar mechanisms.
 // The generateBody virtual function is redefined to create a page containing the attack code.
 //
 // This module definition has two additional parameters to the standard HttpServerDirect definition:
@@ -50,7 +50,7 @@ import inet.applications.ITCPApp;
 // @version 0.9
 // @author  Kristjan V. Jonsson
 //
-simple HttpServerEvilA like ITCPApp
+simple HttpServerEvilB like ITCPApp
 {
     parameters:
         string www;             // The WWW name of the server
@@ -60,8 +60,8 @@ simple HttpServerEvilA like ITCPApp
         string logFile;         // Name of server log file. Events are appended, allowing sharing of file for multiple servers.
         string siteDefinition;      // The site script file. Blank to disable.
         xml config;             // The XML configuration file for random sites
-        int activationTime; // The initial activation delay. Zero to disable.
-        int linkSpeed;          // Used to model transmission delays. //TODO
+        double activationTime;  // The initial activation delay. Zero to disable.
+        double linkSpeed;           // Used to model transmission delays.
         int minBadRequests; // The lower bound of bad requests.
         int maxBadRequests; // The upper bound of bad requests
     gates:

@@ -29,13 +29,13 @@
 //
 // ----------------------------------------------------------------------------
 
-package inet.httptools;
+package inet.applications.httptools;
 
 import inet.applications.ITCPApp;
 
 
 //
-// HttpServerDirectEvilA
+// HttpServerEvilA
 //
 // Demonstrates subclassing the server to create a custom site. This site is an attacker -- a puppetmaster --
 // which serves HTML pages containing attack code. In this case, we are simulating JavaScript attack code which prompts
@@ -47,23 +47,23 @@ import inet.applications.ITCPApp;
 // * minBadRequests specifies the lower bound on bad requests caused to be sent to the wictim by the browser.
 // * maxBadRequests specifies the upper bound on bad requests caused to be sent to the wictim by the browser.
 //
-// @version 1.0
+// @version 0.9
 // @author  Kristjan V. Jonsson
 //
-simple HttpServerDirectEvilA like ITCPApp
+simple HttpServerEvilA like ITCPApp
 {
     parameters:
-        string www = default("");                         // The WWW name of the server
-        int port = default(80);                           // The listening port number
-        int httpProtocol = default(11);                   // The http protocol: 10 for http/1.0, 11 for http/1.1. Not used at the present time.
-        int logLevel = default(0);                        // The log level: 2: Debug, 1: Info; 0: Errors and warnings only
-        string logFile = default("");                     // Name of server log file. Events are appended, allowing sharing of file for multiple servers.
-        string siteDefinition = default("");              // The site script file. Blank to disable.
-        double activationTime @unit(s) = default(0s);     // The initial activation delay. Zero to disable.
-        double linkSpeed @unit(bps) = default(11Mbps); // Used to model transmission delays.
-        int minBadRequests;                               // The lower bound of bad requests.
-        int maxBadRequests;                               // The upper bound of bad requests
-        xml config;                                       // The XML configuration file for random sites
+        string www;             // The WWW name of the server
+        int port;       // The listening port number
+        int httpProtocol;       // The http protocol: 10 for http/1.0, 11 for http/1.1. Not used at the present time.
+        int logLevel;           // The log level: 2: Debug, 1: Info; 0: Errors and warnings only
+        string logFile;         // Name of server log file. Events are appended, allowing sharing of file for multiple servers.
+        string siteDefinition;      // The site script file. Blank to disable.
+        xml config;             // The XML configuration file for random sites
+        int activationTime; // The initial activation delay. Zero to disable.
+        int linkSpeed;          // Used to model transmission delays. //TODO
+        int minBadRequests; // The lower bound of bad requests.
+        int maxBadRequests; // The upper bound of bad requests
     gates:
         input tcpIn;
         output tcpOut;
