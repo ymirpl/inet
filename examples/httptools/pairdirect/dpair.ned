@@ -29,38 +29,32 @@
 //
 // ----------------------------------------------------------------------------
 
-package inet.httptools;
+package inet.examples.httptools.pairdirect;
 
-import inet.applications.ITCPApp;
+import inet.httptools.DirectHost;
+import inet.httptools.httptController;
 
 
 //
-// DirectHost
+// Simple scenario with a pair of nodes. Direct message passing used.
 //
-// Simple host for the HttpTools project. The module is derived from the INET
-// StandardHost module. All network infrastructure modules were removed; 
-// the node is a simple container for tcpApps. Suitable apps are the httptBrowserDirect
-// and httptServerDirect modules from HttpTools.
-// See the INET documentation for StandardHost and the provided examples on how
-// to assign tcpApps to the module.
-//
-// @see httptServerDirect
-// @see httptBrowserDirect
-//
-// @author Kristjan V. Jonsson (kristjanvj@gmail.com)
-// @version 1.0
-//
-module DirectHost
+module httptDirectPair
 {
     parameters:
-        double numTcpApps = default(0);		// The number of tcpApps in the array
-        string tcpAppType = default("");				// The type of contained tcpApps
+        @display("bgb=474,374");
     submodules:
-        tcpApp[numTcpApps]: <tcpAppType> like ITCPApp {
+        controller: httptController {
             parameters:
-                @display("p=163,67;i=block/app");
+                @display("p=62,60;i=block/cogwheel");
+        }
+        srv: DirectHost {
+            parameters:
+                @display("p=170,188;i=device/server_l");
+        }
+        cli: DirectHost {
+            parameters:
+                @display("p=316,188;i=device/laptop_l");
         }
     connections allowunconnected:
 }
-
 

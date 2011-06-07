@@ -29,7 +29,10 @@
 //
 // ----------------------------------------------------------------------------
 
-import inet.applications.tcpapp.TCPApp;
+package inet.httptools;
+
+import inet.applications.ITCPApp;
+
 
 //
 // httptServerDirect
@@ -47,7 +50,7 @@ import inet.applications.tcpapp.TCPApp;
 // @version 1.0 
 // @author  Kristjan V. Jonsson
 //
-simple httptServerDirect like TCPApp
+simple httptServerDirect like ITCPApp
 {
     parameters:
         string www = default("");							// The WWW name of the server

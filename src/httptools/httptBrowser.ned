@@ -29,7 +29,10 @@
 //
 // ----------------------------------------------------------------------------
 
-import inet.applications.tcpapp.TCPApp;
+package inet.httptools;
+
+import inet.applications.ITCPApp;
+
 
 //
 // httptBrowser
@@ -45,7 +48,7 @@ import inet.applications.tcpapp.TCPApp;
 // @version 1.0 
 // @author  Kristjan V. Jonsson
 //
-simple httptBrowser like TCPApp
+simple httptBrowser like ITCPApp
 {
     parameters:
         int logLevel = default(0);						// The log level: 2: Debug, 1: Info; 0: Errors and warnings only

@@ -29,7 +29,10 @@
 //
 // ----------------------------------------------------------------------------
 
-import inet.applications.tcpapp.TCPApp;
+package inet.httptools;
+
+import inet.applications.ITCPApp;
+
 
 //
 // httptServerDirectEvilB
@@ -47,7 +50,7 @@ import inet.applications.tcpapp.TCPApp;
 // @version 1.0
 // @author  Kristjan V. Jonsson
 //
-simple httptServerDirectEvilB like TCPApp
+simple httptServerDirectEvilB like ITCPApp
 {
     parameters:
         string www = default("");                         // The WWW name of the server
@@ -61,7 +64,7 @@ simple httptServerDirectEvilB like TCPApp
         int minBadRequests;                               // The lower bound of bad requests.
         int maxBadRequests;                               // The upper bound of bad requests
         xml config;                                       // The XML configuration file for random sites        
-        
+
     gates:
         input tcpIn;
         output tcpOut;
