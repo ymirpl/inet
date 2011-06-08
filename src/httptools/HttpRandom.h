@@ -34,10 +34,13 @@
 
 #include <exception>
 #include <string>
+
 #include <omnetpp.h>
+
 #include "HttpUtils.h"
 
-enum DISTR_TYPE {dt_normal, dt_uniform, dt_exponential, dt_histogram, dt_constant, dt_zipf};
+
+enum HttpDistrType {dt_normal, dt_uniform, dt_exponential, dt_histogram, dt_constant, dt_zipf};
 
 // Defines for the distribution names
 #define DISTR_NORMAL_STR "normal"
@@ -47,7 +50,6 @@ enum DISTR_TYPE {dt_normal, dt_uniform, dt_exponential, dt_histogram, dt_constan
 #define DISTR_CONSTANT_STR "constant"
 #define DISTR_ZIPF_STR "zipf"
 
-using namespace std;
 
 /**
  * @brief Base random object. Should not be instantiated directly.
@@ -57,15 +59,15 @@ class rdObject
     public:
         virtual ~rdObject(){}
     protected:
-        DISTR_TYPE m_type;
+        HttpDistrType m_type;
     public:
         virtual double get() = 0; //> Pure virtual get a random number. Must be implemented in derived classes.
     public:
-        DISTR_TYPE getType() {return m_type;}
-        string typeStr();
-        virtual string toString() {return typeStr();}
+        HttpDistrType getType() {return m_type;}
+        std::string typeStr();
+        virtual std::string toString() {return typeStr();}
     protected:
-        bool _hasKey(cXMLAttributeMap attributes, string key) {return attributes.find(key)!=attributes.end();}
+        bool _hasKey(cXMLAttributeMap attributes, std::string key) {return attributes.find(key) != attributes.end();}
 };
 
 /**
@@ -167,7 +169,7 @@ class rdHistogram : public rdObject
         /** Get a random value */
         double get();
     private:
-        void __parseBinString( string binstr );
+        void __parseBinString(std::string binstr);
         void __normalizeBins();
 };
 
@@ -210,7 +212,7 @@ class rdZipf : public rdObject
         /** Get a random value -- a element in the pick order (popularity order) */
         virtual double get();
         /** Return the object definition as a string */
-        virtual string toString();
+        virtual std::string toString();
         // Getters and setters
         void setn(int n) {m_number = n; __setup_c();}
         int getn() {return m_number;}

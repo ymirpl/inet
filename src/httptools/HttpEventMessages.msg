@@ -57,7 +57,7 @@
 packet HttpServerStatusUpdateMsg
 {
     @omitGetVerb(true);
-    string www;             // Name of the WWW site.
+    string domainName;      // Name of the WWW site.
     simtime_t setTime;      // The event set time.
     int eventKind;          // The event kind, e.g. ss_special.
     double pvalue;          // The initial elevated probability.

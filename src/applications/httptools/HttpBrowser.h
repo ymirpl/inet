@@ -47,9 +47,9 @@
  *
  * @see HttpBrowser
  */
-struct SOCK_DATA_STRUCT
+struct HttpSockDataStruct
 {
-    MESSAGE_QUEUE_TYPE messageQueue;    //> Queue of pending messages.
+    HttpMessageQueue messageQueue;    //> Queue of pending messages.
     TCPSocket *socket;                  //> A reference to the socket object.
     int pending;                        //> A counter for the number of outstanding replies.
 };
@@ -79,7 +79,7 @@ class INET_API HttpBrowser : public HttpBrowserBase, public TCPSocket::CallbackI
         unsigned long numBroken;        //> Counter for the number of broken connections
         unsigned long socketsOpened;    //> Counter for opened sockets
 
-        SOCK_DATA_STRUCT *pendingSocket;
+        HttpSockDataStruct *pendingSocket;
 
     public:
         HttpBrowser(); //* Constructor. Initializes counters */
@@ -105,16 +105,16 @@ class INET_API HttpBrowser : public HttpBrowserBase, public TCPSocket::CallbackI
     //@{
     protected:
         /** @brief Sends a scripted browse event to a specific server */
-        virtual void sendRequestToServer( BROWSE_EVENT_ENTRY be );
+        virtual void sendRequestToServer(BrowseEventEntry be);
 
         /** Send a request to server. Uses the recipient stamped in the request. */
-        virtual void sendRequestToServer( HttpRequestMessage *request );
+        virtual void sendRequestToServer(HttpRequestMessage *request);
 
         /** @brief Sends a generic request to a randomly chosen server */
         virtual void sendRequestToRandomServer();
 
         /** @brief Sends a number of queued messages to the specified server */
-        virtual void sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue );
+        virtual void sendRequestsToServer(std::string domainName, HttpMessageQueue queue);
     //@}
 
     /** @name TCPSocket::CallbackInterface callback methods */
@@ -165,13 +165,13 @@ class INET_API HttpBrowser : public HttpBrowserBase, public TCPSocket::CallbackI
          *  stored as a myPtr with the socket. The message is transmitted once the socket is established, signaled
          *  by a call to socketEstablished.
          */
-        void submitToSocket( const char* moduleName, int connectPort, cMessage *msg );
+        void submitToSocket(const char* moduleName, int connectPort, cPacket *msg);
 
         /** @brief Establishes a socket and assigns a queue of messages to be transmitted.
          *  Same as the overloaded version, except a number of messages are queued for transmission. The same socket
          *  instance is used for all the queued messages.
          */
-        void submitToSocket( const char* moduleName, int connectPort, MESSAGE_QUEUE_TYPE &queue );
+        void submitToSocket(const char* moduleName, int connectPort, HttpMessageQueue &queue);
     //@}
 };
 

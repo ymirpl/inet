@@ -42,7 +42,7 @@ channel ethernetline extends ned.DatarateChannel
 {
     parameters:
         delay = 0.1us;
-        datarate = 100*1000000;
+        datarate = 100Mbps;
 }
 
 
@@ -89,13 +89,23 @@ network HttpNnodes
             parameters:
                 @display("i=device/laptop_l");
         }
-        server[numservers]: StandardHost {
+        thegood[numservers]: StandardHost {
             parameters:
                 @display("i=device/server_l");
         }
-    connections allowunconnected:
+        thebad[numservers]: StandardHost {
+            parameters:
+                @display("i=device/server_l");
+        }
+        theugly[numservers]: StandardHost {
+            parameters:
+                @display("i=device/server_l");
+        }
+            connections allowunconnected:
         for i=0..numservers-1 {
-            server[i].ethg++ <--> ethernetline <--> router_s.ethg++;
+            thegood[i].ethg++ <--> ethernetline <--> router_s.ethg++;
+            thebad[i].ethg++ <--> ethernetline <--> router_s.ethg++;
+            theugly[i].ethg++ <--> ethernetline <--> router_s.ethg++;
         }
         for i=0..numclients-1 {
             client[i].ethg++ <--> ethernetline <--> router_c.ethg++;

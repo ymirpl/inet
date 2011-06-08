@@ -31,7 +31,7 @@
 
 package inet.nodes.httptools;
 
-import inet.applications.ITCPApp;
+import inet.applications.httptools.IHttpDirectApp;
 
 
 //
@@ -55,7 +55,7 @@ module DirectHost
     parameters:
         double numTcpApps = default(0);		// The number of tcpApps in the array
     submodules:
-        tcpApp[numTcpApps]: <> like ITCPApp {
+        tcpApp[numTcpApps]: <> like IHttpDirectApp {
             parameters:
                 @display("p=163,67;i=block/app");
         }

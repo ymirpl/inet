@@ -29,27 +29,30 @@
 //
 // ----------------------------------------------------------------------------
 
-package inet.httptools;
+package inet.applications.httptools;
+
 
 //
-// HttpNodeBase
+// HttpServerDirect
+//
+// A Web server module for OMNeT++ simulations and direct message passing between modules.
+// This module is intended for use with the DirectHost module and plugs in as a tcpApp.
+//
 //
 // NEW: The module has been migrated to OMNeT++ 4.0 and the latest INET version.
 //
-// @author Kristjan V. Jonsson
-// @version 1.0
+// @see HttpServerBase
+// @see HttpServer
+// @see DirectHost
 //
-simple HttpNodeBase
+// @version 1.0
+// @author  Kristjan V. Jonsson
+//
+moduleinterface IHttpDirectApp
 {
     parameters:
-        string address;
-        int port;
-        xml config;
-        int logLevel;
-        int httpProtocol;
-        double linkSpeed;
+        double linkSpeed @unit(bps);  // Used to model transmission delays.
     gates:
-        input tcpIn;
-        output tcpOut;
+        input httpIn;
 }
 

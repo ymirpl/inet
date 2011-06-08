@@ -43,23 +43,22 @@
 
 #define MAX_URL_LENGTH 2048 // The maximum allowed URL string length.
 
-using namespace std;
 
 /**
  * @brief Browse event item. Used in scripted mode.
  */
-struct BROWSE_EVENT_ENTRY
+struct BrowseEventEntry
 {
     simtime_t time;                 //> Event triggering time
-    string wwwhost;                 //> Host to contact
-    string resourceName;            //> The resource to request
-    HttpNodeBase *serverModule; //> Reference to the omnet server object. Resolved at parse time.
+    std::string wwwhost;            //> Host to contact
+    std::string resourceName;       //> The resource to request
+    HttpNodeBase *serverModule;     //> Reference to the omnet server object. Resolved at parse time.
 };
 
 /**
  * @brief Browse events queue. Used in scripted mode.
  */
-typedef deque<BROWSE_EVENT_ENTRY> BROWSE_EVENT_QUEUE_TYPE;
+typedef std::deque<BrowseEventEntry> BROWSE_EVENT_QUEUE_TYPE;
 
 /**
  * @short Browser module for OMNeT++ simulations - base class
@@ -175,23 +174,23 @@ class INET_API HttpBrowserBase : public HttpNodeBase
         /** @name pure virtual methods to communicate with the server. Must be implemented in derived classes */
         //@{
         /** Send a request defined by a browse event (scripted entry) to a server */
-        virtual void sendRequestToServer( BROWSE_EVENT_ENTRY be ) = 0;
+        virtual void sendRequestToServer( BrowseEventEntry be ) = 0;
         /** Send a request to server. Uses the recipient stamped in the request. */
         virtual void sendRequestToServer( HttpRequestMessage *request ) = 0;
         /** Send a request to a randomly selected server. The derived class utilizes the controller object to retrieve the object */
         virtual void sendRequestToRandomServer() = 0;
         /** Send a request to a named server */
-        virtual void sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue ) = 0;
+        virtual void sendRequestsToServer(std::string domainName, HttpMessageQueue queue ) = 0;
         //@}
 
         /** @name Methods for generating HTML page requests and resource requests */
         //@{
         /** Generate a HTTP request to a specific server and for a specific page */
-        cMessage* generatePageRequest(string www, string page, bool bad = false, int size = 0);
+        cPacket* generatePageRequest(std::string domainName, std::string page, bool bad = false, int size = 0);
         /** Generate a random HTTP request -- used in case we dont care which page is requested */
-        cMessage* generateRandomPageRequest(string www, bool bad = false, int size = 0);
+        cPacket* generateRandomPageRequest(std::string domainName, bool bad = false, int size = 0);
         /** Generate a resource request, e.g. for an image or css document */
-        cMessage* generateResourceRequest(string www, string resource = "", int serial = 0, bool bad = false, int size = 0);
+        cPacket* generateResourceRequest(std::string domainName, std::string resource = "", int serial = 0, bool bad = false, int size = 0);
         //@}
 
         //* Read scripted events from file. Triggered if the script file parameter is specified in the initialization file. */

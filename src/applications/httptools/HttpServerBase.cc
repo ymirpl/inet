@@ -38,14 +38,14 @@ void HttpServerBase::initialize()
 
     EV_DEBUG << "Initializing server component\n";
 
-    wwwName = (const char*)par("www");
-    if ( wwwName.size() == 0 )
+    domainName = (const char*)par("domainName");
+    if ( domainName.size() == 0 )
     {
-        wwwName = "www.";
-        wwwName += getParentModule()->getFullName();
-        wwwName += ".com";
+        domainName = "www.";
+        domainName += getParentModule()->getFullName();
+        domainName += ".com";
     }
-    EV_DEBUG << "Initializing HTTP server. Using WWW name " << wwwName << endl;
+    EV_DEBUG << "Initializing HTTP server. Using WWW name " << domainName << endl;
     port = par("port");
 
     logFileName = (const char*)par("logFile");
@@ -108,7 +108,7 @@ void HttpServerBase::initialize()
     activationTime = par("activationTime");
     EV_INFO << "Activation time is " << activationTime << endl;
 
-    string siteDefinition = (const char*)par("siteDefinition");
+    std::string siteDefinition = (const char*)par("siteDefinition");
     scriptedMode = (siteDefinition.size() != 0);
     if ( scriptedMode )
         readSiteDefinition(siteDefinition);
@@ -168,7 +168,7 @@ void HttpServerBase::handleMessage(cMessage *msg)
     updateDisplay();
 }
 
-cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
+cPacket* HttpServerBase::handleReceivedMessage( cMessage *msg )
 {
     HttpRequestMessage *request = check_and_cast<HttpRequestMessage *>(msg);
     if (request==NULL) error("Message (%s)%s is not a valid request", msg->getClassName(), msg->getName());
@@ -180,7 +180,7 @@ cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
     simtime_t processingDelay = 0;
 
     bool recipientError = false;
-    if ( extractServerName(request->targetUrl()) != wwwName )
+    if ( extractServerName(request->targetUrl()) != domainName )
     {
         // This should never happen but lets check
         error("Received message indended for '%s'", request->targetUrl()); // TODO: DEBUG HERE
@@ -191,8 +191,8 @@ cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
 
     // Parse the request string on spaces
     cStringTokenizer tokenizer = cStringTokenizer(request->heading(), " ");
-    std::vector<string> res = tokenizer.asVector();
-    if ( res.size() != 3 )
+    std::vector<std::string> res = tokenizer.asVector();
+    if (res.size() != 3)
     {
         EV_ERROR << "Invalid request string: " << request->heading() << endl;
         replymsg = generateErrorReply(request, 400);
@@ -200,13 +200,13 @@ cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
         return replymsg;
     }
 
-    if ( request->badRequest() )
+    if (request->badRequest())
     {
         // Bad requests get a 404 reply.
         EV_ERROR << "Bad request - bad flag set. Message: " << request->getName() << endl;
         replymsg = generateErrorReply(request, 404);
     }
-    else if ( res[0] == "GET" )
+    else if (res[0] == "GET")
     {
         replymsg = handleGetRequest(request, res[1]); // Pass in the resource string part
     }
@@ -216,27 +216,27 @@ cMessage* HttpServerBase::handleReceivedMessage( cMessage *msg )
         replymsg = generateErrorReply(request, 400);
     }
 
-    if ( replymsg!=NULL )
+    if (replymsg != NULL)
         logResponse(replymsg);
 
     return replymsg;
 }
 
-HttpReplyMessage* HttpServerBase::handleGetRequest( HttpRequestMessage *request, string resource )
+HttpReplyMessage* HttpServerBase::handleGetRequest( HttpRequestMessage *request, std::string resource )
 {
     EV_DEBUG << "Handling GET request " << request->getName() << " resource: " << resource << endl;
 
     resource = trimLeft(resource, "/");
-    vector<string> req = parseResourceName(resource);
-    if ( req.size()!=3 )
+    std::vector<std::string> req = parseResourceName(resource);
+    if (req.size() != 3)
     {
         EV_ERROR << "Invalid GET request string: " << request->heading() << endl;
         return generateErrorReply(request, 400);
     }
 
-    CONTENT_TYPE_ENUM cat = getResourceCategory(req);
+    HttpContentType cat = getResourceCategory(req);
 
-    if ( cat==rt_html_page )
+    if (cat == rt_html_page)
     {
         if ( scriptedMode )
         {
@@ -285,7 +285,7 @@ HttpReplyMessage* HttpServerBase::generateDocument( HttpRequestMessage *request,
     sprintf(szReply, "HTTP/1.1 200 OK (%s)", resource);
     HttpReplyMessage* replymsg = new HttpReplyMessage(szReply);
     replymsg->setHeading("HTTP/1.1 200 OK");
-    replymsg->setOriginatorUrl(wwwName.c_str());
+    replymsg->setOriginatorUrl(domainName.c_str());
     replymsg->setTargetUrl(request->originatorUrl());
     replymsg->setProtocol(request->protocol());
     replymsg->setSerial(request->serial());
@@ -317,7 +317,7 @@ HttpReplyMessage* HttpServerBase::generateDocument( HttpRequestMessage *request,
     return replymsg;
 }
 
-HttpReplyMessage* HttpServerBase::generateResourceMessage( HttpRequestMessage *request, string resource, CONTENT_TYPE_ENUM category )
+HttpReplyMessage* HttpServerBase::generateResourceMessage( HttpRequestMessage *request, std::string resource, HttpContentType category )
 {
     EV_DEBUG << "Generating resource message in response to request " << request->heading() << " with serial " << request->serial() << endl;
 
@@ -330,7 +330,7 @@ HttpReplyMessage* HttpServerBase::generateResourceMessage( HttpRequestMessage *r
     sprintf(szReply, "HTTP/1.1 200 OK (%s)", resource.c_str());
     HttpReplyMessage* replymsg = new HttpReplyMessage(szReply);
     replymsg->setHeading("HTTP/1.1 200 OK");
-    replymsg->setOriginatorUrl(wwwName.c_str());
+    replymsg->setOriginatorUrl(domainName.c_str());
     replymsg->setTargetUrl(request->originatorUrl());
     replymsg->setProtocol(request->protocol()); // MIGRATE40: kvj
     replymsg->setSerial(request->serial());
@@ -349,7 +349,7 @@ HttpReplyMessage* HttpServerBase::generateErrorReply( HttpRequestMessage *reques
     sprintf(szErrStr, "HTTP/1.1 %.3d %s", code, htmlErrFromCode(code).c_str());
     HttpReplyMessage* replymsg = new HttpReplyMessage(szErrStr);
     replymsg->setHeading(szErrStr);
-    replymsg->setOriginatorUrl(wwwName.c_str());
+    replymsg->setOriginatorUrl(domainName.c_str());
     replymsg->setTargetUrl(request->originatorUrl());
     replymsg->setProtocol(request->protocol());  // MIGRATE40: kvj
     replymsg->setSerial(request->serial());
@@ -361,13 +361,13 @@ HttpReplyMessage* HttpServerBase::generateErrorReply( HttpRequestMessage *reques
     return replymsg;
 }
 
-string HttpServerBase::generateBody()
+std::string HttpServerBase::generateBody()
 {
     int numResources = (int)rdNumResources->get();
     int numImages = (int)(numResources*rdTextImageResourceRatio->get());
     int numText = numResources - numImages;
 
-    string result;
+    std::string result;
 
     char tempBuf[128];
     for ( int i=0; i<numImages; i++ )
@@ -390,26 +390,26 @@ void HttpServerBase::registerWithController()
     cModule * controller = simulation.getSystemModule()->getSubmodule("controller");
     if ( controller == NULL )
         error("Controller module not found");
-    ((HttpController*)controller)->registerWWWserver(getParentModule()->getFullName(), wwwName.c_str(), port, INSERT_END, activationTime);
+    ((HttpController*)controller)->registerWWWserver(getParentModule()->getFullName(), domainName.c_str(), port, INSERT_END, activationTime);
 }
 
-void HttpServerBase::readSiteDefinition(string file)
+void HttpServerBase::readSiteDefinition(std::string file)
 {
     EV_DEBUG << "Reading site definition file " << file << endl;
 
-    ifstream tracefilestream;
+    std::ifstream tracefilestream;
     tracefilestream.open(file.c_str());
     if (tracefilestream.fail())
         error("Could not open site definition file %s", file.c_str());
 
-    vector<string> siteFileSplit = splitFile(file);
-    string line;
-    string key;
-    string htmlfile;
-    string body;
-    string value1;
-    string value2;
-    string sectionsub;
+    std::vector<std::string> siteFileSplit = splitFile(file);
+    std::string line;
+    std::string key;
+    std::string htmlfile;
+    std::string body;
+    std::string value1;
+    std::string value2;
+    std::string sectionsub;
     int size;
     int linecount = 0;
     bool siteSection = false;
@@ -431,17 +431,17 @@ void HttpServerBase::readSiteDefinition(string file)
         else
         {
             cStringTokenizer tokenizer = cStringTokenizer(line.c_str(), ";");
-            std::vector<string> res = tokenizer.asVector();
+            std::vector<std::string> res = tokenizer.asVector();
 
-            if ( siteSection )
+            if (siteSection)
             {
-                if ( res.size()<2 || res.size()>3 )
+                if (res.size() < 2 || res.size() > 3)
                     error("Invalid format of site configuration file '%s'. Site section, line (%d): %s",
                            file.c_str(), linecount, line.c_str());
                 key = trimLeft(res[0], "/");
-                if ( key.size()==0 )
+                if (key.size() == 0)
                 {
-                    if ( htmlPages.find("root")==htmlPages.end() )
+                    if (htmlPages.find("root") == htmlPages.end())
                         key = "root";
                     else
                         error("Second root page found in site definition file %s, line (%d): %s",
@@ -450,7 +450,7 @@ void HttpServerBase::readSiteDefinition(string file)
                 htmlfile = res[1];
                 body = readHtmlBodyFile(htmlfile, siteFileSplit[0]); // Pass in the path of the definition file. Page defs are relative to that.
                 size = 0;
-                if ( res.size()>2 )
+                if (res.size() > 2)
                 {
                     try
                     {
@@ -501,24 +501,24 @@ void HttpServerBase::readSiteDefinition(string file)
     tracefilestream.close();
 }
 
-string HttpServerBase::readHtmlBodyFile( string file, string path )
+std::string HttpServerBase::readHtmlBodyFile(std::string file, std::string path)
 {
     EV_DEBUG << "Reading HTML page definition file" << endl;
 
-    string filePath = path;
+    std::string filePath = path;
     filePath += file;
 
-    string line;
-    string body = "";
-    ifstream htmlfilestream;
+    std::string line;
+    std::string body = "";
+    std::ifstream htmlfilestream;
     htmlfilestream.open(filePath.c_str());
     if (htmlfilestream.fail())
         error("Could not open page definition file '%s'", filePath.c_str());
     while (!std::getline(htmlfilestream, line).eof())
     {
         line = trim(line);
-        if ( line.size()==0 ) continue;
-        if ( line[0]=='#' ) continue;
+        if (line.size()==0) continue;
+        if (line[0]=='#') continue;
         body += line;
         body += "\n";
     }

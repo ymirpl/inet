@@ -36,14 +36,15 @@
 #include <string>
 #include <list>
 #include <vector>
-#include <omnetpp.h>
 #include <fstream>
+
+#include "INETDefs.h"
+
 #include "HttpLogdefs.h"
 #include "HttpUtils.h"
 #include "HttpRandom.h"
 #include "HttpEventMessages_m.h"
 
-using namespace std;
 
 // Definitions for the insertion of registered servers into the picklist.
 #define INSERT_END 0
@@ -55,10 +56,10 @@ enum ServerStatus {ss_normal, ss_special};
 /**
  * @brief Registration entry for Web servers
  */
-struct WEB_SERVER_ENTRY
+struct WebServerEntry
 {
-    string name;                // The server URL.
-    string host;                // The OMNeT++ object name.
+    std::string name;           // The server URL.
+    std::string host;           // The OMNeT++ object name.
     int port;                   // Listening port.
     cModule *module;            // The actual OMNeT++ module reference to the server object.
     simtime_t activationTime;   // Activation time for the server relative to simulation start.
@@ -89,10 +90,10 @@ class HttpController : public cSimpleModule
     protected:
         int ll; //> The log level
 
-        map<string,WEB_SERVER_ENTRY*> webSiteList;  //> A list of registered web sites (server objects)
-        vector<WEB_SERVER_ENTRY*> pickList;         //> The picklist used to select sites at random.
-        list<WEB_SERVER_ENTRY*> specialList;        //> The special list -- contains sites with active popularity modification events.
-        double pspecial;                            //> The probability [0,1) of selecting a site from the special list.
+        std::map<std::string,WebServerEntry*>  webSiteList;  //> A list of registered web sites (server objects)
+        std::vector<WebServerEntry*> pickList;          //> The picklist used to select sites at random.
+        std::list<WebServerEntry*> specialList;         //> The special list -- contains sites with active popularity modification events.
+        double pspecial;                                //> The probability [0,1) of selecting a site from the special list.
 
         unsigned long totalLookups;     //> A counter for the total number of lookups
 
@@ -130,21 +131,24 @@ class HttpController : public cSimpleModule
          * play a role when zipf or other non-uniform selection probability is used (the pick list is basically mapped to
          * the non-uniform distribution).
          */
-        void registerWWWserver( const char* objectName, const char* wwwName, int port, int rank = INSERT_RANDOM, simtime_t activationTime = 0.0 );
+        void registerWWWserver(const char* objectName, const char* domainName, int port, int rank = INSERT_RANDOM, simtime_t activationTime = 0.0);
 
         /**
-         * @brief Get a specific server module reference
-         * Returns a OMNeT++ module reference for a specific WWW name. Called by browser modules to get a
+         * @brief Get a specific server object
+         * Returns a WebServerEntry pointer for a specific domain name. Called by browser modules to get a
          * communications partner. @see HttpBrowserBase
          */
-        cModule* getServerModule( const char* wwwName );
+        const WebServerEntry *getServerEntry(const char *domainName);
 
         /**
          * @brief Get a random server object
-         * Returns a OMNeT++ module reference to a randomly chosen server. The general popularity distribution
+         * Returns a WebServerEntry pointer to a randomly chosen server. The general popularity distribution
          * is used in conjunction with the special list to determine the module returned. Called by browser
          * modules to get a random communications partner. @see HttpBrowserBase
          */
+        const WebServerEntry *getAnyServerEntry();
+
+        cModule* getServerModule(const char* wwwName);
         cModule* getAnyServerModule();
 
         /**
@@ -152,7 +156,7 @@ class HttpController : public cSimpleModule
          * Get a module reference and port number for a specific www name. Used by the browser modules
          * when using TCP transport. @see HttpBrowser
          */
-        int getServerInfo( const char* wwwName, char* module, int &port );
+        int getServerInfo(const char* domainName, char* module, int &port );
 
         /**
          * @brief Get module and port for a random server.
@@ -160,43 +164,42 @@ class HttpController : public cSimpleModule
          * is used in conjunction with the special list to determine the module returned. Called by browser
          * modules to get a random communications partner. @see HttpBrowserBase
          */
-        int getAnyServerInfo( char* wwwName, char* module, int &port );
+        int getAnyServerInfo(char* domainName, char* module, int &port );
     //@}
 
     protected:
         /** @brief helper used by the server registration to locate the tcpApp getModule(server or browser) */
-        cModule* getTcpApp(string node);
+        cModule* getTcpApp(std::string node);
 
         /** @brief Set special status of a WWW server. Triggered by an event message. */
-        void setSpecialStatus( const char* www, ServerStatus status, double p, double amortize );
+        void setSpecialStatus(const char* www, ServerStatus status, double p, double amortize );
 
         /** @brief Cancel special popularity status for a server. Called when popularity has been amortized to zero. */
-        void cancelSpecialStatus( const char* www );
+        void cancelSpecialStatus(const char* www );
 
         /** @brief Select a server from the special list. This method is called with the pspecial probability. */
-        WEB_SERVER_ENTRY* selectFromSpecialList();
+        WebServerEntry* selectFromSpecialList();
 
         /** @brief list the registered servers. Useful for debug. */
-        string listRegisteredServers();
+        std::string listRegisteredServers();
 
         /** @brief list the servers on the special list, i.e. those with custom selection probability. Useful for debug. */
-        string listSpecials();
+        std::string listSpecials();
 
         /** @brief list the registered servers in the order of the general population pick list. Useful for debug. */
-        string listPickOrder();
+        std::string listPickOrder();
 
         /**
          * @brief Parse a popularity modification events definition file at startup (if defined)
          * Format: {time};{www name};{event kind};{p value};{amortization factor}
          * Event kind is not used at the present -- use 1 as a default here.
         */
-        void parseOptionsFile(string file, string section);
+        void parseOptionsFile(std::string file, std::string section);
 
     private:
         /** @brief Get a random server from the special list with p=pspecial or from the general population with p=1-pspecial. */
-        WEB_SERVER_ENTRY* __getRandomServerInfo();
+        WebServerEntry* __getRandomServerInfo();
 };
 
 #endif /* HttpController */
-
 

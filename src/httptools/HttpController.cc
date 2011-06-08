@@ -74,9 +74,9 @@ void HttpController::initialize(int stage)
 
         EV_DEBUG << "Server selection probability distribution: " << rdServerSelection->toString() << endl;
 
-        string optionsfile = (const char*)par("events");
-        string optionssection = (const char*)par("eventsSection");
-        if ( optionsfile.size()!=0 )
+        std::string optionsfile = (const char*)par("events");
+        std::string optionssection = (const char*)par("eventsSection");
+        if (optionsfile.size() != 0)
             parseOptionsFile(optionsfile, optionssection);
     }
 }
@@ -85,8 +85,8 @@ void HttpController::finish()
 {
     EV_SUMMARY << "Invoking finish on the controller. Total lookups " << totalLookups << endl;
 
-    WEB_SERVER_ENTRY *en;
-    map<string,WEB_SERVER_ENTRY*>::const_iterator iter;
+    WebServerEntry *en;
+    std::map<std::string,WebServerEntry*>::const_iterator iter;
     for (iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
     {
         en = (*iter).second;
@@ -103,8 +103,8 @@ void HttpController::handleMessage(cMessage *msg)
     if ( msg->isSelfMessage() )
     {
         HttpServerStatusUpdateMsg* statusMsg = check_and_cast<HttpServerStatusUpdateMsg*>(msg);
-        EV_DEBUG << "Handling a status change message @T=" << simTime() << " for www " << statusMsg->www() << endl;
-        setSpecialStatus(statusMsg->www(), (ServerStatus)statusMsg->eventKind(), statusMsg->pvalue(), statusMsg->pamortize());
+        EV_DEBUG << "Handling a status change message @T=" << simTime() << " for www " << statusMsg->domainName() << endl;
+        setSpecialStatus(statusMsg->domainName(), (ServerStatus)statusMsg->eventKind(), statusMsg->pvalue(), statusMsg->pamortize());
         delete statusMsg;
     }
     else
@@ -117,7 +117,7 @@ void HttpController::registerWWWserver( const char* objectName, const char* wwwN
 {
     Enter_Method_Silent();
 
-    string serverUrl = extractServerName(wwwName);
+    std::string serverUrl = extractServerName(wwwName);
 
     EV_DEBUG << "Registering www server: " << objectName << ", " << wwwName
              << " (" << port << "). Activation time is " << activationTime << endl;
@@ -125,7 +125,7 @@ void HttpController::registerWWWserver( const char* objectName, const char* wwwN
     if ( webSiteList.find(wwwName) != webSiteList.end() )
         EV_ERROR << "Server " << wwwName << " is already registered\n";
 
-    WEB_SERVER_ENTRY *en = new WEB_SERVER_ENTRY;
+    WebServerEntry *en = new WebServerEntry;
 
     en->name = serverUrl;
     en->host = objectName;
@@ -144,7 +144,7 @@ void HttpController::registerWWWserver( const char* objectName, const char* wwwN
     webSiteList[en->name] = en;
 
     int pos;
-    vector<WEB_SERVER_ENTRY*>::iterator begin = pickList.begin();
+    std::vector<WebServerEntry*>::iterator begin = pickList.begin();
     if ( rank==INSERT_RANDOM  )
     {
         if ( pickList.size()==0 )
@@ -172,120 +172,105 @@ void HttpController::registerWWWserver( const char* objectName, const char* wwwN
     }
 }
 
-cModule* HttpController::getServerModule( const char* wwwName )
+const WebServerEntry *HttpController::getServerEntry(const char* wwwName)
 {
     Enter_Method_Silent();
 
-    string serverUrl = extractServerName(wwwName);
+    std::string serverUrl = extractServerName(wwwName);
 
-    if ( webSiteList.find(serverUrl) == webSiteList.end() ) // The www name is not in the map
+    std::map<std::string,WebServerEntry*>::iterator it = webSiteList.find(serverUrl);
+    if (it == webSiteList.end()) // The www name is not in the map
     {
         EV_ERROR << "Could not find module name for " << wwwName << endl;
         return NULL;
     }
 
-    WEB_SERVER_ENTRY *en = webSiteList[serverUrl];
+    WebServerEntry *en = it->second;
     EV_DEBUG << "Got module object for www name " << wwwName << ": " << en->host << " (" << en->port << ")\n";
 
     totalLookups++;
     en->accessCount++;
 
-    if ( en->module == NULL )
+    return en;
+}
+
+const WebServerEntry *HttpController::getAnyServerEntry()
+{
+    Enter_Method_Silent();
+
+    if (webSiteList.size() == 0)
+    {
+        EV_WARNING << "No modules registered. Cannot select a random module" << endl;
+        return NULL;
+    }
+
+    if (pickList.size() == 0)
+    {
+        EV_ERROR << "No modules currently in the picklist. Cannot select a random module" << endl;
+        return NULL;
+    }
+
+    EV_DEBUG << "Getting a random server module with pspecial=" << pspecial << endl;
+
+    WebServerEntry *en = __getRandomServerInfo();
+    EV_DEBUG << "Got a random www module: " << en->name << ", " << en->host << " (" << en->port << ")\n";
+
+    totalLookups++;
+    en->accessCount++;
+
+    return en;
+}
+
+cModule* HttpController::getServerModule(const char* wwwName)
+{
+    const WebServerEntry *en = getServerEntry(wwwName);
+    if (en == NULL)
+        return NULL;
+    if (en->module == NULL) //TODO is this a program bug?
         EV_ERROR << "Undefined module for " << wwwName << endl;
     return en->module;
 }
 
 cModule* HttpController::getAnyServerModule()
 {
-    Enter_Method_Silent();
-
-    if ( webSiteList.size() == 0 )
-    {
-        EV_WARNING << "No modules registered. Cannot select a random module" << endl;
+    const WebServerEntry *en = getAnyServerEntry();
+    if (en == NULL)
         return NULL;
-    }
-
-    if ( pickList.size()==0 )
-    {
-        EV_ERROR << "No modules currently in the picklist. Cannot select a random module" << endl;
-        return NULL;
-    }
-
-    EV_DEBUG << "Getting a random server module with pspecial=" << pspecial << endl;
-
-    WEB_SERVER_ENTRY *en = __getRandomServerInfo();
-    EV_DEBUG << "Got a random www module: " << en->name << ", " << en->host << " (" << en->port << ")\n";
-
-    totalLookups++;
-    en->accessCount++;
-
     return en->module;
 }
 
-int HttpController::getServerInfo( const char* wwwName, char* module, int &port )
+int HttpController::getServerInfo(const char* wwwName, char* moduleName, int &port)
 {
-    Enter_Method_Silent();
-
-    string serverUrl = extractServerName(wwwName);
-
-    if ( webSiteList.find(serverUrl) == webSiteList.end() ) // The www name is not in the map
-    {
-        EV_ERROR << "Could not find module name for " << wwwName << endl;
+    const WebServerEntry *en = getServerEntry(wwwName);
+    if (en == NULL)
         return -1;
-    }
 
-    WEB_SERVER_ENTRY *en = webSiteList[serverUrl];
-    EV_DEBUG << "Got module object for www name " << wwwName << ": " << en->host << " (" << en->port << ")\n";
-
-    totalLookups++;
-    en->accessCount++;
-
-    strcpy(module, en->host.c_str());
+    strcpy(moduleName, en->host.c_str());
     port = en->port;
-
     return 0;
 }
 
-int HttpController::getAnyServerInfo( char* wwwName, char* module, int &port )
+int HttpController::getAnyServerInfo( char* wwwName, char* moduleName, int &port )
 {
-    Enter_Method_Silent();
-
-    if ( webSiteList.size() == 0 )
-    {
-        EV_WARNING << "No modules registered. Cannot select a random module" << endl;
+    const WebServerEntry *en = getAnyServerEntry();
+    if (en == NULL)
         return -1;
-    }
-
-    if ( pickList.size()==0 )
-    {
-        EV_ERROR << "No modules currently in the picklist. Cannot select a random module" << endl;
-        return -2;
-    }
-
-    EV_DEBUG << "Getting a random server module with pspecial=" << pspecial << endl;
-
-    WEB_SERVER_ENTRY *en = __getRandomServerInfo();
-    EV_DEBUG << "Got a random www module: " << en->name << ", " << en->host << " (" << en->port << ")\n";
-
-    totalLookups++;
-    en->accessCount++;
 
     strcpy(wwwName, en->name.c_str());
-    strcpy(module, en->host.c_str());
+    strcpy(moduleName, en->host.c_str());
     port = en->port;
-
     return 0;
 }
 
-cModule* HttpController::getTcpApp(string node)
+cModule* HttpController::getTcpApp(std::string node)
 {
     int pos = node.find("[");
     int rpos = node.rfind("]");
     cModule * receiverModule = NULL;
-    if ( pos > -1 && rpos > -1 )
+    if (pos > -1 && rpos > -1)
     {
-        string id = node.substr(pos+1, pos-rpos-1);
-        string name = node.substr(0, pos);
+        std::string id = node.substr(pos+1, pos-rpos-1);
+        std::string name = node.substr(0, pos);
         int numid = atoi(id.c_str());
         receiverModule = simulation.getSystemModule()->getSubmodule(name.c_str(), numid);
     }
@@ -307,7 +292,7 @@ void HttpController::setSpecialStatus( const char* www, ServerStatus status, dou
 
     EV_DEBUG << "Setting special status for " << www << ", p=" << p << " and amortize=" << amortize << endl;
 
-    WEB_SERVER_ENTRY *en = webSiteList[www];
+    WebServerEntry *en = webSiteList[www];
 
     en->statusSetTime = simTime();
     en->serverStatus = status;
@@ -322,8 +307,8 @@ void HttpController::setSpecialStatus( const char* www, ServerStatus status, dou
 void HttpController::cancelSpecialStatus( const char* www )
 {
     if (specialList.size()==0) return;
-    WEB_SERVER_ENTRY *en;
-    list<WEB_SERVER_ENTRY*>::iterator i;
+    WebServerEntry *en;
+    std::list<WebServerEntry*>::iterator i;
     for (i=specialList.begin(); i!=specialList.end(); i++)
     {
         en = (*i);
@@ -344,7 +329,7 @@ void HttpController::cancelSpecialStatus( const char* www )
     EV_DEBUG << "Size of special list is now " << specialList.size() << endl;
 }
 
-WEB_SERVER_ENTRY* HttpController::selectFromSpecialList()
+WebServerEntry* HttpController::selectFromSpecialList()
 {
     if ( specialList.size()==0 )
     {
@@ -352,7 +337,7 @@ WEB_SERVER_ENTRY* HttpController::selectFromSpecialList()
         return NULL;
     }
 
-    WEB_SERVER_ENTRY *en = NULL;
+    WebServerEntry *en = NULL;
 
     if ( specialList.size()==1 )
     {
@@ -362,7 +347,7 @@ WEB_SERVER_ENTRY* HttpController::selectFromSpecialList()
     {
         double p = uniform(0, 1);
         double pcumulative = 0.0;
-        list<WEB_SERVER_ENTRY*>::iterator i;
+        std::list<WebServerEntry*>::iterator i;
         for (i=specialList.begin(); i!=specialList.end(); i++)
         {
             en = (*i);
@@ -393,11 +378,11 @@ WEB_SERVER_ENTRY* HttpController::selectFromSpecialList()
     return en;
 }
 
-string HttpController::listRegisteredServers()
+std::string HttpController::listRegisteredServers()
 {
-    ostringstream str;
-    WEB_SERVER_ENTRY *en;
-    map<string,WEB_SERVER_ENTRY*>::const_iterator iter;
+    std::ostringstream str;
+    WebServerEntry *en;
+    std::map<std::string,WebServerEntry*>::const_iterator iter;
     for (iter = webSiteList.begin(); iter != webSiteList.end(); ++iter)
     {
         en = (*iter).second;
@@ -406,11 +391,11 @@ string HttpController::listRegisteredServers()
     return str.str();
 }
 
-string HttpController::listSpecials()
+std::string HttpController::listSpecials()
 {
-    ostringstream str;
-    WEB_SERVER_ENTRY *en;
-    list<WEB_SERVER_ENTRY*>::iterator i;
+    std::ostringstream str;
+    WebServerEntry *en;
+    std::list<WebServerEntry*>::iterator i;
     for (i=specialList.begin(); i!=specialList.end(); i++)
     {
         en = (*i);
@@ -420,11 +405,11 @@ string HttpController::listSpecials()
     return str.str();
 }
 
-string HttpController::listPickOrder()
+std::string HttpController::listPickOrder()
 {
-    ostringstream str;
-    WEB_SERVER_ENTRY *en;
-    vector<WEB_SERVER_ENTRY*>::iterator i;
+    std::ostringstream str;
+    WebServerEntry *en;
+    std::vector<WebServerEntry*>::iterator i;
     for ( i=pickList.begin(); i!=pickList.end(); i++ )
     {
         en = (*i);
@@ -434,10 +419,10 @@ string HttpController::listPickOrder()
     return str.str();
 }
 
-void HttpController::parseOptionsFile(string file, string section)
+void HttpController::parseOptionsFile(std::string file, std::string section)
 {
     bool bSectionFound = false;
-    ifstream tracefilestream;
+    std::ifstream tracefilestream;
     tracefilestream.open(file.c_str());
     if (!tracefilestream.is_open())
         error("Could not open events file %s", file.c_str());
@@ -447,7 +432,7 @@ void HttpController::parseOptionsFile(string file, string section)
     double pval;
     double amortizeval;
     simtime_t activationtime;
-    string line;
+    std::string line;
     int linecount = 0;
     HttpServerStatusUpdateMsg *statusChange;
     while (!std::getline(tracefilestream, line).eof())
@@ -459,7 +444,7 @@ void HttpController::parseOptionsFile(string file, string section)
         {
             // Section
             bSectionFound = false;
-            string sectionsub = line.substr(1, line.size()-2);
+            std::string sectionsub = line.substr(1, line.size()-2);
             bSectionFound = sectionsub==section;
         }
         else
@@ -470,7 +455,7 @@ void HttpController::parseOptionsFile(string file, string section)
                 // Event kind is not used at the present
 
                 cStringTokenizer tokenizer = cStringTokenizer(line.c_str(), ";");
-                std::vector<string> res = tokenizer.asVector();
+                std::vector<std::string> res = tokenizer.asVector();
                 if ( res.size()!=5 )
                     error("Invalid format of event config line in '%s' Line: '%s'", file.c_str(), line.c_str());
                 try
@@ -486,7 +471,7 @@ void HttpController::parseOptionsFile(string file, string section)
 
                 EV_DEBUG << "Scheduling a status change for " << res[1] << " @ T=" << activationtime << ". Parameters: " << line << endl;
                 statusChange = new HttpServerStatusUpdateMsg();
-                statusChange->setWww(res[1].c_str());
+                statusChange->setDomainName(res[1].c_str());
                 statusChange->setEventKind(1);
                 statusChange->setPvalue(pval);
                 statusChange->setPamortize(amortizeval);
@@ -498,9 +483,9 @@ void HttpController::parseOptionsFile(string file, string section)
     tracefilestream.close();
 }
 
-WEB_SERVER_ENTRY* HttpController::__getRandomServerInfo()
+WebServerEntry* HttpController::__getRandomServerInfo()
 {
-    WEB_SERVER_ENTRY* en;
+    WebServerEntry* en;
     int selected = 0;
     // @todo Reimplement! This is a ugly hack to enable easy activation of servers - can lead to problems if no servers active!!!
     do

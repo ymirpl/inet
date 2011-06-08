@@ -33,9 +33,9 @@
 #define __httptServerDirectEvilA_H_
 
 #include <string>
+
 #include "HttpServerDirect.h"
 
-using namespace std;
 
 /**
  * @brief An evil attacker server demonstration - type A
@@ -58,7 +58,7 @@ class INET_API HttpServerDirectEvilA : public HttpServerDirect
         int badHigh;
     protected:
         virtual void initialize();
-        virtual string generateBody();
+        virtual std::string generateBody();
 };
 
 #endif /* HttpServerDirectEvilA */

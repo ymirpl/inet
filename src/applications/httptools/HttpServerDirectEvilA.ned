@@ -31,9 +31,6 @@
 
 package inet.applications.httptools;
 
-import inet.applications.ITCPApp;
-
-
 //
 // HttpServerDirectEvilA
 //
@@ -50,10 +47,10 @@ import inet.applications.ITCPApp;
 // @version 1.0
 // @author  Kristjan V. Jonsson
 //
-simple HttpServerDirectEvilA like ITCPApp
+simple HttpServerDirectEvilA like IHttpDirectApp
 {
     parameters:
-        string www = default("");                         // The WWW name of the server
+        string domainName = default("");                         // The WWW name of the server
         int port = default(80);                           // The listening port number
         int httpProtocol = default(11);                   // The http protocol: 10 for http/1.0, 11 for http/1.1. Not used at the present time.
         int logLevel = default(0);                        // The log level: 2: Debug, 1: Info; 0: Errors and warnings only
@@ -65,7 +62,6 @@ simple HttpServerDirectEvilA like ITCPApp
         int maxBadRequests;                               // The upper bound of bad requests
         xml config;                                       // The XML configuration file for random sites
     gates:
-        input tcpIn;
-        output tcpOut;
+        input httpIn;
 }
 

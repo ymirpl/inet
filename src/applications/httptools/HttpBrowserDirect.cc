@@ -55,7 +55,7 @@ void HttpBrowserDirect::handleMessage(cMessage *msg)
         handleDataMessage(msg);
 }
 
-void HttpBrowserDirect::sendRequestToServer( BROWSE_EVENT_ENTRY be )
+void HttpBrowserDirect::sendRequestToServer( BrowseEventEntry be )
 {
     sendDirectToModule(be.serverModule, generatePageRequest(be.wwwhost, be.resourceName), 0.0, rdProcessingDelay);
 }
@@ -69,7 +69,7 @@ void HttpBrowserDirect::sendRequestToServer( HttpRequestMessage *request )
     }
     else
     {
-        EV_DEBUG << "Sending request to " << serverModule->getWWW() << endl;
+        EV_DEBUG << "Sending request to " << serverModule->getDomainName() << endl;
         sendDirectToModule(serverModule, request, 0.0, rdProcessingDelay);
     }
 }
@@ -77,26 +77,26 @@ void HttpBrowserDirect::sendRequestToServer( HttpRequestMessage *request )
 void HttpBrowserDirect::sendRequestToRandomServer()
 {
     HttpNodeBase *serverModule = dynamic_cast<HttpNodeBase*>(controller->getAnyServerModule());
-    if ( serverModule == NULL )
+    if (serverModule == NULL)
     {
         EV_ERROR << "Failed to get a random server module" << endl;
     }
     else
     {
-        EV_DEBUG << "Sending request randomly to " << serverModule->getWWW() << endl;
-        sendDirectToModule(serverModule, generateRandomPageRequest(serverModule->getWWW()), 0.0, rdProcessingDelay);
+        EV_DEBUG << "Sending request randomly to " << serverModule->getDomainName() << endl;
+        sendDirectToModule(serverModule, generateRandomPageRequest(serverModule->getDomainName()), 0.0, rdProcessingDelay);
     }
 }
 
-void HttpBrowserDirect::sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue )
+void HttpBrowserDirect::sendRequestsToServer(std::string domainName, HttpMessageQueue queue)
 {
-    cMessage *msg;
-    HttpNodeBase *serverModule = dynamic_cast<HttpNodeBase*>(controller->getServerModule(www.c_str()));
-    if ( serverModule == NULL )
-        EV_ERROR << "Failed to get server module " << www << endl;
+    cPacket *msg;
+    HttpNodeBase *serverModule = dynamic_cast<HttpNodeBase*>(controller->getServerModule(domainName.c_str()));
+    if (serverModule == NULL)
+        EV_ERROR << "Failed to get server module " << domainName << endl;
     else
     {
-        while ( queue.size()!=0 )
+        while (queue.size() != 0)
         {
             msg = queue.back();
             queue.pop_back();

@@ -102,7 +102,7 @@ void HttpBrowser::handleMessage(cMessage *msg)
     }
 }
 
-void HttpBrowser::sendRequestToServer( BROWSE_EVENT_ENTRY be )
+void HttpBrowser::sendRequestToServer( BrowseEventEntry be )
 {
     int connectPort;
     char szModuleName[127];
@@ -148,18 +148,18 @@ void HttpBrowser::sendRequestToRandomServer()
     submitToSocket(szModuleName, connectPort, generateRandomPageRequest(szWWW));
 }
 
-void HttpBrowser::sendRequestsToServer( string www, MESSAGE_QUEUE_TYPE queue )
+void HttpBrowser::sendRequestsToServer(std::string domainName, HttpMessageQueue queue)
 {
     int connectPort;
     char szModuleName[127];
 
-    if ( controller->getServerInfo(www.c_str(), szModuleName, connectPort) != 0 )
+    if ( controller->getServerInfo(domainName.c_str(), szModuleName, connectPort) != 0 )
     {
-        EV_ERROR << "Unable to get server info for URL " << www << endl;
+        EV_ERROR << "Unable to get server info for URL " << domainName << endl;
         return;
     }
 
-    EV_DEBUG << "Sending requests to server " << www << " (" << szModuleName << ") on port " << connectPort
+    EV_DEBUG << "Sending requests to server " << domainName << " (" << szModuleName << ") on port " << connectPort
              << ". Total messages queued are " << queue.size() << endl;
     submitToSocket(szModuleName, connectPort, queue);
 }
@@ -177,7 +177,7 @@ void HttpBrowser::socketEstablished(int connId, void *yourPtr)
     }
 
     // Get the socket and associated datastructure.
-    SOCK_DATA_STRUCT *sockdata = (SOCK_DATA_STRUCT*)yourPtr;
+    HttpSockDataStruct *sockdata = (HttpSockDataStruct*)yourPtr;
     TCPSocket *socket = sockdata->socket;
     if ( sockdata->messageQueue.size()==0 )
     {
@@ -209,7 +209,7 @@ void HttpBrowser::socketDataArrived(int connId, void *yourPtr, cPacket *msg, boo
         return;
     }
 
-    SOCK_DATA_STRUCT *sockdata = (SOCK_DATA_STRUCT*)yourPtr;
+    HttpSockDataStruct *sockdata = (HttpSockDataStruct*)yourPtr;
     TCPSocket *socket = sockdata->socket;
 
     handleDataMessage(msg);
@@ -236,7 +236,7 @@ void HttpBrowser::socketPeerClosed(int connId, void *yourPtr)
         return;
     }
 
-    SOCK_DATA_STRUCT *sockdata = (SOCK_DATA_STRUCT*)yourPtr;
+    HttpSockDataStruct *sockdata = (HttpSockDataStruct*)yourPtr;
     TCPSocket *socket = sockdata->socket;
 
     // close the connection (if not already closed)
@@ -257,7 +257,7 @@ void HttpBrowser::socketClosed(int connId, void *yourPtr)
         return;
     }
 
-    SOCK_DATA_STRUCT *sockdata = (SOCK_DATA_STRUCT*)yourPtr;
+    HttpSockDataStruct *sockdata = (HttpSockDataStruct*)yourPtr;
     TCPSocket *socket = sockdata->socket;
     sockCollection.removeSocket(socket);
     delete socket;
@@ -280,23 +280,23 @@ void HttpBrowser::socketFailure(int connId, void *yourPtr, int code)
     else if (code==TCP_I_CONNECTION_REFUSED)
         EV_WARNING << "Connection refused!\\n";
 
-    SOCK_DATA_STRUCT *sockdata = (SOCK_DATA_STRUCT*)yourPtr;
+    HttpSockDataStruct *sockdata = (HttpSockDataStruct*)yourPtr;
     TCPSocket *socket = sockdata->socket;
     sockCollection.removeSocket(socket);
     delete socket;
     delete sockdata;
 }
 
-void HttpBrowser::submitToSocket( const char* moduleName, int connectPort, cMessage *msg )
+void HttpBrowser::submitToSocket(const char* moduleName, int connectPort, cPacket *msg)
 {
     // Create a queue and push the single message
-    MESSAGE_QUEUE_TYPE queue;
+    HttpMessageQueue queue;
     queue.push_back(msg);
     // Call the overloaded version with the queue as parameter
     submitToSocket(moduleName, connectPort, queue);
 }
 
-void HttpBrowser::submitToSocket( const char* moduleName, int connectPort, MESSAGE_QUEUE_TYPE &queue )
+void HttpBrowser::submitToSocket( const char* moduleName, int connectPort, HttpMessageQueue &queue )
 {
     // Dont do anything if the queue is empty.s
     if ( queue.size()==0 )
@@ -314,8 +314,8 @@ void HttpBrowser::submitToSocket( const char* moduleName, int connectPort, MESSA
     sockCollection.addSocket(socket);
 
     // Initialize the associated datastructure
-    SOCK_DATA_STRUCT *sockdata = new SOCK_DATA_STRUCT;
-    sockdata->messageQueue = MESSAGE_QUEUE_TYPE(queue);
+    HttpSockDataStruct *sockdata = new HttpSockDataStruct;
+    sockdata->messageQueue = HttpMessageQueue(queue);
     sockdata->socket = socket;
     sockdata->pending = 0;
     socket->setCallbackObject(this, sockdata);

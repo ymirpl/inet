@@ -143,9 +143,9 @@ void HttpBrowserBase::initialize(int stage)
     {
         EV_DEBUG << "Initializing base HTTP browser component -- phase 1\n";
 
-        string scriptFile = (const char*)par("scriptFile");
+        std::string scriptFile = (const char*)par("scriptFile");
         scriptedMode = ( scriptFile.size() != 0 );
-        if ( scriptedMode )
+        if (scriptedMode)
         {
             EV_DEBUG << "Scripted mode. Script file: " << scriptFile << endl;
             readScriptedEvents(scriptFile.c_str());
@@ -185,7 +185,7 @@ void HttpBrowserBase::finish()
 
 void HttpBrowserBase::handleSelfMessages(cMessage *msg)
 {
-    string serverUrl;
+    std::string serverUrl;
     switch (msg->getKind())
     {
         case MSGKIND_ACTIVITY_START:
@@ -246,7 +246,7 @@ void HttpBrowserBase::handleSelfScriptedEvent()
     messagesInCurrentSession = 0;
     // Get the browse event
     if ( browseEvents.size() == 0 ) error("No event entry in queue");
-    BROWSE_EVENT_ENTRY be = browseEvents.back();
+    BrowseEventEntry be = browseEvents.back();
     browseEvents.pop_back();
     sendRequestToServer(be);
     // Schedule the next event
@@ -282,10 +282,11 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
 
     int serial = appmsg->serial();
 
-    string senderWWW = appmsg->originatorUrl();
-    EV_DEBUG << "Handling received message from " << senderWWW << ": " << msg->getName() << ". Received @T=" << simTime() << endl;
+    std::string senderWWW = appmsg->originatorUrl();
+    EV_DEBUG << "Handling received message from " << senderWWW << ": " << msg->getName()
+             << ". Received @T=" << simTime() << endl;
 
-    if ( appmsg->result()!=200 || (CONTENT_TYPE_ENUM)appmsg->contentType()==rt_unknown )
+    if ( appmsg->result()!=200 || (HttpContentType)appmsg->contentType()==rt_unknown )
     {
         EV_INFO << "Result for " << appmsg->getName() << " was other than OK. Code: " << appmsg->result() << endl;
         htmlErrorsReceived++;
@@ -294,11 +295,12 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
     }
     else
     {
-        switch ( (CONTENT_TYPE_ENUM)appmsg->contentType() )
+        switch ( (HttpContentType)appmsg->contentType() )
         {
             case rt_html_page:
-                EV_INFO << "HTML Document received: " << appmsg->getName() << "'. Size is " << appmsg->getByteLength() << " bytes and serial " << serial << endl;
-                if ( strlen(appmsg->payload()) != 0 )
+                EV_INFO << "HTML Document received: " << appmsg->getName() << "'. Size is "
+                        << appmsg->getByteLength() << " bytes and serial " << serial << endl;
+                if (strlen(appmsg->payload()) != 0)
                     EV_DEBUG << "Payload of " << appmsg->getName() << " is: " << endl << appmsg->payload()
                              << ", " << strlen(appmsg->payload()) << " bytes" << endl;
                 else
@@ -317,31 +319,31 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
                 if (ev.isGUI()) bubble("Received an image resource");
                 break;
             case rt_unknown:
-                EV_DEBUG << "UNKNOWN RESOURCE TYPE RECEIVED: " << (CONTENT_TYPE_ENUM)appmsg->contentType() << endl;
+                EV_DEBUG << "UNKNOWN RESOURCE TYPE RECEIVED: " << (HttpContentType)appmsg->contentType() << endl;
                 if (ev.isGUI()) bubble("Received an unknown resource type");
                 break;
         }
 
         // Parse the html page body
-        if ( (CONTENT_TYPE_ENUM)appmsg->contentType() == rt_html_page && strlen(appmsg->payload()) != 0 )
+        if ( (HttpContentType)appmsg->contentType() == rt_html_page && strlen(appmsg->payload()) != 0 )
         {
             EV_DEBUG << "Processing HTML document body:\n";
             cStringTokenizer lineTokenizer( (const char*)appmsg->payload(), "\n" );
-            std::vector<string> lines = lineTokenizer.asVector();
+            std::vector<std::string> lines = lineTokenizer.asVector();
             int serial = 0;
-            string providerName = "";
-            string resourceName = "";
+            std::string providerName = "";
+            std::string resourceName = "";
             double delay = 0.0;
             bool bad = false;
             int refSize = 0;
-            MESSAGE_QUEUE_TYPE queue;
-            std::map<string,MESSAGE_QUEUE_TYPE> requestQueues;
-            for ( vector<string>::iterator iter = lines.begin(); iter != lines.end(); iter++)
+            HttpMessageQueue queue;
+            std::map<std::string,HttpMessageQueue> requestQueues;
+            for (std::vector<std::string>::iterator iter = lines.begin(); iter != lines.end(); iter++)
             {
-                string resourceLine = *iter;
+                std::string resourceLine = *iter;
                 cStringTokenizer fieldTokenizer( resourceLine.c_str(), ";" );
-                std::vector<string> fields = fieldTokenizer.asVector();
-                if ( fields.size()<1 )
+                std::vector<std::string> fields = fieldTokenizer.asVector();
+                if (fields.size() < 1)
                 {
                     EV_ERROR << "Invalid resource reference in received message: " << resourceLine << endl;
                     continue;
@@ -350,27 +352,27 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
                 resourceName = fields[0];
 
                 providerName = senderWWW;
-                if ( fields.size()>1 )
+                if (fields.size() > 1)
                     providerName = fields[1];
 
                 delay = 0.0;
-                if ( fields.size()>2 )
+                if (fields.size() > 2)
                     delay = safeatof(fields[2].c_str());
 
                 bad = false;
-                if ( fields.size()>3 )
+                if (fields.size() > 3)
                     bad = safeatobool(fields[3].c_str());
 
                 refSize = 0;
-                if ( fields.size()>4 )
+                if (fields.size() > 4)
                     refSize = safeatoi(fields[4].c_str());
 
                 EV_DEBUG << "Generating resource request: " << resourceName << ". Provider: " << providerName
                          << ", delay: " << delay << ", bad: " << bad << ", ref.size: " << refSize <<endl;
 
                 // Generate a request message and push on queue for the intended recipient
-                cMessage *reqmsg = generateResourceRequest(providerName, resourceName, serial++, bad, refSize); // TODO: KVJ: CHECK HERE FOR XSITE
-                if ( delay==0.0 )
+                cPacket *reqmsg = generateResourceRequest(providerName, resourceName, serial++, bad, refSize); // TODO: KVJ: CHECK HERE FOR XSITE
+                if (delay == 0.0)
                 {
                     requestQueues[providerName].push_front(reqmsg);
                 }
@@ -383,7 +385,7 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
             // Iterate through the list of queues (one for each recipient encountered) and submit each queue.
             // A single socket will thus be opened for each recipient for a rough HTTP/1.1 emulation.
             // This is only done for messages which are not delayed in the simulated page.
-            std::map<string,MESSAGE_QUEUE_TYPE>::iterator i = requestQueues.begin();
+            std::map<std::string,HttpMessageQueue>::iterator i = requestQueues.begin();
             for (; i!=requestQueues.end(); i++ )
                 sendRequestsToServer((*i).first, (*i).second);
         }
@@ -392,13 +394,13 @@ void HttpBrowserBase::handleDataMessage( cMessage *msg )
     delete msg;
 }
 
-cMessage* HttpBrowserBase::generatePageRequest(string www, string pageName, bool bad, int size)
+cPacket* HttpBrowserBase::generatePageRequest(std::string domainName, std::string pageName, bool bad, int size)
 {
-    EV_DEBUG << "Generating page request for URL " << www << ", page " << pageName << endl;
+    EV_DEBUG << "Generating page request for URL " << domainName << ", page " << pageName << endl;
 
-    if ( www.size()+pageName.size() > MAX_URL_LENGTH )
+    if (domainName.size()+pageName.size() > MAX_URL_LENGTH)
     {
-        EV_ERROR << "URL for site " << www << " exceeds allowed maximum size" << endl;
+        EV_ERROR << "URL for site " << domainName << " exceeds allowed maximum size" << endl;
         return NULL;
     }
 
@@ -410,7 +412,7 @@ cMessage* HttpBrowserBase::generatePageRequest(string www, string pageName, bool
     char szReq[MAX_URL_LENGTH+24];
     sprintf(szReq, "GET %s HTTP/1.1", pageName.c_str());
     HttpRequestMessage *msg = new HttpRequestMessage(szReq);
-    msg->setTargetUrl(www.c_str());
+    msg->setTargetUrl(domainName.c_str());
     msg->setProtocol(httpProtocol);
     msg->setHeading(szReq);
     msg->setSerial(0);
@@ -425,19 +427,19 @@ cMessage* HttpBrowserBase::generatePageRequest(string www, string pageName, bool
     return msg;
 }
 
-cMessage* HttpBrowserBase::generateRandomPageRequest(string www, bool bad, int size)
+cPacket* HttpBrowserBase::generateRandomPageRequest(std::string domainName, bool bad, int size)
 {
-    EV_DEBUG << "Generating random page request, URL: " << www << endl;
-    return generatePageRequest(www, "random_page.html", bad, size);
+    EV_DEBUG << "Generating random page request, URL: " << domainName << endl;
+    return generatePageRequest(domainName, "random_page.html", bad, size);
 }
 
-cMessage* HttpBrowserBase::generateResourceRequest(string www, string resource, int serial, bool bad, int size)
+cPacket* HttpBrowserBase::generateResourceRequest(std::string domainName, std::string resource, int serial, bool bad, int size)
 {
-    EV_DEBUG << "Generating resource request for URL " << www << ", resource: " << resource << endl;
+    EV_DEBUG << "Generating resource request for URL " << domainName << ", resource: " << resource << endl;
 
-    if ( www.size()+resource.size() > MAX_URL_LENGTH )
+    if ( domainName.size()+resource.size() > MAX_URL_LENGTH )
     {
-        EV_ERROR << "URL for site " << www << " exceeds allowed maximum size" << endl;
+        EV_ERROR << "URL for site " << domainName << " exceeds allowed maximum size" << endl;
         return NULL;
     }
 
@@ -451,8 +453,8 @@ cMessage* HttpBrowserBase::generateResourceRequest(string www, string resource, 
     else if (resource[0]!='/')
         resource.insert(0, "/");
 
-    string ext = trimLeft(resource, ".");
-    CONTENT_TYPE_ENUM rc = getResourceCategory(ext);
+    std::string ext = trimLeft(resource, ".");
+    HttpContentType rc = getResourceCategory(ext);
     if ( rc==rt_image ) imgResourcesRequested++;
     else if ( rc==rt_text ) textResourcesRequested++;
 
@@ -460,7 +462,7 @@ cMessage* HttpBrowserBase::generateResourceRequest(string www, string resource, 
     sprintf(szReq, "GET %s HTTP/1.1", resource.c_str());
 
     HttpRequestMessage *msg = new HttpRequestMessage(szReq);
-    msg->setTargetUrl(www.c_str());
+    msg->setTargetUrl(domainName.c_str());
     msg->setProtocol(httpProtocol);
     msg->setHeading(szReq);
     msg->setSerial(serial);
@@ -513,18 +515,18 @@ void HttpBrowserBase::scheduleNextBrowseEvent()
     }
 }
 
-void HttpBrowserBase::readScriptedEvents( const char* filename )
+void HttpBrowserBase::readScriptedEvents(const char* filename)
 {
     EV_DEBUG << "Reading scripted events from " << filename << "\n";
 
-    ifstream scriptfilestream;
+    std::ifstream scriptfilestream;
     scriptfilestream.open(filename);
     if (!scriptfilestream.is_open())
         error("Could not open script file %s", filename);
 
-    string line;
-    string timepart;
-    string wwwpart;
+    std::string line;
+    std::string timepart;
+    std::string wwwpart;
     int pos;
     simtime_t t;
     while (!std::getline(scriptfilestream, line).eof())
@@ -547,9 +549,9 @@ void HttpBrowserBase::readScriptedEvents( const char* filename )
             continue;
         }
 
-        vector<string> path = parseResourceName(wwwpart);
+        std::vector<std::string> path = parseResourceName(wwwpart);
 
-        BROWSE_EVENT_ENTRY be;
+        BrowseEventEntry be;
         be.time = t;
         be.wwwhost = extractServerName(wwwpart.c_str());
         be.resourceName = extractResourceName(wwwpart.c_str());
@@ -563,15 +565,10 @@ void HttpBrowserBase::readScriptedEvents( const char* filename )
 
     if ( browseEvents.size() != 0 )
     {
-        BROWSE_EVENT_ENTRY be = browseEvents.back();
+        BrowseEventEntry be = browseEvents.back();
         eventTimer->setKind(MSGKIND_SCRIPT_EVENT);
         scheduleAt(be.time, eventTimer);
     }
 }
-
-
-
-
-
 
 

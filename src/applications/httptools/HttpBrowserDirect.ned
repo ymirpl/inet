@@ -31,9 +31,6 @@
 
 package inet.applications.httptools;
 
-import inet.applications.ITCPApp;
-
-
 //
 // HttpBrowserDirect
 //
@@ -53,10 +50,10 @@ import inet.applications.ITCPApp;
 // @version 1.0
 // @author  Kristjan V. Jonsson
 //
-simple HttpBrowserDirect like ITCPApp
+simple HttpBrowserDirect like IHttpDirectApp
 {
     parameters:
-        int logLevel = default(0);                              // The log level: 2: Debug, 1: Info; 0: Errors and warnings only
+        int logLevel = default(0);                      // The log level: 2: Debug, 1: Info; 0: Errors and warnings only
         int httpProtocol = default(11);                         // The http protocol: 10 for http/1.0, 11 for http/1.1. Not used at the present time.
         string logFile = default("");                           // Name of a browser log file. Browse events are appended, allowing sharing of file for multiple browsers.
         string scriptFile = default("");                        // The browsing script file. Blank to disable.
@@ -64,7 +61,6 @@ simple HttpBrowserDirect like ITCPApp
         double linkSpeed @unit(bps) = default(11Mbps);      // Used to model transmission delays (Bit/s)
         xml config;                                             // The XML configuration file for the browser
     gates:
-        input tcpIn;
-        output tcpOut;
+        input httpIn;
 }
 
