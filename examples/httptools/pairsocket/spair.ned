@@ -7,9 +7,9 @@
 
 package inet.examples.httptools.pairsocket;
 
-import inet.httptools.HttpController;
 import inet.networklayer.autorouting.ipv4.FlatNetworkConfigurator;
 import inet.nodes.inet.StandardHost;
+import inet.world.httptools.HttpController;
 
 
 network HttpSockPair
@@ -26,8 +26,8 @@ network HttpSockPair
     submodules:
         configurator: FlatNetworkConfigurator {
             parameters:
-//                moduleTypes = "StandardHost";
-//                nonIPModuleTypes = "";
+                //                moduleTypes = "StandardHost";
+                //                nonIPModuleTypes = "";
                 networkAddress = "145.236.0.0";
                 netmask = "255.255.0.0";
                 @display("i=block/cogwheel");

@@ -31,8 +31,8 @@
 
 package inet.examples.httptools.pairdirect;
 
-import inet.httptools.HttpController;
 import inet.nodes.httptools.DirectHost;
+import inet.world.httptools.HttpController;
 
 
 //
