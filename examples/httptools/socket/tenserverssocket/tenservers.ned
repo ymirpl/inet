@@ -30,7 +30,7 @@
 // ----------------------------------------------------------------------------
 
 
-package inet.examples.httptools.tenserverssocket;
+package inet.examples.httptools.socket.tenserverssocket;
 
 import inet.networklayer.autorouting.ipv4.FlatNetworkConfigurator;
 import inet.nodes.inet.Router;
@@ -51,7 +51,7 @@ channel ethernetline extends ned.DatarateChannel
 // The scenario consists of a number of clients and 10 servers connected to two routers. The routers are connected
 // with a single link.
 //
-module httpt10servers
+network Http10Servers
 {
     parameters:
         double numclients @prompt("Number of clients") = default(10);

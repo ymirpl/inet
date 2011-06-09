@@ -30,7 +30,7 @@
 // ----------------------------------------------------------------------------
 
 
-package inet.examples.httptools.simpledirectddos;
+package inet.examples.httptools.socket.simpleddos;
 
 import inet.networklayer.autorouting.ipv4.FlatNetworkConfigurator;
 import inet.nodes.inet.Router;
