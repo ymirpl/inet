@@ -91,6 +91,8 @@ class INET_API RoutingTableParser
     // and appends \0, returns position of next space-char in src
     static int strcpyword(char *dest, const char *src);
 
+    // policies methods
+    virtual void parseRules(char *);
 };
 
 
