@@ -86,17 +86,36 @@ namespace
 
     double segmentsIntersectAt(Coord p1From, Coord p1To, Coord p2From, Coord p2To)
     {
+        /*
+         * intersection of (x1,y1)<--->(x2,y2) and (x3,y3)<--->(x4,y4) lines:
+         * d = (x1-x2)*(y3-y4)-(y1-y2)*(x3-x4)
+         * Px = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / d
+         * Py = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / d
+         *
+         * p1To:(x1,y1), p1From: (x2,y2), p2To:(x3,y3) p2From:(x4,y4)
+         * d = (p1To.x-p1From.x)*(p2To.y-p2From.y)-(p1To.y-p1From.y)*(p2To.x-p2From.x)
+         * Px = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2To.x-p2From.x)-(p1To.x-p1From.x)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
+         * Py = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2To.y-p2From.y)-(p1To.y-p1From.y)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
+         *
+         * p1Vec:(x1-x2,y1-y2), p2Vec:(x3-x4,y3-y4)
+         * d = p1Vec.x*p2Vec.y - p1Vec.y*p2Vec.x
+         * Px = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2Vec.x)-(p1Vec.x)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
+         * Py = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2Vec.y)-(p1Vec.y)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
+         *
+         */
         Coord p1Vec = p1To - p1From;
         Coord p2Vec = p2To - p2From;
         Coord p1p2 = p1From - p2From;
 
-        double D = (p1Vec.x * p2Vec.y - p1Vec.y * p2Vec.x);
+        double d = (p1Vec.x * p2Vec.y - p1Vec.y * p2Vec.x);
+        if (d == 0.0)
+            return -1;
 
-        double p1Frac = (p2Vec.x * p1p2.y - p2Vec.y * p1p2.x) / D;
+        double p1Frac = (p2Vec.x * p1p2.y - p2Vec.y * p1p2.x) / d;
         if (p1Frac < 0 || p1Frac > 1)
             return -1;
 
-        double p2Frac = (p1Vec.x * p1p2.y - p1Vec.y * p1p2.x) / D;
+        double p2Frac = (p1Vec.x * p1p2.y - p1Vec.y * p1p2.x) / d;
         if (p2Frac < 0 || p2Frac > 1)
             return -1;
 
@@ -104,8 +123,9 @@ namespace
     }
 }
 
-double Obstacle::calculateReceivedPower(double pSend, double carrierFrequency, const Coord& senderPos, double senderAngle, const Coord& receiverPos, double receiverAngle) const {
-
+double Obstacle::calculateReceivedPower(double pSend, double carrierFrequency, const Coord& senderPos,
+        double senderAngle, const Coord& receiverPos, double receiverAngle) const
+{
     // if obstacles has neither walls nor matter: bail.
     if (getShape().size() < 2)
         return pSend;
@@ -114,9 +134,9 @@ double Obstacle::calculateReceivedPower(double pSend, double carrierFrequency, c
     std::multiset<double> intersectAt;
     bool doesIntersect = false;
     const Obstacle::Coords& shape = getShape();
-    Obstacle::Coords::const_iterator i = shape.begin();
+
     Obstacle::Coords::const_iterator j = (shape.rbegin()+1).base();
-    for (; i != shape.end(); j = i++)
+    for (Obstacle::Coords::const_iterator i = shape.begin(); i != shape.end(); j = i++)
     {
         Coord c1 = *i;
         Coord c2 = *j;
@@ -127,7 +147,6 @@ double Obstacle::calculateReceivedPower(double pSend, double carrierFrequency, c
             doesIntersect = true;
             intersectAt.insert(i);
         }
-
     }
 
     // if beam interacts with neither walls nor matter: bail.
