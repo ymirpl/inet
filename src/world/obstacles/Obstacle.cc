@@ -87,39 +87,54 @@ namespace
     double segmentsIntersectAt(Coord p1From, Coord p1To, Coord p2From, Coord p2To)
     {
         /*
-         * intersection of (x1,y1)<--->(x2,y2) and (x3,y3)<--->(x4,y4) lines:
-         * d = (x1-x2)*(y3-y4)-(y1-y2)*(x3-x4)
-         * Px = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / d
-         * Py = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / d
+         * intersection of P1(x1,y1)<--->P2(x2,y2) and P3(x3,y3)<--->P4(x4,y4) lines:
          *
-         * p1To:(x1,y1), p1From: (x2,y2), p2To:(x3,y3) p2From:(x4,y4)
-         * d = (p1To.x-p1From.x)*(p2To.y-p2From.y)-(p1To.y-p1From.y)*(p2To.x-p2From.x)
-         * Px = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2To.x-p2From.x)-(p1To.x-p1From.x)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
-         * Py = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2To.y-p2From.y)-(p1To.y-p1From.y)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
+         * http://paulbourke.net/geometry/lineline2d/
          *
-         * p1Vec:(x1-x2,y1-y2), p2Vec:(x3-x4,y3-y4)
-         * d = p1Vec.x*p2Vec.y - p1Vec.y*p2Vec.x
-         * Px = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2Vec.x)-(p1Vec.x)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
-         * Py = ((p1To.x*p1From.y-p1To.y*p1From.x)*(p2Vec.y)-(p1Vec.y)*(p2To.x*p2From.y-p2To.y*p2From.x)) / d
+         * The equations of the lines are
+         *   Pa = P1 + ua ( P2 - P1 )
+         *   Pb = P3 + ub ( P4 - P3 )
          *
+         * Solving for the point where Pa = Pb gives the following two equations in two unknowns (ua and ub)
+         *   x1 + ua (x2 - x1) = x3 + ub (x4 - x3)
+         * and
+         *   y1 + ua (y2 - y1) = y3 + ub (y4 - y3)
+         *
+         * Solving gives the following expressions for ua and ub
+         *
+         *   ua = ((x4-x3)(y1-y3) - (y4-y3)(x1-x3)) / ((y4-y3)(x2-x1) - (x4-x3)(y2-y1))
+         *   ub = ((x2-x1)(y1-y3) - (y2-y1)(x1-x3)) / ((y4-y3)(x2-x1) - (x4-x3)(y2-y1))
+         *
+         * For segments intersection, ua and ub are must be between 0 and 1
+         *
+         * Substituting either of these into the corresponding equation for the line gives the
+         * intersection point. For example the intersection point (x,y) is
+         *   x = x1 + ua (x2 - x1)
+         *   y = y1 + ua (y2 - y1)
          */
+
         Coord p1Vec = p1To - p1From;
         Coord p2Vec = p2To - p2From;
         Coord p1p2 = p1From - p2From;
 
         double d = (p1Vec.x * p2Vec.y - p1Vec.y * p2Vec.x);
-        if (d == 0.0)
-            return -1;
 
-        double p1Frac = (p2Vec.x * p1p2.y - p2Vec.y * p1p2.x) / d;
-        if (p1Frac < 0 || p1Frac > 1)
-            return -1;
+        try
+        {
+            double p1Frac = (p2Vec.x * p1p2.y - p2Vec.y * p1p2.x) / d;
+            if (p1Frac < 0 || p1Frac > 1)
+                return -1;
 
-        double p2Frac = (p1Vec.x * p1p2.y - p1Vec.y * p1p2.x) / d;
-        if (p2Frac < 0 || p2Frac > 1)
-            return -1;
+            double p2Frac = (p1Vec.x * p1p2.y - p1Vec.y * p1p2.x) / d;
+            if (p2Frac < 0 || p2Frac > 1)
+                return -1;
 
-        return p1Frac;
+            return p1Frac;
+        }
+        catch (std::exception& e)
+        {
+            return -1;  // divide by zero, or overflow when d is too small
+        }
     }
 }
 
