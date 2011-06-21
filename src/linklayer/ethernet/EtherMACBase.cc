@@ -47,9 +47,9 @@ const EtherMACBase::EtherDescr EtherMACBase::nullEtherDescr =
     0,
     0,
     0,
-    0.0,
-    0.0,
-    0.0
+    SIMTIME_ZERO,
+    SIMTIME_ZERO,
+    SIMTIME_ZERO
 };
 
 const EtherMACBase::EtherDescr EtherMACBase::etherDescrs[NUM_OF_ETHERDESCRS] =
@@ -60,9 +60,9 @@ const EtherMACBase::EtherDescr EtherMACBase::etherDescrs[NUM_OF_ETHERDESCRS] =
         0,
         MIN_ETHERNET_FRAME,
         0,
-        0.5 / ETHERNET_TXRATE,
-        512.0 / ETHERNET_TXRATE,
-        MIN_ETHERNET_FRAME / ETHERNET_TXRATE
+        SIMTIME_ZERO, // 0.5 / ETHERNET_TXRATE,
+        SIMTIME_ZERO, // 512.0 / ETHERNET_TXRATE,
+        SIMTIME_ZERO, // MIN_ETHERNET_FRAME / ETHERNET_TXRATE
     },
     {
         FAST_ETHERNET_TXRATE,
@@ -70,9 +70,9 @@ const EtherMACBase::EtherDescr EtherMACBase::etherDescrs[NUM_OF_ETHERDESCRS] =
         0,
         MIN_ETHERNET_FRAME,
         0,
-        0.5 / FAST_ETHERNET_TXRATE,
-        512.0 / ETHERNET_TXRATE,
-        MIN_ETHERNET_FRAME / FAST_ETHERNET_TXRATE
+        SIMTIME_ZERO, // 0.5 / FAST_ETHERNET_TXRATE,
+        SIMTIME_ZERO, // 512.0 / ETHERNET_TXRATE,
+        SIMTIME_ZERO, // MIN_ETHERNET_FRAME / FAST_ETHERNET_TXRATE
     },
     {
         GIGABIT_ETHERNET_TXRATE,
@@ -80,19 +80,39 @@ const EtherMACBase::EtherDescr EtherMACBase::etherDescrs[NUM_OF_ETHERDESCRS] =
         GIGABIT_MAX_BURST_BYTES,
         GIGABIT_MIN_FRAME_WITH_EXT,
         MIN_ETHERNET_FRAME,
-        0.5 / GIGABIT_ETHERNET_TXRATE,
-        512.0 / GIGABIT_ETHERNET_TXRATE,
-        GIGABIT_MIN_FRAME_WITH_EXT / GIGABIT_ETHERNET_TXRATE
+        SIMTIME_ZERO, // 0.5 / GIGABIT_ETHERNET_TXRATE,
+        SIMTIME_ZERO, // 512.0 / GIGABIT_ETHERNET_TXRATE,
+        SIMTIME_ZERO, // GIGABIT_MIN_FRAME_WITH_EXT / GIGABIT_ETHERNET_TXRATE
     },
     {
         FAST_GIGABIT_ETHERNET_TXRATE,
-        MAX_PACKETBURST,
-        GIGABIT_MAX_BURST_BYTES,
-        GIGABIT_MIN_FRAME_WITH_EXT,
+        0,
+        0,
         MIN_ETHERNET_FRAME,
-        0.5 / FAST_GIGABIT_ETHERNET_TXRATE,
-        512.0 / GIGABIT_ETHERNET_TXRATE,
-        GIGABIT_MIN_FRAME_WITH_EXT / FAST_GIGABIT_ETHERNET_TXRATE
+        MIN_ETHERNET_FRAME,
+        SIMTIME_ZERO, // 0.5 / FAST_GIGABIT_ETHERNET_TXRATE
+        SIMTIME_ZERO, // 512.0 / GIGABIT_ETHERNET_TXRATE,
+        SIMTIME_ZERO, // GIGABIT_MIN_FRAME_WITH_EXT / FAST_GIGABIT_ETHERNET_TXRATE
+    },
+    {
+        FOURTY_GIGABIT_ETHERNET_TXRATE,
+        0,
+        0,
+        MIN_ETHERNET_FRAME,
+        MIN_ETHERNET_FRAME,
+        SIMTIME_ZERO, // 0.5 / FAST_GIGABIT_ETHERNET_TXRATE
+        SIMTIME_ZERO, // 512.0 / GIGABIT_ETHERNET_TXRATE,
+        SIMTIME_ZERO, // GIGABIT_MIN_FRAME_WITH_EXT / FAST_GIGABIT_ETHERNET_TXRATE
+    },
+    {
+        HUNDRED_GIGABIT_ETHERNET_TXRATE,
+        0,
+        0,
+        MIN_ETHERNET_FRAME,
+        MIN_ETHERNET_FRAME,
+        SIMTIME_ZERO, // 0.5 / FAST_GIGABIT_ETHERNET_TXRATE
+        SIMTIME_ZERO, // 512.0 / GIGABIT_ETHERNET_TXRATE,
+        SIMTIME_ZERO, // GIGABIT_MIN_FRAME_WITH_EXT / FAST_GIGABIT_ETHERNET_TXRATE
     }
 };
 
@@ -111,6 +131,13 @@ simsignal_t EtherMACBase::packetReceivedFromLowerSignal = SIMSIGNAL_NULL;
 simsignal_t EtherMACBase::packetSentToUpperSignal = SIMSIGNAL_NULL;
 simsignal_t EtherMACBase::packetReceivedFromUpperSignal = SIMSIGNAL_NULL;
 
+void EtherMACBase::EtherDescr::calculateTimes()
+{
+    halfBitTime = 0.5 / txrate;
+    slotTime = 512.0 / txrate;
+    shortestFrameDuration = frameMinBytes / txrate;
+}
+
 bool EtherMACBase::MacQueue::isEmpty()
 {
     return innerQueue ? innerQueue->queue.empty() : extQueue->isEmpty();
@@ -119,7 +146,7 @@ bool EtherMACBase::MacQueue::isEmpty()
 EtherMACBase::EtherMACBase()
 {
     lastTxFinishTime = -1.0; // never equals with current simtime.
-    curEtherDescr = &nullEtherDescr;
+    curEtherDescr = nullEtherDescr;
     transmissionChannel = NULL;
     physInGate = NULL;
     physOutGate = NULL;
@@ -249,7 +276,7 @@ void EtherMACBase::initializeFlags()
     promiscuous = par("promiscuous");
     WATCH(promiscuous);
 
-    frameBursting = par("frameBursting");
+    frameBursting = false;
     WATCH(frameBursting);
 }
 
@@ -422,7 +449,7 @@ void EtherMACBase::calculateParameters()
 
     if (!connected)
     {
-        curEtherDescr = &nullEtherDescr;
+        curEtherDescr = nullEtherDescr;
         carrierExtension = false;
 
         if (transmissionChannel)
@@ -438,7 +465,6 @@ void EtherMACBase::calculateParameters()
         outTrChannel->subscribe(POST_MODEL_CHANGE, this);
 
     transmissionChannel = outTrChannel;
-    carrierExtension = false; // FIXME
     double txRate = transmissionChannel->getNominalDatarate();
     double rxRate = inTrChannel->getNominalDatarate();
 
@@ -446,13 +472,12 @@ void EtherMACBase::calculateParameters()
     {
         if (!initialized())
         {
-            throw cRuntimeError(this, "The input/output datarates are differs (%g / %g bps)",
-                                rxRate, txRate);
+            throw cRuntimeError(this, "The input/output datarates are differs (%g / %g bps)", rxRate, txRate);
         }
         else
         {
-            ev << "The input/output datarates are differs (" << rxRate << " / " << txRate
-                    << " bps), input rate changed to " << txRate << "bps.\n";
+            EV << "The input/output datarates are differs (" << rxRate << " / " << txRate
+               << " bps), input rate changed to " << txRate << "bps.\n";
             inTrChannel->par("datarate").setDoubleValue(txRate);
         }
     }
@@ -462,7 +487,8 @@ void EtherMACBase::calculateParameters()
     {
         if (txRate == etherDescrs[i].txrate)
         {
-            curEtherDescr = &etherDescrs[i];
+            curEtherDescr = etherDescrs[i];
+            curEtherDescr.calculateTimes();
             interfaceEntry->setDown(false);
             interfaceEntry->setDatarate(txRate);
             return;
@@ -477,7 +503,7 @@ void EtherMACBase::printParameters()
 {
     // Dump parameters
     EV << "MAC address: " << address << (promiscuous ? ", promiscuous mode" : "") << endl
-       << "txrate: " << curEtherDescr->txrate << ", "
+       << "txrate: " << curEtherDescr.txrate << ", "
        << (duplexMode ? "full-duplex" : "half-duplex") << endl;
 #if 0
     EV << "bitTime: " << bitTime << endl;
@@ -553,7 +579,7 @@ void EtherMACBase::processFrameFromUpperLayer(EtherFrame *frame)
                 txQueue.innerQueue->queue.insert(frame);
         }
 
-        if (NULL == curTxFrame && !txQueue.innerQueue->queue.empty())
+        if (!curTxFrame && !txQueue.innerQueue->queue.empty())
             curTxFrame = (EtherFrame*)txQueue.innerQueue->queue.pop();
     }
 }
@@ -565,7 +591,7 @@ void EtherMACBase::processMsgFromNetwork(EtherTraffic *frame)
     // detect cable length violation in half-duplex mode
     if (!duplexMode)
     {
-        if (simTime() - frame->getSendingTime() >= curEtherDescr->shortestFrameDuration)
+        if (simTime() - frame->getSendingTime() >= curEtherDescr.shortestFrameDuration)
         {
             error("very long frame propagation time detected, "
                   "maybe cable exceeds maximum allowed length? "
@@ -668,13 +694,6 @@ void EtherMACBase::handleEndIFGPeriod()
 
     // End of IFG period, okay to transmit, if Rx idle OR duplexMode
     EV << "IFG elapsed, now begin transmission of frame " << curTxFrame << endl;
-
-    // Perform carrier extension if in Gigabit Ethernet
-    if (carrierExtension && curTxFrame->getByteLength() < GIGABIT_MIN_FRAME_WITH_EXT)
-    {
-        EV << "Performing carrier extension of small frame\n";
-        curTxFrame->setByteLength(GIGABIT_MIN_FRAME_WITH_EXT);
-    }
 }
 
 void EtherMACBase::handleEndTxPeriod()
@@ -723,17 +742,16 @@ void EtherMACBase::prepareTxFrame(EtherFrame *frame)
     if (frame->getSrc().isUnspecified())
         frame->setSrc(address);
 
-    // add preamble and SFD (Starting Frame Delimiter), then send out
     frame->setOrigByteLength(frame->getByteLength());
-    frame->addByteLength(PREAMBLE_BYTES+SFD_BYTES);
     bool inBurst = frameBursting && framesSentInBurst;
     int64 minFrameLength =
-            inBurst ? curEtherDescr->frameInBurstMinBytes : curEtherDescr->frameMinBytes;
+            inBurst ? curEtherDescr.frameInBurstMinBytes : curEtherDescr.frameMinBytes;
 
     if (frame->getByteLength() < minFrameLength)
-    {
         frame->setByteLength(minFrameLength);
-    }
+
+    // add preamble and SFD (Starting Frame Delimiter), then send out
+    frame->addByteLength(PREAMBLE_BYTES+SFD_BYTES);
 }
 
 void EtherMACBase::handleEndPausePeriod()
@@ -777,9 +795,9 @@ void EtherMACBase::scheduleEndIFGPeriod()
 
     if (frameBursting
             && (simTime() == lastTxFinishTime)
-            && (framesSentInBurst < curEtherDescr->maxFramesInBurst)
+            && (framesSentInBurst < curEtherDescr.maxFramesInBurst)
             && (bytesSentInBurst + (INTERFRAME_GAP_BITS / 8) + curTxFrame->getByteLength()
-                    <= curEtherDescr->maxBytesInBurst)
+                    <= curEtherDescr.maxBytesInBurst)
        )
     {
         EtherPadding *gap = new EtherPadding("IFG");
@@ -975,3 +993,28 @@ void EtherMACBase::receiveChangeNotification(int category, const cPolymorphic *)
     if (category == NF_SUBSCRIBERLIST_CHANGED)
         updateHasSubcribers();
 }
+
+void EtherMACBase::handleMessage(cMessage *msg)
+{
+    if (msg->isSelfMessage())
+    {
+        handleSelfMessage(msg);
+    }
+    else
+    {
+        if (!connected)
+            processMessageWhenNotConnected(msg);
+        else if (disabled)
+            processMessageWhenDisabled(msg);
+        else if (msg->getArrivalGate() == gate("upperLayerIn"))
+            processFrameFromUpperLayer(check_and_cast<EtherFrame *>(msg));
+        else if (msg->getArrivalGate() == gate("phys$i"))
+            processMsgFromNetwork(check_and_cast<EtherTraffic *>(msg));
+        else
+            throw cRuntimeError(this, "Message received from unknown gate!");
+    }
+
+    if (ev.isGUI())
+        updateDisplayString();
+}
+

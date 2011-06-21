@@ -38,7 +38,6 @@ class INET_API EtherMAC : public EtherMACBase
     virtual void initialize();
     virtual void initializeFlags();
     virtual void initializeStatistics();
-    virtual void handleMessage(cMessage *msg);
     virtual void finish();
 
   protected:
@@ -53,15 +52,20 @@ class INET_API EtherMAC : public EtherMACBase
     // statistics
     simtime_t totalCollisionTime;      // total duration of collisions on channel
     simtime_t totalSuccessfulRxTxTime; // total duration of successful transmissions on channel
-    simtime_t channelBusySince;  // needed for computing totalCollisionTime/totalSuccessfulRxTxTime
+    simtime_t channelBusySince;        // needed for computing totalCollisionTime/totalSuccessfulRxTxTime
     unsigned long numCollisions;       // collisions (NOT number of collided frames!) sensed
     unsigned long numBackoffs;         // number of retransmissions
     static simsignal_t collisionSignal;
     static simsignal_t backoffSignal;
 
+    // helpers
+    virtual void calculateParameters();
+
     // event handlers
     virtual void processFrameFromUpperLayer(EtherFrame *msg);
     virtual void processMsgFromNetwork(EtherTraffic *msg);
+    virtual void handleMessage(cMessage *msg);
+    virtual void handleSelfMessage(cMessage *msg);
     virtual void handleEndIFGPeriod();
     virtual void handleEndTxPeriod();
     virtual void handleEndRxPeriod();

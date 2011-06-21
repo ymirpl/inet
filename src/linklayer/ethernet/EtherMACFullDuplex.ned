@@ -47,6 +47,7 @@ import inet.linklayer.IEtherMAC;
 // - 10Mb Ethernet (full duplex mode)
 // - 100Mb Ethernet (full duplex mode)
 // - 1Gb Ethernet (full duplex mode)
+// - 10Gb Ethernet (full duplex mode)
 //
 // Supports all three Ethernet frame types. (It handles ~EtherFrame message class;
 // specific frame classes (Ethernet-II, IEEE 802.3) are subclassed from that one.)
@@ -132,16 +133,16 @@ import inet.linklayer.IEtherMAC;
 simple EtherMACFullDuplex like IEtherMAC
 {
     parameters:
-        bool promiscuous = default(false);     // if true, all packets are received, otherwise only the
-                                // ones with matching destination MAC address
-        string address = default("auto");       // MAC address as hex string (12 hex digits), or
-                                // "auto". "auto" values will be replaced by
-                                // a generated MAC address in init stage 0.
-        bool duplexEnabled = true;   // duplex mode can be enabled;
-        int txQueueLimit = default(1000); // maximum number of frames queued up for transmission;
-                                // additional frames are dropped. Only used if queueModule==""
-        string queueModule = default("");    // name of optional external queue module
-        bool frameBursting = default(true);     // enable/disable frame bursting mode in Gigabit Ethernet
+        bool promiscuous = default(false);       // if true, all packets are received, otherwise only the
+                                                 // ones with matching destination MAC address
+        string address = default("auto");        // MAC address as hex string (12 hex digits), or
+                                                 // "auto". "auto" values will be replaced by
+                                                 // a generated MAC address in init stage 0.
+        bool duplexEnabled = true;               // duplex mode can be enabled;
+        int txQueueLimit = default(1000);        // maximum number of frames queued up for transmission;
+                                                 // additional frames are dropped. Only used if queueModule==""
+        string queueModule = default("");        // name of optional external queue module
+        bool frameBursting = default(true);      // enable/disable frame bursting mode in Gigabit Ethernet
         int mtu = default(1500);
         @display("i=block/rxtx");
         @statistic[txPkBytes](title="Sent bytes"; record=sum,count,vector);

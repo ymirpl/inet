@@ -23,6 +23,10 @@
 #include "NotifierConsts.h"
 
 
+//FIXME : invalid combinations:
+//        - 10Gbit and HalfDuplex
+//        - FullDuplex and carrierExtension
+
 Define_Module(EtherMACFullDuplex);
 
 EtherMACFullDuplex::EtherMACFullDuplex()
@@ -52,37 +56,18 @@ void EtherMACFullDuplex::initializeFlags()
     physInGate->setDeliverOnReceptionStart(false);
 }
 
-void EtherMACFullDuplex::handleMessage(cMessage *msg)
+void EtherMACFullDuplex::handleSelfMessage(cMessage *msg)
 {
-    if (msg->isSelfMessage())
-    {
-        EV << "Self-message " << msg << " received\n";
+    EV << "Self-message " << msg << " received\n";
 
-        if (msg == endTxMsg)
-            handleEndTxPeriod();
-        else if (msg == endIFGMsg)
-            handleEndIFGPeriod();
-        else if (msg == endPauseMsg)
-            handleEndPausePeriod();
-        else
-            throw cRuntimeError(this, "Unknown self message received!");
-    }
+    if (msg == endTxMsg)
+        handleEndTxPeriod();
+    else if (msg == endIFGMsg)
+        handleEndIFGPeriod();
+    else if (msg == endPauseMsg)
+        handleEndPausePeriod();
     else
-    {
-        if (!connected)
-            processMessageWhenNotConnected(msg);
-        else if (disabled)
-            processMessageWhenDisabled(msg);
-        else if (msg->getArrivalGate() == gate("upperLayerIn"))
-            processFrameFromUpperLayer(check_and_cast<EtherFrame *>(msg));
-        else if (msg->getArrivalGate() == gate("phys$i"))
-            processMsgFromNetwork(check_and_cast<EtherTraffic *>(msg));
-        else
-            throw cRuntimeError(this, "Message received from unknown gate!");
-    }
-
-    if (ev.isGUI())
-        updateDisplayString();
+        throw cRuntimeError(this, "Unknown self message received!");
 }
 
 void EtherMACFullDuplex::startFrameTransmission()

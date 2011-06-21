@@ -69,7 +69,7 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
 
     enum
     {
-        NUM_OF_ETHERDESCRS = 4
+        NUM_OF_ETHERDESCRS = 6
     };
 
     struct EtherDescr
@@ -79,9 +79,10 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
         int64       maxBytesInBurst;      // with IFG and external datas
         int64       frameMinBytes;        // minimal frame length
         int64       frameInBurstMinBytes; // minimal frame length in burst mode, after first frame
-        const_simtime_t   halfBitTime;          // transmission time of a half bit
-        const_simtime_t   slotTime;             // slot time
-        const_simtime_t   shortestFrameDuration; // precalculated from MIN_ETHERNET_FRAME or GIGABIT_MIN_FRAME_WITH_EXT
+        simtime_t   halfBitTime;          // transmission time of a half bit
+        simtime_t   slotTime;             // slot time
+        simtime_t   shortestFrameDuration; // precalculated from MIN_ETHERNET_FRAME or GIGABIT_MIN_FRAME_WITH_EXT
+        void calculateTimes();
     };
 
     class InnerQueue
@@ -135,7 +136,7 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
     static const EtherDescr etherDescrs[NUM_OF_ETHERDESCRS];
     static const EtherDescr nullEtherDescr;
 
-    const EtherDescr *curEtherDescr;    // Current Ethernet Constants (eg txrate, ...)
+    EtherDescr curEtherDescr;    // Current Ethernet Constants (eg txrate, ...)
 
     cChannel *transmissionChannel;  // transmission channel
 
@@ -219,6 +220,8 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
     virtual void processMsgFromNetwork(EtherTraffic *msg);
     virtual void processMessageWhenNotConnected(cMessage *msg);
     virtual void processMessageWhenDisabled(cMessage *msg);
+    virtual void handleMessage(cMessage *msg);
+    virtual void handleSelfMessage(cMessage *msg) = 0;
     virtual void handleEndIFGPeriod();
     virtual void handleEndTxPeriod();
     virtual void handleEndPausePeriod();

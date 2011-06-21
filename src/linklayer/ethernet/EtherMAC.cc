@@ -89,8 +89,62 @@ void EtherMAC::initializeFlags()
 {
     EtherMACBase::initializeFlags();
 
-    duplexMode = par("duplexEnabled");
+    duplexMode = par("duplexEnabled").boolValue();
+    frameBursting = !duplexMode && par("frameBursting").boolValue();
     physInGate->setDeliverOnReceptionStart(true);
+}
+
+void EtherMAC::calculateParameters()
+{
+    EtherMACBase::calculateParameters();
+
+    if (curEtherDescr.txrate >= FAST_GIGABIT_ETHERNET_TXRATE && !duplexMode)
+        error("The fast gigabit ethernet supports only the full duplex connections");
+
+    if (curEtherDescr.txrate == GIGABIT_ETHERNET_TXRATE && !duplexMode)
+    {
+        carrierExtension = par("carrierExtension").boolValue();
+        curEtherDescr.frameMinBytes = carrierExtension ? GIGABIT_MIN_FRAME_WITH_EXT : MIN_ETHERNET_FRAME;
+        curEtherDescr.calculateTimes();
+        EV << "Half duplex Gigabit Ethernet, carrier extension "
+           << (carrierExtension ? "enabled" : "disabled") << endl;
+    }
+}
+
+void EtherMAC::handleSelfMessage(cMessage *msg)
+{
+    // Process different self-messages (timer signals)
+    EV << "Self-message " << msg << " received\n";
+
+    switch (msg->getKind())
+    {
+        case ENDIFG:
+            handleEndIFGPeriod();
+            break;
+
+        case ENDTRANSMISSION:
+            handleEndTxPeriod();
+            break;
+
+        case ENDRECEPTION:
+            handleEndRxPeriod();
+            break;
+
+        case ENDBACKOFF:
+            handleEndBackoffPeriod();
+            break;
+
+        case ENDJAMMING:
+            handleEndJammingPeriod();
+            break;
+
+        case ENDPAUSE:
+            handleEndPausePeriod();
+            break;
+
+        default:
+            error("self-message with unexpected message kind %d", msg->getKind());
+    }
 }
 
 void EtherMAC::handleMessage(cMessage *msg)
@@ -101,59 +155,10 @@ void EtherMAC::handleMessage(cMessage *msg)
     if (!duplexMode && transmitState == TRANSMITTING_STATE && receiveState != RX_IDLE_STATE)
         error("Inconsistent state -- transmitting and receiving at the same time");
 
-    if (!msg->isSelfMessage())
-    {
-        // either frame from upper layer, or frame/jam signal from the network
-        if (!connected)
-            processMessageWhenNotConnected(msg);
-        else if (disabled)
-            processMessageWhenDisabled(msg);
-        else if (msg->getArrivalGate() == gate("upperLayerIn"))
-            processFrameFromUpperLayer(check_and_cast<EtherFrame *>(msg));
-        else
-            processMsgFromNetwork(check_and_cast<EtherTraffic *>(msg));
-    }
-    else
-    {
-        // Process different self-messages (timer signals)
-        EV << "Self-message " << msg << " received\n";
+    EtherMACBase::handleMessage(msg);
 
-        switch (msg->getKind())
-        {
-            case ENDIFG:
-                handleEndIFGPeriod();
-                break;
-
-            case ENDTRANSMISSION:
-                handleEndTxPeriod();
-                break;
-
-            case ENDRECEPTION:
-                handleEndRxPeriod();
-                break;
-
-            case ENDBACKOFF:
-                handleEndBackoffPeriod();
-                break;
-
-            case ENDJAMMING:
-                handleEndJammingPeriod();
-                break;
-
-            case ENDPAUSE:
-                handleEndPausePeriod();
-                break;
-
-            default:
-                error("self-message with unexpected message kind %d", msg->getKind());
-        }
-    }
     printState();
-
-    if (ev.isGUI())
-        updateDisplayString();
 }
-
 
 void EtherMAC::processFrameFromUpperLayer(EtherFrame *frame)
 {
@@ -217,7 +222,7 @@ void EtherMAC::processMsgFromNetwork(EtherTraffic *msg)
     }
     else if (receiveState == RECEIVING_STATE
             && dynamic_cast<EtherJam*>(msg) == NULL
-            && endRxMsg->getArrivalTime() - simTime() < curEtherDescr->halfBitTime)
+            && endRxMsg->getArrivalTime() - simTime() < curEtherDescr.halfBitTime)
     {
         // With the above condition we filter out "false" collisions that may occur with
         // back-to-back frames. That is: when "beginning of frame" message (this one) occurs
@@ -469,7 +474,7 @@ void EtherMAC::handleRetransmission()
     EV << "Executing backoff procedure\n";
     int backoffrange = (backoffs >= BACKOFF_RANGE_LIMIT) ? 1024 : (1 << backoffs);
     int slotNumber = intuniform(0, backoffrange-1);
-    simtime_t backofftime = slotNumber * curEtherDescr->slotTime;
+    simtime_t backofftime = slotNumber * curEtherDescr.slotTime;
 
     scheduleAt(simTime() + backofftime, endBackoffMsg);
     transmitState = BACKOFF_STATE;
@@ -481,8 +486,8 @@ void EtherMAC::handleRetransmission()
 void EtherMAC::printState()
 {
 #define CASE(x) case x: EV << #x; break
-    EV << "transmitState: ";
 
+    EV << "transmitState: ";
     switch (transmitState)
     {
         CASE(TX_IDLE_STATE);
@@ -519,8 +524,8 @@ void EtherMAC::finish()
     recordScalar("rx channel idle (%)", 100*(totalChannelIdleTime/t));
     recordScalar("rx channel utilization (%)", 100*(totalSuccessfulRxTxTime/t));
     recordScalar("rx channel collision (%)", 100*(totalCollisionTime/t));
-    recordScalar("collisions",     numCollisions);
-    recordScalar("backoffs",       numBackoffs);
+    recordScalar("collisions", numCollisions);
+    recordScalar("backoffs", numBackoffs);
 }
 
 void EtherMAC::refreshConnection(bool connected_par)
