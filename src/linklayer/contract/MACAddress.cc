@@ -60,6 +60,9 @@ static int hextobin(const char *hexstr, unsigned char *destbuf, int size)
 
 const MACAddress MACAddress::UNSPECIFIED_ADDRESS;
 const MACAddress MACAddress::BROADCAST_ADDRESS("ff:ff:ff:ff:ff:ff");
+/** Returns the special multicast pause (01:80:C2:00:00:01) MAC address */
+const MACAddress MACAddress::MULTICAST_PAUSE_ADDRESS("01:80:C2:00:00:01");
+
 
 MACAddress::MACAddress()
 {

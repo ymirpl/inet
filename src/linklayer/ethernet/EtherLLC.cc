@@ -247,6 +247,7 @@ void EtherLLC::handleSendPause(cMessage *msg)
     sprintf(framename, "pause-%d-%d", getId(), seqNum++);
     EtherPauseFrame *frame = new EtherPauseFrame(framename);
     frame->setPauseTime(pauseUnits);
+    frame->setDest(etherctrl->getDest());
 
     frame->setByteLength(ETHER_MAC_FRAME_BYTES+ETHER_PAUSE_COMMAND_BYTES);
     if (frame->getByteLength() < MIN_ETHERNET_FRAME)
