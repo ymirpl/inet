@@ -116,15 +116,23 @@ void EtherMAC::calculateParameters(bool errorWhenAsymmetric)
 {
     EtherMACBase::calculateParameters(errorWhenAsymmetric);
 
-    if (curEtherDescr.txrate >= FAST_GIGABIT_ETHERNET_TXRATE && !duplexMode)
-        error("The fast gigabit ethernet supports only the full duplex connections");
-
-    if (curEtherDescr.txrate == GIGABIT_ETHERNET_TXRATE && !duplexMode)
+    if (!duplexMode)
     {
-        carrierExtension = par("carrierExtension").boolValue();
-        curEtherDescr.frameMinBytes = carrierExtension ? GIGABIT_MIN_FRAME_WITH_EXT : MIN_ETHERNET_FRAME;
-        EV << "Half duplex Gigabit Ethernet, carrier extension "
-           << (carrierExtension ? "enabled" : "disabled") << endl;
+        if (curEtherDescr.txrate >= FAST_GIGABIT_ETHERNET_TXRATE)
+            error("The fast gigabit ethernet supports only the full duplex connections");
+
+        if (curEtherDescr.txrate == GIGABIT_ETHERNET_TXRATE)
+        {
+            carrierExtension = par("carrierExtension").boolValue();
+            curEtherDescr.frameMinBytes = carrierExtension ? GIGABIT_MIN_FRAME_WITH_EXT : MIN_ETHERNET_FRAME;
+            EV << "Half duplex Gigabit Ethernet, carrier extension "
+               << (carrierExtension ? "enabled" : "disabled") << endl;
+        }
+        slotTime = ((curEtherDescr.txrate >= GIGABIT_ETHERNET_TXRATE) ? 4096 : 512 ) / curEtherDescr.txrate;
+    }
+    else
+    {
+        slotTime = 0.0;
     }
 }
 
@@ -624,9 +632,8 @@ void EtherMAC::handleRetransmission()
     EV << "Executing backoff procedure\n";
     int backoffrange = (backoffs >= BACKOFF_RANGE_LIMIT) ? 1024 : (1 << backoffs);
     int slotNumber = intuniform(0, backoffrange-1);
-    simtime_t backofftime = slotNumber * 512.0 / curEtherDescr.txrate;
 
-    scheduleAt(simTime() + backofftime, endBackoffMsg);
+    scheduleAt(simTime() + slotNumber * slotTime, endBackoffMsg);
     transmitState = BACKOFF_STATE;
 
     numBackoffs++;
