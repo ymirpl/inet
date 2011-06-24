@@ -37,6 +37,7 @@ class INET_API EtherMACFullDuplex : public EtherMACBase
     virtual void initialize();
     virtual void initializeStatistics();
     virtual void initializeFlags();
+    virtual void handleMessage(cMessage *msg);
     virtual void handleSelfMessage(cMessage *msg);
 
     // finish
@@ -46,8 +47,18 @@ class INET_API EtherMACFullDuplex : public EtherMACBase
     virtual void startFrameTransmission();
     virtual void processFrameFromUpperLayer(EtherFrame *frame);
     virtual void processMsgFromNetwork(EtherTraffic *msg);
+    virtual void processMessageWhenNotConnected(cMessage *msg);
+    virtual void processMessageWhenDisabled(cMessage *msg);
     virtual void handleEndIFGPeriod();
     virtual void handleEndTxPeriod();
+    virtual void handleEndPausePeriod();
+    virtual void scheduleEndIFGPeriod();
+    virtual void scheduleEndPausePeriod(int pauseUnits);
+    virtual void beginSendFrames();
+
+    // helpers
+    virtual void processReceivedDataFrame(EtherFrame *frame);
+    virtual void processPauseCommand(int pauseUnits);
 
     // notifications
     virtual void updateHasSubcribers();

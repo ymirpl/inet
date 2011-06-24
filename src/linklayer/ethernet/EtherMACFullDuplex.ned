@@ -150,7 +150,9 @@ simple EtherMACFullDuplex like IEtherMAC
         @statistic[droppedPkBytesIfaceDown](title="Dropped msg Iface down"; record=sum,count,vector);
         @statistic[droppedPkBytesBitError](title="Dropped bytes bit error"; record=sum,count,vector);
         @statistic[droppedPkBytesNotForUs](title="Dropped bytes not for us"; record=sum,count,vector);
-        @statistic[passedUpPkBytes](title="Passed bytes to higher layer"; record=sum,count,vector);
+
+        @statistic[passedUpPkBytes](title="Passed bytes to higher layer";source="packetBytes(packetSentToUpper)"; unit=B; record=sum,count,vector);
+
         @statistic[rxPausePkUnits](title="Received pause"; record=count,stats,vector);
         @statistic[txPausePkUnits](title="Sent pause"; record=count,stats,vector);
         @statistic[rxPkBytesFromHL](title="Received bytes from higher layer"; record=sum,count,vector);

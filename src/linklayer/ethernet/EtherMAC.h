@@ -55,22 +55,33 @@ class INET_API EtherMAC : public EtherMACBase
     simtime_t channelBusySince;        // needed for computing totalCollisionTime/totalSuccessfulRxTxTime
     unsigned long numCollisions;       // collisions (NOT number of collided frames!) sensed
     unsigned long numBackoffs;         // number of retransmissions
+    unsigned int  framesSentInBurst;   // Number of frames send out in current frame burst
+    long bytesSentInBurst;             // Number of bytes transmitted in current frame burst
+
     static simsignal_t collisionSignal;
     static simsignal_t backoffSignal;
 
     // helpers
-    virtual void calculateParameters();
+    virtual void calculateParameters(bool errorWhenAsymmetric);
 
     // event handlers
     virtual void processFrameFromUpperLayer(EtherFrame *msg);
     virtual void processMsgFromNetwork(EtherTraffic *msg);
+    virtual void processMessageWhenNotConnected(cMessage *msg);
+    virtual void processMessageWhenDisabled(cMessage *msg);
     virtual void handleMessage(cMessage *msg);
     virtual void handleSelfMessage(cMessage *msg);
     virtual void handleEndIFGPeriod();
+    virtual void handleEndPausePeriod();
     virtual void handleEndTxPeriod();
     virtual void handleEndRxPeriod();
     virtual void handleEndBackoffPeriod();
     virtual void handleEndJammingPeriod();
+    virtual void scheduleEndIFGPeriod();
+    virtual void scheduleEndTxPeriod(cPacket *);
+    virtual void scheduleEndPausePeriod(int pauseUnits);
+    virtual bool checkAndScheduleEndPausePeriod();
+    virtual void beginSendFrames();
 
     virtual void printState();
 
@@ -79,12 +90,13 @@ class INET_API EtherMAC : public EtherMACBase
     virtual void sendJamSignal();
     virtual void handleRetransmission();
     virtual void startFrameTransmission();
+    virtual void frameReceptionComplete(EtherTraffic *frame);
+    virtual void processReceivedDataFrame(EtherFrame *frame);
+    virtual void processPauseCommand(int pauseUnits);
+    virtual void ifDown();
 
     // notifications
     virtual void updateHasSubcribers();
-
-    // model change related functions
-    virtual void refreshConnection(bool connected);
 };
 
 #endif

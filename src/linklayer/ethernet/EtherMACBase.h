@@ -74,15 +74,11 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
 
     struct EtherDescr
     {
-        double      txrate;
-        int         maxFramesInBurst;
-        int64       maxBytesInBurst;      // with IFG and external datas
-        int64       frameMinBytes;        // minimal frame length
-        int64       frameInBurstMinBytes; // minimal frame length in burst mode, after first frame
-        simtime_t   halfBitTime;          // transmission time of a half bit
-        simtime_t   slotTime;             // slot time
-        simtime_t   shortestFrameDuration; // precalculated from MIN_ETHERNET_FRAME or GIGABIT_MIN_FRAME_WITH_EXT
-        void calculateTimes();
+        double        txrate;
+        unsigned int  maxFramesInBurst;
+        int64         maxBytesInBurst;      // with IFG and external datas
+        int64         frameMinBytes;        // minimal frame length
+        int64         frameInBurstMinBytes; // minimal frame length in burst mode, after first frame
     };
 
     class InnerQueue
@@ -118,6 +114,8 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
     bool connected;                 // true if connected to a network, set automatically by exploring the network configuration
     bool disabled;                  // true if the MAC is disabled, defined by the user
     bool promiscuous;               // if true, passes up all received frames
+
+    bool dataratesDiffer;         // true when tx rate and rx rate differ (configuration error, or between datarate change of tx/rx channels)
 
     // MAC operation modes and parameters
     bool duplexMode;                // channel connecting to MAC is full duplex, i.e. like a switch with 2 half-duplex lines
@@ -158,8 +156,6 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
     cMessage *endTxMsg, *endIFGMsg, *endPauseMsg;
 
     // statistics
-    int  framesSentInBurst;            // Number of frames send out in current frame burst
-    int  bytesSentInBurst;             // Number of bytes transmitted in current frame burst
     unsigned long numFramesSent;
     unsigned long numFramesReceivedOK;
     unsigned long numBytesSent;        // includes Ethernet frame bytes with preamble
@@ -188,6 +184,9 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
     static simsignal_t packetReceivedFromUpperSignal;
 
   public:
+    static const double SPEED_OF_LIGHT_IN_CABLE;
+
+  public:
     EtherMACBase();
     virtual ~EtherMACBase();
 
@@ -207,36 +206,26 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
     virtual void registerInterface();
 
     // helpers
+    /** Checks destination address and drop frame when not came for me */
     virtual bool checkDestinationAddress(EtherFrame *frame);
-    virtual void calculateParameters();
+
+    /**
+     * Calculates datarates, etc. Verify the same settings on in/out channels, and throw error
+     * when differs and the parameter errorWhenAsymmetric is true.
+     */
+    virtual void calculateParameters(bool errorWhenAsymmetric);
+
     virtual void printParameters();
-    virtual void prepareTxFrame(EtherFrame *frame);
 
     // finish
     virtual void finish();
 
     // event handlers
-    virtual void processFrameFromUpperLayer(EtherFrame *msg);
-    virtual void processMsgFromNetwork(EtherTraffic *msg);
-    virtual void processMessageWhenNotConnected(cMessage *msg);
-    virtual void processMessageWhenDisabled(cMessage *msg);
-    virtual void handleMessage(cMessage *msg);
-    virtual void handleSelfMessage(cMessage *msg) = 0;
-    virtual void handleEndIFGPeriod();
-    virtual void handleEndTxPeriod();
-    virtual void handleEndPausePeriod();
-    virtual void scheduleEndIFGPeriod();
-    virtual void scheduleEndTxPeriod(cPacket *);
-    virtual void scheduleEndPausePeriod(int pauseUnits);
 
     // helpers
-    virtual bool checkAndScheduleEndPausePeriod();
     virtual void fireChangeNotification(int type, cPacket *msg);
-    virtual void beginSendFrames();
-    virtual void frameReceptionComplete(EtherTraffic *frame);
-    virtual void processReceivedDataFrame(EtherFrame *frame);
-    virtual void processPauseCommand(int pauseUnits);
     virtual void getNextFrameFromQueue();
+    virtual void ifDown();
 
     // display
     virtual void updateDisplayString();
@@ -248,7 +237,7 @@ class INET_API EtherMACBase : public cSimpleModule, public INotifiable, public c
 
     // model change related functions
     virtual void receiveSignal(cComponent *src, simsignal_t id, cObject *obj);
-    virtual void refreshConnection(bool connected);
+    virtual void refreshConnection();
 };
 
 #endif
