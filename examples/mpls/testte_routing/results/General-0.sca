@@ -1,0 +1,154 @@
+version 2
+run General-0-20110701-00:15:43-7602
+attr configname General
+attr datetime 20110701-00:15:43
+attr experiment General
+attr inifile /Users/ymir/Devel/omnet-workspace/inet/examples/mpls/testte_routing/omnetpp.ini
+attr iterationvars ""
+attr iterationvars2 $repetition=0
+attr measurement ""
+attr network RSVPTE4
+attr processid 7602
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+
+scalar RSVPTE4.LSR1.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.LSR1.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.LSR1.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.LSR1.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.LSR1.ppp[0].queue 	"packets received by queue" 	253
+scalar RSVPTE4.LSR1.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR1.ppp[0].queue 	"energy used by router" 	22
+scalar RSVPTE4.LSR1.ppp[1].queue 	"packets received by queue" 	346
+scalar RSVPTE4.LSR1.ppp[1].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR1.ppp[1].queue 	"energy used by router" 	24
+scalar RSVPTE4.LSR1.ppp[2].queue 	"packets received by queue" 	0
+scalar RSVPTE4.LSR1.ppp[2].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR1.ppp[2].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR1.ppp[3].queue 	"packets received by queue" 	3
+scalar RSVPTE4.LSR1.ppp[3].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR1.ppp[3].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR1.ppp[4].queue 	"packets received by queue" 	0
+scalar RSVPTE4.LSR1.ppp[4].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR1.ppp[4].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR2.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.LSR2.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.LSR2.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.LSR2.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.LSR2.ppp[0].queue 	"packets received by queue" 	60
+scalar RSVPTE4.LSR2.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR2.ppp[0].queue 	"energy used by router" 	34
+scalar RSVPTE4.LSR2.ppp[1].queue 	"packets received by queue" 	241
+scalar RSVPTE4.LSR2.ppp[1].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR2.ppp[1].queue 	"energy used by router" 	10
+scalar RSVPTE4.LSR2.ppp[2].queue 	"packets received by queue" 	63
+scalar RSVPTE4.LSR2.ppp[2].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR2.ppp[2].queue 	"energy used by router" 	22
+scalar RSVPTE4.LSR3.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.LSR3.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.LSR3.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.LSR3.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.LSR3.ppp[0].queue 	"packets received by queue" 	59
+scalar RSVPTE4.LSR3.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR3.ppp[0].queue 	"energy used by router" 	30
+scalar RSVPTE4.LSR3.ppp[1].queue 	"packets received by queue" 	151
+scalar RSVPTE4.LSR3.ppp[1].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR3.ppp[1].queue 	"energy used by router" 	10
+scalar RSVPTE4.LSR3.ppp[2].queue 	"packets received by queue" 	257
+scalar RSVPTE4.LSR3.ppp[2].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR3.ppp[2].queue 	"energy used by router" 	46
+scalar RSVPTE4.LSR4.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.LSR4.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.LSR4.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.LSR4.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.LSR4.ppp[0].queue 	"packets received by queue" 	56
+scalar RSVPTE4.LSR4.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR4.ppp[0].queue 	"energy used by router" 	18
+scalar RSVPTE4.LSR4.ppp[1].queue 	"packets received by queue" 	367
+scalar RSVPTE4.LSR4.ppp[1].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR4.ppp[1].queue 	"energy used by router" 	42
+scalar RSVPTE4.LSR4.ppp[2].queue 	"packets received by queue" 	49
+scalar RSVPTE4.LSR4.ppp[2].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR4.ppp[2].queue 	"energy used by router" 	20
+scalar RSVPTE4.LSR5.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.LSR5.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.LSR5.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.LSR5.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.LSR5.ppp[0].queue 	"packets received by queue" 	39
+scalar RSVPTE4.LSR5.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR5.ppp[0].queue 	"energy used by router" 	12
+scalar RSVPTE4.LSR5.ppp[1].queue 	"packets received by queue" 	492
+scalar RSVPTE4.LSR5.ppp[1].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR5.ppp[1].queue 	"energy used by router" 	2
+scalar RSVPTE4.LSR5.ppp[2].queue 	"packets received by queue" 	0
+scalar RSVPTE4.LSR5.ppp[2].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR5.ppp[2].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR5.ppp[3].queue 	"packets received by queue" 	64
+scalar RSVPTE4.LSR5.ppp[3].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR5.ppp[3].queue 	"energy used by router" 	30
+scalar RSVPTE4.LSR5.ppp[4].queue 	"packets received by queue" 	64
+scalar RSVPTE4.LSR5.ppp[4].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR5.ppp[4].queue 	"energy used by router" 	30
+scalar RSVPTE4.LSR6.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.LSR6.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.LSR6.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.LSR6.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.LSR6.ppp[0].queue 	"packets received by queue" 	38
+scalar RSVPTE4.LSR6.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR6.ppp[0].queue 	"energy used by router" 	2
+scalar RSVPTE4.LSR6.ppp[1].queue 	"packets received by queue" 	61
+scalar RSVPTE4.LSR6.ppp[1].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR6.ppp[1].queue 	"energy used by router" 	24
+scalar RSVPTE4.LSR7.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.LSR7.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.LSR7.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.LSR7.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.LSR7.ppp[0].queue 	"packets received by queue" 	47
+scalar RSVPTE4.LSR7.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR7.ppp[0].queue 	"energy used by router" 	16
+scalar RSVPTE4.LSR7.ppp[1].queue 	"packets received by queue" 	244
+scalar RSVPTE4.LSR7.ppp[1].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.LSR7.ppp[1].queue 	"energy used by router" 	34
+scalar RSVPTE4.host1.pingApp 	"Pings sent" 	0
+scalar RSVPTE4.host1.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.host1.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.host1.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.host1.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.host1.ppp[0].queue 	"packets received by queue" 	499
+scalar RSVPTE4.host1.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.host1.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host2.pingApp 	"Pings sent" 	0
+scalar RSVPTE4.host2.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.host2.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.host2.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.host2.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.host2.ppp[0].queue 	"packets received by queue" 	0
+scalar RSVPTE4.host2.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.host2.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host3.pingApp 	"Pings sent" 	0
+scalar RSVPTE4.host3.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.host3.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.host3.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.host3.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.host3.ppp[0].queue 	"packets received by queue" 	0
+scalar RSVPTE4.host3.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.host3.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host4.pingApp 	"Pings sent" 	0
+scalar RSVPTE4.host4.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.host4.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.host4.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.host4.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.host4.ppp[0].queue 	"packets received by queue" 	0
+scalar RSVPTE4.host4.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.host4.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host5.pingApp 	"Pings sent" 	0
+scalar RSVPTE4.host5.networkLayer.arp 	"ARP requests sent" 	0
+scalar RSVPTE4.host5.networkLayer.arp 	"ARP replies sent" 	0
+scalar RSVPTE4.host5.networkLayer.arp 	"ARP resolutions" 	0
+scalar RSVPTE4.host5.networkLayer.arp 	"failed ARP resolutions" 	0
+scalar RSVPTE4.host5.ppp[0].queue 	"packets received by queue" 	0
+scalar RSVPTE4.host5.ppp[0].queue 	"packets dropped by queue" 	0
+scalar RSVPTE4.host5.ppp[0].queue 	"energy used by router" 	0
