@@ -1,0 +1,38 @@
+                                                                
+version 2
+run General-0-20110702-12:52:04-7880
+attr configname General
+attr datetime 20110702-12:52:04
+attr experiment General
+attr inifile /Users/ymir/Devel/omnet-workspace/inet/examples/mpls/testte_failure/omnetpp.ini
+attr iterationvars ""
+attr iterationvars2 $repetition=0
+attr measurement ""
+attr network RSVPTE4
+attr processid 7880
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+
+vector 22  RSVPTE4.LSR4.ppp[0].queue  "queue length"  ETV
+vector 24  RSVPTE4.LSR4.ppp[1].queue  "queue length"  ETV
+vector 26  RSVPTE4.LSR4.ppp[2].queue  "queue length"  ETV
+vector 14  RSVPTE4.LSR2.ppp[2].queue  "queue length"  ETV
+vector 12  RSVPTE4.LSR2.ppp[1].queue  "queue length"  ETV
+vector 10  RSVPTE4.LSR2.ppp[0].queue  "queue length"  ETV
+vector 28  RSVPTE4.LSR5.ppp[0].queue  "queue length"  ETV
+vector 16  RSVPTE4.LSR3.ppp[0].queue  "queue length"  ETV
+vector 18  RSVPTE4.LSR3.ppp[1].queue  "queue length"  ETV
+vector 20  RSVPTE4.LSR3.ppp[2].queue  "queue length"  ETV
+vector 34  RSVPTE4.LSR5.ppp[3].queue  "queue length"  ETV
+vector 36  RSVPTE4.LSR5.ppp[4].queue  "queue length"  ETV
+vector 2  RSVPTE4.LSR1.ppp[1].queue  "queue length"  ETV
+vector 42  RSVPTE4.LSR7.ppp[0].queue  "queue length"  ETV
+vector 44  RSVPTE4.LSR7.ppp[1].queue  "queue length"  ETV
+vector 0  RSVPTE4.LSR1.ppp[0].queue  "queue length"  ETV
+vector 40  RSVPTE4.LSR6.ppp[1].queue  "queue length"  ETV
+22	1415 389 87 8778 0.00882384669 1.036639999999 16 0 1 8 8
+24	1804 737 88 8936 0.00882384669 1.048693333332 30 0 2 21 27
+26	2541 339 89 4613 0.00882384669 0.341135573397 14 0 2 9 11

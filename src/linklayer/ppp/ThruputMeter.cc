@@ -71,9 +71,11 @@ void ThruputMeter::beginNewInterval(simtime_t now)
     // record measurements
     double bitpersec = intvlNumBits/duration.dbl();
     double pkpersec = intvlNumPackets/duration.dbl();
+    double tEnergy = bitpersec * 2.0;
 
     bitpersecVector.recordWithTimestamp(intvlStartTime, bitpersec);
     pkpersecVector.recordWithTimestamp(intvlStartTime, pkpersec);
+    tEnergyVector.recordWithTimestamp(intvlStartTime, tEnergy);
 
     // restart counters
     intvlStartTime = now;  // FIXME this should be *beginning* of tx of this packet, not end!
@@ -91,5 +93,6 @@ void ThruputMeter::finish()
     recordScalar("avg throughput (bit/s)", numBits/duration.dbl());
     recordScalar("avg packets/s", numPackets/duration.dbl());
 }
+
 
 

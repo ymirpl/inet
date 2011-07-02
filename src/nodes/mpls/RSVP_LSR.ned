@@ -16,6 +16,7 @@ package inet.nodes.mpls;
 
 import inet.base.NotificationBoard;
 import inet.linklayer.ppp.PPPInterface;
+import inet.linklayer.ppp.PPPInterfaceWithDLULThruputMeter;
 import inet.networklayer.common.InterfaceTable;
 import inet.networklayer.ipv4.RoutingTable;
 import inet.networklayer.mpls.LIBTable;
@@ -88,7 +89,7 @@ module RSVP_LSR
                 ifIn[sizeof(pppg)];
                 ifOut[sizeof(pppg)];
         }
-        ppp[sizeof(pppg)]: PPPInterface {
+        ppp[sizeof(pppg)]: PPPInterfaceWithDLULThruputMeter {
             parameters:
                 @display("p=88,329,row,90;q=l2queue");
         }

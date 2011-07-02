@@ -29,13 +29,16 @@ void PassiveQueueBase::initialize()
     // statistics
     numQueueReceived = 0;
     numQueueDropped = 0;
+    energy = 0;
     WATCH(numQueueReceived);
     WATCH(numQueueDropped);
+    WATCH(energy);
 }
 
 void PassiveQueueBase::handleMessage(cMessage *msg)
 {
     numQueueReceived++;
+    energy++;
     if (packetRequested>0)
     {
         packetRequested--;
@@ -75,5 +78,6 @@ void PassiveQueueBase::finish()
 {
     recordScalar("packets received by queue", numQueueReceived);
     recordScalar("packets dropped by queue", numQueueDropped);
+    recordScalar("energy used by queue", energy);
 }
 

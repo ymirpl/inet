@@ -51,6 +51,7 @@ class INET_API ThruputMeter : public cSimpleModule
     // statistics
     cOutVector bitpersecVector;
     cOutVector pkpersecVector;
+    cOutVector tEnergyVector;
 
   protected:
     virtual void updateStats(simtime_t now, unsigned long bits);

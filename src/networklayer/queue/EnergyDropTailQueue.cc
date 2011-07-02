@@ -76,5 +76,5 @@ void EnergyDropTailQueue::sendOut(cMessage *msg)
 void EnergyDropTailQueue::finish()
 {
     PassiveQueueBase::finish();
-    recordScalar("energy used by router", energy);
+    recordScalar("energy used by queue", energy);
 }

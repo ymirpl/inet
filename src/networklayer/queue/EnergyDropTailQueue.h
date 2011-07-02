@@ -23,6 +23,10 @@
 #include "PassiveQueueBase.h"
 
 /**
+ * Ymir: it might be useless, let's get into the basic PassiveQueueBase
+ */
+
+/**
  * Drop-front queue. See NED for more info.
  */
 class INET_API EnergyDropTailQueue : public PassiveQueueBase

@@ -1,14 +1,14 @@
 version 2
-run General-0-20110701-00:15:43-7602
+run General-0-20110702-14:10:24-9050
 attr configname General
-attr datetime 20110701-00:15:43
+attr datetime 20110702-14:10:24
 attr experiment General
 attr inifile /Users/ymir/Devel/omnet-workspace/inet/examples/mpls/testte_routing/omnetpp.ini
 attr iterationvars ""
 attr iterationvars2 $repetition=0
 attr measurement ""
 attr network RSVPTE4
-attr processid 7602
+attr processid 9050
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -21,97 +21,327 @@ scalar RSVPTE4.LSR1.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.LSR1.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.LSR1.ppp[0].queue 	"packets received by queue" 	253
 scalar RSVPTE4.LSR1.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR1.ppp[0].queue 	"energy used by router" 	22
+scalar RSVPTE4.LSR1.ppp[0].queue 	"energy used by queue" 	253
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterUL 	"total packets" 	253
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterUL 	"total bits" 	290976
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterUL 	"avg throughput (bit/s)" 	58195.2
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterUL 	"avg packets/s" 	50.6
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterDL 	"total packets" 	60
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterDL 	"total bits" 	44472
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterDL 	"avg throughput (bit/s)" 	8894.4
+scalar RSVPTE4.LSR1.ppp[0].thruputMeterDL 	"avg packets/s" 	12
 scalar RSVPTE4.LSR1.ppp[1].queue 	"packets received by queue" 	346
 scalar RSVPTE4.LSR1.ppp[1].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR1.ppp[1].queue 	"energy used by router" 	24
+scalar RSVPTE4.LSR1.ppp[1].queue 	"energy used by queue" 	346
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterUL 	"total packets" 	346
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterUL 	"total bits" 	409736
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterUL 	"avg throughput (bit/s)" 	81947.2
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterUL 	"avg packets/s" 	69.2
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterDL 	"total packets" 	59
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterDL 	"total bits" 	41424
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterDL 	"avg throughput (bit/s)" 	8284.8
+scalar RSVPTE4.LSR1.ppp[1].thruputMeterDL 	"avg packets/s" 	11.8
 scalar RSVPTE4.LSR1.ppp[2].queue 	"packets received by queue" 	0
 scalar RSVPTE4.LSR1.ppp[2].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR1.ppp[2].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR1.ppp[2].queue 	"energy used by queue" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterUL 	"total packets" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterUL 	"total bits" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterUL 	"avg throughput (bit/s)" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterUL 	"avg packets/s" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterDL 	"total packets" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterDL 	"total bits" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterDL 	"avg throughput (bit/s)" 	0
+scalar RSVPTE4.LSR1.ppp[2].thruputMeterDL 	"avg packets/s" 	0
 scalar RSVPTE4.LSR1.ppp[3].queue 	"packets received by queue" 	3
 scalar RSVPTE4.LSR1.ppp[3].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR1.ppp[3].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR1.ppp[3].queue 	"energy used by queue" 	3
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterUL 	"total packets" 	3
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterUL 	"total bits" 	1344
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterUL 	"avg throughput (bit/s)" 	268.8
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterUL 	"avg packets/s" 	0.6
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterDL 	"total packets" 	498
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterDL 	"total bits" 	621504
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterDL 	"avg throughput (bit/s)" 	124300.8
+scalar RSVPTE4.LSR1.ppp[3].thruputMeterDL 	"avg packets/s" 	99.6
 scalar RSVPTE4.LSR1.ppp[4].queue 	"packets received by queue" 	0
 scalar RSVPTE4.LSR1.ppp[4].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR1.ppp[4].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR1.ppp[4].queue 	"energy used by queue" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterUL 	"total packets" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterUL 	"total bits" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterUL 	"avg throughput (bit/s)" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterUL 	"avg packets/s" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterDL 	"total packets" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterDL 	"total bits" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterDL 	"avg throughput (bit/s)" 	0
+scalar RSVPTE4.LSR1.ppp[4].thruputMeterDL 	"avg packets/s" 	0
 scalar RSVPTE4.LSR2.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.LSR2.networkLayer.arp 	"ARP replies sent" 	0
 scalar RSVPTE4.LSR2.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.LSR2.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.LSR2.ppp[0].queue 	"packets received by queue" 	60
 scalar RSVPTE4.LSR2.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR2.ppp[0].queue 	"energy used by router" 	34
+scalar RSVPTE4.LSR2.ppp[0].queue 	"energy used by queue" 	60
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterUL 	"total packets" 	60
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterUL 	"total bits" 	44472
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterUL 	"avg throughput (bit/s)" 	8894.4
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterUL 	"avg packets/s" 	12
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterDL 	"total packets" 	253
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterDL 	"total bits" 	290976
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterDL 	"avg throughput (bit/s)" 	58195.2
+scalar RSVPTE4.LSR2.ppp[0].thruputMeterDL 	"avg packets/s" 	50.6
 scalar RSVPTE4.LSR2.ppp[1].queue 	"packets received by queue" 	241
 scalar RSVPTE4.LSR2.ppp[1].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR2.ppp[1].queue 	"energy used by router" 	10
+scalar RSVPTE4.LSR2.ppp[1].queue 	"energy used by queue" 	241
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterUL 	"total packets" 	241
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterUL 	"total bits" 	275584
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterUL 	"avg throughput (bit/s)" 	55116.8
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterUL 	"avg packets/s" 	48.2
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterDL 	"total packets" 	56
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterDL 	"total bits" 	36864
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterDL 	"avg throughput (bit/s)" 	7372.8
+scalar RSVPTE4.LSR2.ppp[1].thruputMeterDL 	"avg packets/s" 	11.2
 scalar RSVPTE4.LSR2.ppp[2].queue 	"packets received by queue" 	63
 scalar RSVPTE4.LSR2.ppp[2].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR2.ppp[2].queue 	"energy used by router" 	22
+scalar RSVPTE4.LSR2.ppp[2].queue 	"energy used by queue" 	63
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterUL 	"total packets" 	63
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterUL 	"total bits" 	45024
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterUL 	"avg throughput (bit/s)" 	9004.8
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterUL 	"avg packets/s" 	12.6
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterDL 	"total packets" 	38
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterDL 	"total bits" 	19584
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterDL 	"avg throughput (bit/s)" 	3916.8
+scalar RSVPTE4.LSR2.ppp[2].thruputMeterDL 	"avg packets/s" 	7.6
 scalar RSVPTE4.LSR3.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.LSR3.networkLayer.arp 	"ARP replies sent" 	0
 scalar RSVPTE4.LSR3.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.LSR3.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.LSR3.ppp[0].queue 	"packets received by queue" 	59
 scalar RSVPTE4.LSR3.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR3.ppp[0].queue 	"energy used by router" 	30
+scalar RSVPTE4.LSR3.ppp[0].queue 	"energy used by queue" 	59
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterUL 	"total packets" 	59
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterUL 	"total bits" 	41424
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterUL 	"avg throughput (bit/s)" 	8284.8
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterUL 	"avg packets/s" 	11.8
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterDL 	"total packets" 	346
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterDL 	"total bits" 	409736
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterDL 	"avg throughput (bit/s)" 	81947.2
+scalar RSVPTE4.LSR3.ppp[0].thruputMeterDL 	"avg packets/s" 	69.2
 scalar RSVPTE4.LSR3.ppp[1].queue 	"packets received by queue" 	151
 scalar RSVPTE4.LSR3.ppp[1].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR3.ppp[1].queue 	"energy used by router" 	10
+scalar RSVPTE4.LSR3.ppp[1].queue 	"energy used by queue" 	151
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterUL 	"total packets" 	151
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterUL 	"total bits" 	159304
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterUL 	"avg throughput (bit/s)" 	31860.8
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterUL 	"avg packets/s" 	30.2
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterDL 	"total packets" 	49
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterDL 	"total bits" 	31184
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterDL 	"avg throughput (bit/s)" 	6236.8
+scalar RSVPTE4.LSR3.ppp[1].thruputMeterDL 	"avg packets/s" 	9.8
 scalar RSVPTE4.LSR3.ppp[2].queue 	"packets received by queue" 	257
 scalar RSVPTE4.LSR3.ppp[2].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR3.ppp[2].queue 	"energy used by router" 	46
+scalar RSVPTE4.LSR3.ppp[2].queue 	"energy used by queue" 	257
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterUL 	"total packets" 	257
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterUL 	"total bits" 	297952
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterUL 	"avg throughput (bit/s)" 	59590.4
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterUL 	"avg packets/s" 	51.4
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterDL 	"total packets" 	47
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterDL 	"total bits" 	27936
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterDL 	"avg throughput (bit/s)" 	5587.2
+scalar RSVPTE4.LSR3.ppp[2].thruputMeterDL 	"avg packets/s" 	9.4
 scalar RSVPTE4.LSR4.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.LSR4.networkLayer.arp 	"ARP replies sent" 	0
 scalar RSVPTE4.LSR4.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.LSR4.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.LSR4.ppp[0].queue 	"packets received by queue" 	56
 scalar RSVPTE4.LSR4.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR4.ppp[0].queue 	"energy used by router" 	18
+scalar RSVPTE4.LSR4.ppp[0].queue 	"energy used by queue" 	56
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterUL 	"total packets" 	56
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterUL 	"total bits" 	36864
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterUL 	"avg throughput (bit/s)" 	7372.8
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterUL 	"avg packets/s" 	11.2
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterDL 	"total packets" 	241
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterDL 	"total bits" 	275584
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterDL 	"avg throughput (bit/s)" 	55116.8
+scalar RSVPTE4.LSR4.ppp[0].thruputMeterDL 	"avg packets/s" 	48.2
 scalar RSVPTE4.LSR4.ppp[1].queue 	"packets received by queue" 	367
 scalar RSVPTE4.LSR4.ppp[1].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR4.ppp[1].queue 	"energy used by router" 	42
+scalar RSVPTE4.LSR4.ppp[1].queue 	"energy used by queue" 	367
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterUL 	"total packets" 	367
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterUL 	"total bits" 	435264
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterUL 	"avg throughput (bit/s)" 	87052.8
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterUL 	"avg packets/s" 	73.4
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterDL 	"total packets" 	39
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterDL 	"total bits" 	24392
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterDL 	"avg throughput (bit/s)" 	4878.4
+scalar RSVPTE4.LSR4.ppp[1].thruputMeterDL 	"avg packets/s" 	7.8
 scalar RSVPTE4.LSR4.ppp[2].queue 	"packets received by queue" 	49
 scalar RSVPTE4.LSR4.ppp[2].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR4.ppp[2].queue 	"energy used by router" 	20
+scalar RSVPTE4.LSR4.ppp[2].queue 	"energy used by queue" 	49
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterUL 	"total packets" 	49
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterUL 	"total bits" 	31184
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterUL 	"avg throughput (bit/s)" 	6236.8
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterUL 	"avg packets/s" 	9.8
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterDL 	"total packets" 	151
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterDL 	"total bits" 	159304
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterDL 	"avg throughput (bit/s)" 	31860.8
+scalar RSVPTE4.LSR4.ppp[2].thruputMeterDL 	"avg packets/s" 	30.2
 scalar RSVPTE4.LSR5.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.LSR5.networkLayer.arp 	"ARP replies sent" 	0
 scalar RSVPTE4.LSR5.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.LSR5.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.LSR5.ppp[0].queue 	"packets received by queue" 	39
 scalar RSVPTE4.LSR5.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR5.ppp[0].queue 	"energy used by router" 	12
+scalar RSVPTE4.LSR5.ppp[0].queue 	"energy used by queue" 	39
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterUL 	"total packets" 	39
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterUL 	"total bits" 	24392
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterUL 	"avg throughput (bit/s)" 	4878.4
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterUL 	"avg packets/s" 	7.8
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterDL 	"total packets" 	367
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterDL 	"total bits" 	435264
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterDL 	"avg throughput (bit/s)" 	87052.8
+scalar RSVPTE4.LSR5.ppp[0].thruputMeterDL 	"avg packets/s" 	73.4
 scalar RSVPTE4.LSR5.ppp[1].queue 	"packets received by queue" 	492
 scalar RSVPTE4.LSR5.ppp[1].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR5.ppp[1].queue 	"energy used by router" 	2
+scalar RSVPTE4.LSR5.ppp[1].queue 	"energy used by queue" 	492
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterUL 	"total packets" 	492
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterUL 	"total bits" 	614016
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterUL 	"avg throughput (bit/s)" 	122803.2
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterUL 	"avg packets/s" 	98.4
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterDL 	"total packets" 	0
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterDL 	"total bits" 	0
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterDL 	"avg throughput (bit/s)" 	0
+scalar RSVPTE4.LSR5.ppp[1].thruputMeterDL 	"avg packets/s" 	0
 scalar RSVPTE4.LSR5.ppp[2].queue 	"packets received by queue" 	0
 scalar RSVPTE4.LSR5.ppp[2].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR5.ppp[2].queue 	"energy used by router" 	0
+scalar RSVPTE4.LSR5.ppp[2].queue 	"energy used by queue" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterUL 	"total packets" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterUL 	"total bits" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterUL 	"avg throughput (bit/s)" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterUL 	"avg packets/s" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterDL 	"total packets" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterDL 	"total bits" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterDL 	"avg throughput (bit/s)" 	0
+scalar RSVPTE4.LSR5.ppp[2].thruputMeterDL 	"avg packets/s" 	0
 scalar RSVPTE4.LSR5.ppp[3].queue 	"packets received by queue" 	64
 scalar RSVPTE4.LSR5.ppp[3].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR5.ppp[3].queue 	"energy used by router" 	30
+scalar RSVPTE4.LSR5.ppp[3].queue 	"energy used by queue" 	64
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterUL 	"total packets" 	64
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterUL 	"total bits" 	50816
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterUL 	"avg throughput (bit/s)" 	10163.2
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterUL 	"avg packets/s" 	12.8
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterDL 	"total packets" 	61
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterDL 	"total bits" 	42944
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterDL 	"avg throughput (bit/s)" 	8588.8
+scalar RSVPTE4.LSR5.ppp[3].thruputMeterDL 	"avg packets/s" 	12.2
 scalar RSVPTE4.LSR5.ppp[4].queue 	"packets received by queue" 	64
 scalar RSVPTE4.LSR5.ppp[4].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR5.ppp[4].queue 	"energy used by router" 	30
+scalar RSVPTE4.LSR5.ppp[4].queue 	"energy used by queue" 	64
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterUL 	"total packets" 	64
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterUL 	"total bits" 	54264
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterUL 	"avg throughput (bit/s)" 	10852.8
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterUL 	"avg packets/s" 	12.8
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterDL 	"total packets" 	243
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterDL 	"total bits" 	283672
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterDL 	"avg throughput (bit/s)" 	56734.4
+scalar RSVPTE4.LSR5.ppp[4].thruputMeterDL 	"avg packets/s" 	48.6
 scalar RSVPTE4.LSR6.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.LSR6.networkLayer.arp 	"ARP replies sent" 	0
 scalar RSVPTE4.LSR6.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.LSR6.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.LSR6.ppp[0].queue 	"packets received by queue" 	38
 scalar RSVPTE4.LSR6.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR6.ppp[0].queue 	"energy used by router" 	2
+scalar RSVPTE4.LSR6.ppp[0].queue 	"energy used by queue" 	38
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterUL 	"total packets" 	38
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterUL 	"total bits" 	19584
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterUL 	"avg throughput (bit/s)" 	3916.8
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterUL 	"avg packets/s" 	7.6
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterDL 	"total packets" 	63
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterDL 	"total bits" 	45024
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterDL 	"avg throughput (bit/s)" 	9004.8
+scalar RSVPTE4.LSR6.ppp[0].thruputMeterDL 	"avg packets/s" 	12.6
 scalar RSVPTE4.LSR6.ppp[1].queue 	"packets received by queue" 	61
 scalar RSVPTE4.LSR6.ppp[1].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR6.ppp[1].queue 	"energy used by router" 	24
+scalar RSVPTE4.LSR6.ppp[1].queue 	"energy used by queue" 	61
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterUL 	"total packets" 	61
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterUL 	"total bits" 	42944
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterUL 	"avg throughput (bit/s)" 	8588.8
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterUL 	"avg packets/s" 	12.2
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterDL 	"total packets" 	64
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterDL 	"total bits" 	50816
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterDL 	"avg throughput (bit/s)" 	10163.2
+scalar RSVPTE4.LSR6.ppp[1].thruputMeterDL 	"avg packets/s" 	12.8
 scalar RSVPTE4.LSR7.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.LSR7.networkLayer.arp 	"ARP replies sent" 	0
 scalar RSVPTE4.LSR7.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.LSR7.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.LSR7.ppp[0].queue 	"packets received by queue" 	47
 scalar RSVPTE4.LSR7.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR7.ppp[0].queue 	"energy used by router" 	16
+scalar RSVPTE4.LSR7.ppp[0].queue 	"energy used by queue" 	47
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterUL 	"total packets" 	47
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterUL 	"total bits" 	27936
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterUL 	"avg throughput (bit/s)" 	5587.2
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterUL 	"avg packets/s" 	9.4
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterDL 	"total packets" 	255
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterDL 	"total bits" 	295392
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterDL 	"avg throughput (bit/s)" 	59078.4
+scalar RSVPTE4.LSR7.ppp[0].thruputMeterDL 	"avg packets/s" 	51
 scalar RSVPTE4.LSR7.ppp[1].queue 	"packets received by queue" 	244
 scalar RSVPTE4.LSR7.ppp[1].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.LSR7.ppp[1].queue 	"energy used by router" 	34
+scalar RSVPTE4.LSR7.ppp[1].queue 	"energy used by queue" 	244
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterUL 	duration 	5
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterUL 	"total packets" 	244
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterUL 	"total bits" 	284952
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterUL 	"avg throughput (bit/s)" 	56990.4
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterUL 	"avg packets/s" 	48.8
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterDL 	duration 	5
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterDL 	"total packets" 	64
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterDL 	"total bits" 	54264
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterDL 	"avg throughput (bit/s)" 	10852.8
+scalar RSVPTE4.LSR7.ppp[1].thruputMeterDL 	"avg packets/s" 	12.8
 scalar RSVPTE4.host1.pingApp 	"Pings sent" 	0
 scalar RSVPTE4.host1.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.host1.networkLayer.arp 	"ARP replies sent" 	0
@@ -119,7 +349,7 @@ scalar RSVPTE4.host1.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.host1.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.host1.ppp[0].queue 	"packets received by queue" 	499
 scalar RSVPTE4.host1.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.host1.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host1.ppp[0].queue 	"energy used by queue" 	499
 scalar RSVPTE4.host2.pingApp 	"Pings sent" 	0
 scalar RSVPTE4.host2.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.host2.networkLayer.arp 	"ARP replies sent" 	0
@@ -127,7 +357,7 @@ scalar RSVPTE4.host2.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.host2.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.host2.ppp[0].queue 	"packets received by queue" 	0
 scalar RSVPTE4.host2.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.host2.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host2.ppp[0].queue 	"energy used by queue" 	0
 scalar RSVPTE4.host3.pingApp 	"Pings sent" 	0
 scalar RSVPTE4.host3.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.host3.networkLayer.arp 	"ARP replies sent" 	0
@@ -135,7 +365,7 @@ scalar RSVPTE4.host3.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.host3.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.host3.ppp[0].queue 	"packets received by queue" 	0
 scalar RSVPTE4.host3.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.host3.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host3.ppp[0].queue 	"energy used by queue" 	0
 scalar RSVPTE4.host4.pingApp 	"Pings sent" 	0
 scalar RSVPTE4.host4.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.host4.networkLayer.arp 	"ARP replies sent" 	0
@@ -143,7 +373,7 @@ scalar RSVPTE4.host4.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.host4.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.host4.ppp[0].queue 	"packets received by queue" 	0
 scalar RSVPTE4.host4.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.host4.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host4.ppp[0].queue 	"energy used by queue" 	0
 scalar RSVPTE4.host5.pingApp 	"Pings sent" 	0
 scalar RSVPTE4.host5.networkLayer.arp 	"ARP requests sent" 	0
 scalar RSVPTE4.host5.networkLayer.arp 	"ARP replies sent" 	0
@@ -151,4 +381,4 @@ scalar RSVPTE4.host5.networkLayer.arp 	"ARP resolutions" 	0
 scalar RSVPTE4.host5.networkLayer.arp 	"failed ARP resolutions" 	0
 scalar RSVPTE4.host5.ppp[0].queue 	"packets received by queue" 	0
 scalar RSVPTE4.host5.ppp[0].queue 	"packets dropped by queue" 	0
-scalar RSVPTE4.host5.ppp[0].queue 	"energy used by router" 	0
+scalar RSVPTE4.host5.ppp[0].queue 	"energy used by queue" 	0

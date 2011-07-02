@@ -29,11 +29,6 @@ import inet.world.ScenarioManager;
 network RSVPTE4
 {
     submodules:
-        nam: NAMTrace {
-            parameters:
-                @display("p=152,280");
-
-        }
         LSR1: RSVP_LSR {
             parameters:
                 peers = "ppp0 ppp1";
@@ -107,10 +102,10 @@ network RSVPTE4
             parameters:
                 @display("p=150,50");
         }
-        failureManager: FailureManager {
-            parameters:
-                @display("p=500,50");
-        }
+//        failureManager: FailureManager {
+//           parameters:
+//                @display("p=500,50");
+//       }
     connections:
         LSR1.pppg[0] <--> {  delay = 15ms; datarate = 600Kbps; } <--> LSR2.pppg[0];
         LSR1.pppg[1] <--> {  delay = 5ms; datarate = 600Kbps; } <--> LSR3.pppg[0];
