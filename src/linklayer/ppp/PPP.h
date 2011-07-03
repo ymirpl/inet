@@ -56,6 +56,8 @@ class INET_API PPP : public cSimpleModule, public INotifiable
     long numRcvdOK;
     long numBitErr;
     long numDroppedIfaceDown;
+    long numDroppedIfaceSleeping;
+    simtime_t shutDownTime;
 
   protected:
     virtual InterfaceEntry *registerInterface(double datarate);
@@ -76,6 +78,7 @@ class INET_API PPP : public cSimpleModule, public INotifiable
     virtual int numInitStages() const {return 4;}
     virtual void initialize(int stage);
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 };
 
 #endif

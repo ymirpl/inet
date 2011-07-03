@@ -51,6 +51,7 @@ void PassiveQueueBase::handleMessage(cMessage *msg)
             numQueueDropped++;
     }
 
+
     if (ev.isGUI())
     {
         char buf[40];

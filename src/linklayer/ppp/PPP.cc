@@ -52,14 +52,16 @@ void PPP::initialize(int stage)
         endTransmissionEvent = new cMessage("pppEndTxEvent");
 
         txQueueLimit = par("txQueueLimit");
+        shutDownTime = STR_SIMTIME(par("shutDownTime").stringValue());
 
         interfaceEntry = NULL;
 
-        numSent = numRcvdOK = numBitErr = numDroppedIfaceDown = 0;
+        numSent = numRcvdOK = numBitErr = numDroppedIfaceDown = numDroppedIfaceSleeping = 0;
         WATCH(numSent);
         WATCH(numRcvdOK);
         WATCH(numBitErr);
         WATCH(numDroppedIfaceDown);
+        WATCH(numDroppedIfaceSleeping);
 
         // find queueModule
         queueModule = NULL;
@@ -115,6 +117,12 @@ void PPP::initialize(int stage)
         updateDisplayString();
     }
 }
+
+void PPP::finish()
+{
+	recordScalar("numDroppedIfaceSleeping", numDroppedIfaceSleeping);
+}
+
 
 InterfaceEntry *PPP::registerInterface(double datarate)
 {
@@ -184,6 +192,11 @@ void PPP::handleMessage(cMessage *msg)
         EV << "Interface is not connected, dropping packet " << msg << endl;
         delete msg;
         numDroppedIfaceDown++;
+    }
+    else if (simTime() >= shutDownTime) {
+        EV << "Interface is saving energy, dropping packet " << msg << endl;
+        delete msg;
+        numDroppedIfaceSleeping++;
     }
     else if (msg==endTransmissionEvent)
     {

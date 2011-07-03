@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <scenario>
-	<at t="3.0">
+	<at t="2.0">
 		<del-session module="LSR1.rsvp">
 			<endpoint>10.2.1.1</endpoint>
 			<tunnel_id>1</tunnel_id>
@@ -11,7 +11,7 @@
 			</paths>
 		</del-session>
 	</at>
-	<at t="3.0">
+	<at t="2.0">
 		<add-session module="LSR1.rsvp">
 		<endpoint>10.2.1.1</endpoint>
 		<tunnel_id>1</tunnel_id>

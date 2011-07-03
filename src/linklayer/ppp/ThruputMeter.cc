@@ -39,9 +39,11 @@ void ThruputMeter::initialize()
     WATCH(intvlStartTime);
     WATCH(intvlNumPackets);
     WATCH(intvlNumBits);
+    WATCH(tEnergyVector);
 
     bitpersecVector.setName("thruput (bit/sec)");
     pkpersecVector.setName("packet/sec");
+    tEnergyVector.setName("thruput router energy");
 }
 
 void ThruputMeter::handleMessage(cMessage *msg)
