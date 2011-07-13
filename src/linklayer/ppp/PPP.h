@@ -58,6 +58,7 @@ class INET_API PPP : public cSimpleModule, public INotifiable
     long numDroppedIfaceDown;
     long numDroppedIfaceSleeping;
     simtime_t shutDownTime;
+    simtime_t turnOnTime;
 
   protected:
     virtual InterfaceEntry *registerInterface(double datarate);

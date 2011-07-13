@@ -193,7 +193,7 @@ void PPP::handleMessage(cMessage *msg)
         delete msg;
         numDroppedIfaceDown++;
     }
-    else if (simTime() >= shutDownTime) {
+    else if (simTime() >= shutDownTime && simTime() <= turnOnTime) {
         EV << "Interface is saving energy, dropping packet " << msg << endl;
         delete msg;
         numDroppedIfaceSleeping++;

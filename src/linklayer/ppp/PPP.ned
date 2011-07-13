@@ -49,6 +49,7 @@ simple PPP
         int txQueueLimit = default(1000);  // only used if queueModule==""; zero means infinite
         string queueModule = default("");  // name of external (QoS,RED,etc) queue module
         string shutDownTime = default("999999s");
+        string turnOnTime = default("999999s");
         int mtu = default(4470);
         @display("i=block/rxtx");
     gates:
