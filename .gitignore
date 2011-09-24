@@ -28,3 +28,7 @@ xxx
 /3rdparty
 /tmp/
 /results/
+*.elog
+*.sca
+*.vci
+*.vec
