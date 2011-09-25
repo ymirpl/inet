@@ -48,14 +48,19 @@ void UDPBasicApp::initialize(int stage)
     const char *token;
     while ((token = tokenizer.nextToken())!=NULL)
         destAddresses.push_back(IPAddressResolver().resolve(token));
-
     if (destAddresses.empty())
         return;
 
     bindToPort(localPort);
 
+//    curFreq = (double)par("freqValue" + itoa(1));
+    curFreq = (double)par("freqValue1");
+
     cMessage *timer = new cMessage("sendTimer");
-    scheduleAt((double)par("messageFreq"), timer);
+//    scheduleAt((double)par("messageFreq"), timer);
+    scheduleAt(curFreq, timer);
+
+
 }
 
 IPvXAddress UDPBasicApp::chooseDestAddr()
@@ -90,7 +95,11 @@ void UDPBasicApp::handleMessage(cMessage *msg)
     {
         // send, then reschedule next sending
         sendPacket();
-        scheduleAt(simTime()+(double)par("messageFreq"), msg);
+        if (simTime() >= (double)par("changeTime1"))
+        	curFreq = (double)par("freqValue2");
+
+//        scheduleAt(simTime()+(double)par("messageFreq"), msg);
+        scheduleAt(simTime()+curFreq, msg);
     }
     else
     {

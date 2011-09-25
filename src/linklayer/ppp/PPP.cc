@@ -53,6 +53,9 @@ void PPP::initialize(int stage)
 
         txQueueLimit = par("txQueueLimit");
         shutDownTime = STR_SIMTIME(par("shutDownTime").stringValue());
+        turnOnTime = STR_SIMTIME(par("turnOnTime").stringValue());
+
+
 
         interfaceEntry = NULL;
 
