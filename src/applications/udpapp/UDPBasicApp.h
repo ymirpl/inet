@@ -23,6 +23,7 @@
 #include <vector>
 #include <omnetpp.h>
 #include "UDPAppBase.h"
+#include <boost/regex.hpp>
 
 
 /**
@@ -35,6 +36,8 @@ class INET_API UDPBasicApp : public UDPAppBase
     int localPort, destPort;
     std::vector<IPvXAddress> destAddresses;
     double curFreq; // current frequency set from data given in NED/.ini
+    std::vector<std::string> freqArrayVals;
+    std::vector<simtime_t> changeTimeVals;
 
     static int counter; // counter for generating a global number for each packet
 
@@ -46,6 +49,7 @@ class INET_API UDPBasicApp : public UDPAppBase
     virtual cPacket *createPacket();
     virtual void sendPacket();
     virtual void processPacket(cPacket *msg);
+    simtime_t getFreqValue();
 
   protected:
     virtual int numInitStages() const {return 4;}

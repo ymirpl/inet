@@ -39,13 +39,13 @@ simple UDPBasicApp like UDPApp
         int localPort; // if -1, app doesn't bind in UDP
         int destPort;
         volatile int messageLength @unit("B"); // length of messages to generate, in bytes
-        volatile double messageFreq @unit("s"); // should usually be a random value, e.g. exponential(1)
+//       volatile double messageFreq @unit("s"); // should usually be a random value, e.g. exponential(1)
         string destAddresses = default(""); // list of \IP addresses, separated by spaces
         int noOfPeriods = default(2);
-        double changeTime1 @unit("s") = default(-1s);
-//        double changeTimeSecond @unit("s") = default(-1s);
-        volatile double freqValue1 @unit("s");
-        volatile double freqValue2 @unit("s");
+        string freqArray = default("");
+        string changeTimeArray = default("");
+        
+        
         @display("i=block/app");
     gates:
         input udpIn @labels(UDPControlInfo/up);

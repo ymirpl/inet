@@ -51,15 +51,30 @@ void UDPBasicApp::initialize(int stage)
     if (destAddresses.empty())
         return;
 
+    /** parse freqArray **/
+    const char *holderStr = par("freqArray");
+        cStringTokenizer tokenizer2(holderStr);
+        const char *token2;
+        while ((token2 = tokenizer2.nextToken())!=NULL)
+        	freqArrayVals.push_back(token2);
+
+	/** parse changeTimeArray **/
+
+	const char *holderStr2 = par("changeTimeArray");
+		cStringTokenizer tokenizer3(holderStr2);
+		const char *token3;
+		while ((token3 = tokenizer3.nextToken())!=NULL)
+            	changeTimeVals.push_back(STR_SIMTIME(token3));
+    /** end parse **/
+
+
     bindToPort(localPort);
 
-//    curFreq = (double)par("freqValue" + itoa(1));
-    curFreq = (double)par("freqValue1");
+    curFreq = STR_SIMTIME(freqArrayVals[0].c_str()).dbl();
 
     cMessage *timer = new cMessage("sendTimer");
 //    scheduleAt((double)par("messageFreq"), timer);
     scheduleAt(curFreq, timer);
-
 
 }
 
@@ -68,6 +83,33 @@ IPvXAddress UDPBasicApp::chooseDestAddr()
     int k = intrand(destAddresses.size());
     return destAddresses[k];
 }
+
+simtime_t UDPBasicApp::getFreqValue() {
+
+	if (simTime() < changeTimeVals[0]) { // first value
+		return STR_SIMTIME(freqArrayVals[0].c_str());
+	}
+
+	EV << "$$ time is " << simTime() << endl;
+
+	for (unsigned int i=changeTimeVals.size()-1; i >= 0 ; i--) {
+		if (simTime() >= changeTimeVals[i]) {
+			EV << "$$ time greater than " << changeTimeVals[i] << endl;
+/*			if (i+1 < changeTimeVals.size()) {
+				EV << "$$ yes i+1 element " << endl;
+				if (simTime() < changeTimeVals[i+1]) {
+					EV << "$$ i+1 going in " << endl;
+					return STR_SIMTIME(freqArrayVals[i+1].c_str());
+				}
+			}
+			else {
+				EV << "$$ no i+1 element " << endl;
+*/
+				return STR_SIMTIME(freqArrayVals[i+1].c_str());
+			}
+		}
+}
+
 
 
 cPacket *UDPBasicApp::createPacket()
@@ -95,11 +137,11 @@ void UDPBasicApp::handleMessage(cMessage *msg)
     {
         // send, then reschedule next sending
         sendPacket();
-        if (simTime() >= (double)par("changeTime1"))
-        	curFreq = (double)par("freqValue2");
 
 //        scheduleAt(simTime()+(double)par("messageFreq"), msg);
-        scheduleAt(simTime()+curFreq, msg);
+
+    	EV << "## time is: " << simTime() << " freq is: " << getFreqValue() << endl;
+        scheduleAt(simTime()+getFreqValue(), msg);
     }
     else
     {
