@@ -23,7 +23,6 @@
 #include <vector>
 #include <omnetpp.h>
 #include "UDPAppBase.h"
-#include <boost/regex.hpp>
 
 
 /**
